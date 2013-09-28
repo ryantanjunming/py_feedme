@@ -29,3 +29,19 @@ Then Download psycopg2
 To Run
 
 Run `python manage.py runserver` and navigate to `localhost:8000`.
+
+To Get FeedParser Working
+
+`wget https://feedparser.googlecode.com/files/feedparser-5.1.3.tar.gz`
+
+`tar xzvf feedparser-5.1.3.tar.gz`
+
+`cd feedparser-5.1.3.tar.gz`
+
+`sudo python setup.py install`
+
+If you encounter error, you might need to install this first (setupTools)
+
+`wget http://python-distribute.org/distribute_setup.py`
+
+`python distribute_setup.py`

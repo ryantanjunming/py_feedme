@@ -2,46 +2,49 @@ py_feedme
 =========
 If you have problems regarding missing modules.
 
-Download Django First
+### Install Django
 
-`wget https://www.djangoproject.com/download/1.5.4/tarball/`
+    $ wget https://www.djangoproject.com/download/1.5.4/tarball/
+    $ tar xzvf index.html
+    $ cd Django-1.5.4
+    $ sudo python setup.py install
+    
+    OR 
+    
+    $ pip install django
 
-`tar xzvf index.html`
+### Install some python dev stuff (to install psycopg2)
 
-`cd Django-1.5.4`
+    For Ubuntu:
+    $ sudo apt-get install libpq-dev python-dev
 
-`sudo python setup.py install`
+### Install psycopg2
 
-Install some python dev stuff (to install psycopg2)
+    $ wget http://initd.org/psycopg/tarballs/PSYCOPG-2-5/psycopg2-2.5.1.tar.gz
+    $ tar xzvf psycopg2-2.5.1.tar.gz
+    $ cd psycopg2-2.5.1
+    $ sudo python setup.py install
+    
+    OR
+    
+    $ pip install psycopg2
 
-`sudo apt-get install libpq-dev python-dev`
-
-Then Download psycopg2
-
-`wget http://initd.org/psycopg/tarballs/PSYCOPG-2-5/psycopg2-2.5.1.tar.gz`
-
-`tar xzvf psycopg2-2.5.1.tar.gz`
-
-`cd psycopg2-2.5.1`
-
-`sudo python setup.py install`
-
-To Run
+### To Run
 
 Run `python manage.py runserver` and navigate to `localhost:8000`.
 
-To Get FeedParser Working
+### Install Feedparser
 
-`wget https://feedparser.googlecode.com/files/feedparser-5.1.3.tar.gz`
+    $ wget https://feedparser.googlecode.com/files/feedparser-5.1.3.tar.gz
+    $ tar xzvf feedparser-5.1.3.tar.gz
+    $ cd feedparser-5.1.3.tar.gz
+    $ sudo python setup.py install
+    
+    OR
+    
+    $ pip install feedparser
 
-`tar xzvf feedparser-5.1.3.tar.gz`
+If you encounter errors, you might need to install this first (setupTools)
 
-`cd feedparser-5.1.3.tar.gz`
-
-`sudo python setup.py install`
-
-If you encounter error, you might need to install this first (setupTools)
-
-`wget http://python-distribute.org/distribute_setup.py`
-
-`python distribute_setup.py`
+    $ wget http://python-distribute.org/distribute_setup.py
+    $ python distribute_setup.py

@@ -2,7 +2,7 @@ py_feedme
 =========
 If you have problems regarding missing modules.
 
-Download Django First
+Install Django First
 
 `wget https://www.djangoproject.com/download/1.5.4/tarball/`
 
@@ -12,11 +12,15 @@ Download Django First
 
 `sudo python setup.py install`
 
+OR 
+
+`pip install django`
+
 Install some python dev stuff (to install psycopg2)
 
 `sudo apt-get install libpq-dev python-dev`
 
-Then Download psycopg2
+Then Install psycopg2
 
 `wget http://initd.org/psycopg/tarballs/PSYCOPG-2-5/psycopg2-2.5.1.tar.gz`
 
@@ -26,11 +30,15 @@ Then Download psycopg2
 
 `sudo python setup.py install`
 
+OR
+
+`pip install psycopg2`
+
 To Run
 
 Run `python manage.py runserver` and navigate to `localhost:8000`.
 
-To Get FeedParser Working
+Install Feedparser
 
 `wget https://feedparser.googlecode.com/files/feedparser-5.1.3.tar.gz`
 
@@ -39,6 +47,10 @@ To Get FeedParser Working
 `cd feedparser-5.1.3.tar.gz`
 
 `sudo python setup.py install`
+
+OR
+
+`pip install feedparser`
 
 If you encounter error, you might need to install this first (setupTools)
 

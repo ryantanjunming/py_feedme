@@ -32,6 +32,7 @@ If you have problems regarding missing modules.
 ### To Run
 
 Run `python manage.py runserver` and navigate to `localhost:8000`.
+Run `python manage.py runserver` and navigate to `localhost:8000/feeds` (new stuff).
 
 ### Install Feedparser
 
@@ -48,3 +49,15 @@ If you encounter errors, you might need to install this first (setupTools)
 
     $ wget http://python-distribute.org/distribute_setup.py
     $ python distribute_setup.py
+
+
+Hi Guys!! I've took some time to change some settings and organize the folders(Based on Django tutorial style)
+The html files are in the folder "templates" and the dependencies like bootstrap and javascrip is in the folder
+"static". The directory structure may not be ideal(someone improve on this please) but its working, if you 
+have a better please implement it and test it and make sure it works before pushing.
+
+I've also added a new app called "feeds" (its kind of just a folder with models.py,views.py and other stuffs)
+
+After running python manage.py runserver, navigate to 'http://localhost:8000/feeds/' instead 
+It should look good(unless your using firefox)
+

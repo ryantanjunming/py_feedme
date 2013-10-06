@@ -16,9 +16,14 @@ def feedTest(request):
     feed = feedparser.parse(pythonUrl)
     for i in feed["items"]:
         if "summary" in i:
+            #print i["summary"]
             return HttpResponse(i["summary"])
             break
-    
+    #return HttpResponse("asd")
+    #t=loader.get_template('feeds/feedTest.html')
+    #c=Context({
+    #    'lover':'Jack'
+    #})	
 
     
 

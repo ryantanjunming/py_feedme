@@ -2,6 +2,9 @@ from django.template import Context,loader
 from django.http import HttpResponse
 import feedparser
 from feeds.models import Feeds
+import sys, codecs
+import time
+from datetime import datetime
 
 # Create your views here.
 def index(request):
@@ -24,9 +27,9 @@ def insert(insertURL, date)
              dateAdded = datetime.datetime.now())
     f.save()
 
-import sys, codecs
-import time
-from datetime import datetime
+def selectAll()
+    allfeeds = Feeds.objects.all()
+    return allfeeds
 
 def feedTestRoar(request):
     # so i can print out the debug msgs without exploding

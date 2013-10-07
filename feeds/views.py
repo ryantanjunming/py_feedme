@@ -12,12 +12,18 @@ def index(request):
     return HttpResponse(t.render(c))
 
 def feedTest(request):
-    pythonUrl="http://www.theverge.com/rss/frontpage"
+    pythonUrl="http://feeds.gawker.com/kotaku/full"
     feed = feedparser.parse(pythonUrl)
-    for i in feed["entries"]:
-        if "summary" in i:
-            return HttpResponse(i["summary"])
-            break
+    t=loader.get_template('feeds/feedTest.html')
+    c=Context({
+        'lala':'land'
+    })
+    return HttpResponse(t.render(c))
+    #for i in feed["entries"]:
+    #    if "summary" in i:
+    #        return HttpResponse(i["summary"])
+    #        break
+
 
 import sys, codecs
 import time

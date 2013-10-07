@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
     (r'^feeds/$','feeds.views.index'),
     (r'^feeds/feedTest$','feeds.views.feedTest'),
+    (r'^feeds/feedTestRoar$','feeds.views.feedTestRoar')
 )

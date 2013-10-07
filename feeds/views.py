@@ -1,7 +1,7 @@
 from django.template import Context,loader
 from django.http import HttpResponse
 import feedparser
-#from feeds.models import Feeds
+from feeds.models import Feeds
 
 # Create your views here.
 def index(request):
@@ -18,6 +18,11 @@ def feedTest(request):
         if "summary" in i:
             return HttpResponse(i["summary"])
             break
+
+def insert(insertURL, date)
+    f = Feeds(url = "{}".format(insertURL)
+             dateAdded = datetime.datetime.now())
+    f.save()
 
 import sys, codecs
 import time

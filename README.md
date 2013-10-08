@@ -32,8 +32,9 @@ If you have problems regarding missing modules.
 ### To Run
 
 Run `python manage.py runserver` and navigate to `localhost:8000`.
-Run `python manage.py runserver` and navigate to `localhost:8000/feeds` (new stuff).
-Run `python manage.py runserver` and navigate to `localhost:8000/feeds/feedTest` (even more new stuff).
+`localhost:8000/feeds` (Ryan your login page!).
+`localhost:8000/feeds/feedTest` (Insert feeds here).
+`localhost:8000/feeds/myFeeds` (Shows all our feeds).
 
 ### Install Feedparser
 
@@ -68,4 +69,6 @@ Added more new stuff!
 Added a feedTest page (showing latest feed of kotaku, needs to display it cleaner)
 
 Run `python manage.py runserver` and navigate to `localhost:8000/feeds/feedTest` (even more new stuff).
+
+
 

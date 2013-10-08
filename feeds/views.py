@@ -16,7 +16,7 @@ def insert(insertURL):
 # Create your views here.
 def index(request):
     t=loader.get_template('feeds/index.html')
-    c=RequestContext({
+    c=RequestContext(request,{
         'lover':'Jack'
     })	
     return HttpResponse(t.render(c))
@@ -39,6 +39,12 @@ def insertFeed(request):
     insert(request.POST['feedurl'])
     return HttpResponse("Thanks for the feed!")
 
+def myFeeds(request):
+    ret_str = ""
+    for feed in selectAll():
+	ret_str += feed.url + "<br>"
+    return HttpResponse(ret_str)
+
 
 
 def selectAll():
@@ -49,6 +55,7 @@ def selectAll():
 def feedTestRoar(request):
     # so i can print out the debug msgs without exploding
     sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout, errors='replace')
+    
     url = "http://feeds.feedburner.com/RockPaperShotgun"
     #url = "http://www.theverge.com/rss/frontpage"
     #url = "http://kotaku.com/vip.xml"

@@ -53,7 +53,7 @@ def myFeeds(request):
 
 def deleteFeed(request):
     delete(request.POST['feedurl'])
-    return HttpResponse(myFeeds(request))
+    return HttpResponseRedirect("/feeds/myFeeds")
 
 
 def selectAll():

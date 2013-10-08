@@ -41,7 +41,7 @@ def insertFeed(request):
 
 
 
-def selectAll()
+def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
 

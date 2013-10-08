@@ -12,6 +12,9 @@ def insert(insertURL):
     f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
     f.save()
 
+def delete(deleteURL):
+    f = Feeds.objects.get(url = str(deleteURL))
+    f.delete()
 
 # Create your views here.
 def index(request):

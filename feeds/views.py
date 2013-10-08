@@ -25,7 +25,7 @@ def index(request):
     })	
     return HttpResponse(t.render(c))
 
-def feedTest(request):
+def addFeed(request):
     pythonUrl="http://feeds.gawker.com/kotaku/full"
     feed = feedparser.parse(pythonUrl)
     t=loader.get_template('feeds/feedTest.html')

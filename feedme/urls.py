@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     (r'^feeds/$','feeds.views.index'),
-    (r'^feeds/feedTest$','feeds.views.feedTest'),
+    (r'^feeds/addFeed$','feeds.views.addFeed'),
     (r'^feeds/insertFeed$','feeds.views.insertFeed'),
     (r'^feeds/myFeeds$','feeds.views.myFeeds'),
     (r'^feeds/deleteFeed$','feeds.views.deleteFeed'),

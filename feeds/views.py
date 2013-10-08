@@ -32,15 +32,15 @@ def feedTest(request):
         'lala':'land'
     })
     return HttpResponse(t.render(c))
-    #for i in feed["entries"]:
-    #    if "summary" in i:
-    #        return HttpResponse(i["summary"])
-    #        break
 
 def insertFeed(request):
     #print request.POST['feedurl']
     insert(request.POST['feedurl'])
     return HttpResponse("Thanks for the feed!")
+
+def deleteFeed(request):
+    delete(request.POST['feedurl'])
+    return HttpResponse("Why did you delete me,Im hungry feede!")
 
 def myFeeds(request):
     ret_str = ""

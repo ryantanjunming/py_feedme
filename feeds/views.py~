@@ -12,6 +12,9 @@ def insert(insertURL):
     f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
     f.save()
 
+def delete(deleteURL):
+    f = Feeds.objects.get(url = str(deleteURL))
+    f.delete()
 
 # Create your views here.
 def index(request):
@@ -29,15 +32,16 @@ def feedTest(request):
         'lala':'land'
     })
     return HttpResponse(t.render(c))
-    #for i in feed["entries"]:
-    #    if "summary" in i:
-    #        return HttpResponse(i["summary"])
-    #        break
 
 def insertFeed(request):
     #print request.POST['feedurl']
     insert(request.POST['feedurl'])
     return HttpResponse("Thanks for the feed!")
+
+def deleteFeed(request):
+    #print request.POST['feedurl']
+    delete(request.POST['feedurl'])
+    return HttpResponse("Why did you delete me,Im hungry feede!")
 
 def myFeeds(request):
     ret_str = ""

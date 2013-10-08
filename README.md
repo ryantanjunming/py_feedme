@@ -35,6 +35,9 @@ Run `python manage.py runserver` and navigate to `localhost:8000`.
 `localhost:8000/feeds` (Ryan your login page!).
 `localhost:8000/feeds/addFeed` (Insert feeds here).
 `localhost:8000/feeds/myFeeds` (Shows all our feeds).
+`/showfeed?url=FEEDURL` to display a feed's articles.
+    eg. `http://localhost:8000/feeds/showfeed?url=http://feeds.feedburner.com/RockPaperShotgun`
+    also works for FEEDURL = `http://kotaku.com/vip.xml`, `http://www.theverge.com/rss/frontpage`
 
 ### Install Feedparser
 

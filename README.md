@@ -33,7 +33,7 @@ If you have problems regarding missing modules.
 
 Run `python manage.py runserver` and navigate to `localhost:8000`.
 `localhost:8000/feeds` (Ryan your login page!).
-`localhost:8000/feeds/feedTest` (Insert feeds here).
+`localhost:8000/feeds/addFeed` (Insert feeds here).
 `localhost:8000/feeds/myFeeds` (Shows all our feeds).
 
 ### Install Feedparser

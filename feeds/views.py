@@ -38,15 +38,20 @@ def insertFeed(request):
     insert(request.POST['feedurl'])
     return HttpResponse("Thanks for the feed!")
 
-def deleteFeed(request):
-    delete(request.POST['feedurl'])
-    return HttpResponse("Why did you delete me,Im hungry feede!")
-
 def myFeeds(request):
+    #delete(request.POST['feedurl'])
+    #return HttpResponse("Why did you delete me,Im hungry feed!")
     ret_str = ""
     for feed in selectAll():
-	ret_str += feed.url + "<br>"
-    return HttpResponse(ret_str)
+	ret_str += "<li>" + feed.url + "</li>"
+
+    t=loader.get_template('feeds/myFeeds.html')
+    c=RequestContext(request,{
+        'lover':ret_str
+    })
+    return HttpResponse(t.render(c))
+
+
 
 
 

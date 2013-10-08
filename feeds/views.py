@@ -2,11 +2,21 @@ from django.template import Context,loader
 from django.http import HttpResponse
 import feedparser
 from feeds.models import Feeds
+from django.core.context_processors import csrf
+from django.template import RequestContext
+import sys, codecs
+import time
+from datetime import datetime
+
+def insert(insertURL):
+    f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
+    f.save()
+
 
 # Create your views here.
 def index(request):
     t=loader.get_template('feeds/index.html')
-    c=Context({
+    c=RequestContext({
         'lover':'Jack'
     })	
     return HttpResponse(t.render(c))
@@ -15,7 +25,7 @@ def feedTest(request):
     pythonUrl="http://feeds.gawker.com/kotaku/full"
     feed = feedparser.parse(pythonUrl)
     t=loader.get_template('feeds/feedTest.html')
-    c=Context({
+    c=RequestContext(request,{
         'lala':'land'
     })
     return HttpResponse(t.render(c))
@@ -24,15 +34,13 @@ def feedTest(request):
     #        return HttpResponse(i["summary"])
     #        break
 
+def insertFeed(request):
+    #print request.POST['feedurl']
+    insert(request.POST['feedurl'])
+    return HttpResponse("Thanks for the feed!")
 
-def insert(insertURL, date)
-    f = Feeds(url = "{}".format(insertURL)
-             dateAdded = datetime.datetime.now())
-    f.save()
 
-import sys, codecs
-import time
-from datetime import datetime
+
 
 def feedTestRoar(request):
     #sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout, errors='replace')

@@ -7,6 +7,7 @@ from django.template import RequestContext
 import sys, codecs
 import time
 from datetime import datetime
+from django.http import HttpResponseRedirect
 
 def insert(insertURL):
     f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
@@ -39,8 +40,6 @@ def insertFeed(request):
     return HttpResponse("Thanks for the feed!")
 
 def myFeeds(request):
-    #delete(request.POST['feedurl'])
-    #return HttpResponse("Why did you delete me,Im hungry feed!")
     ret_str = ""
     for feed in selectAll():
 	ret_str += "<li>" + feed.url + "</li>"
@@ -52,7 +51,9 @@ def myFeeds(request):
     return HttpResponse(t.render(c))
 
 
-
+def deleteFeed(request):
+    delete(request.POST['feedurl'])
+    return HttpResponse(myFeeds(request))
 
 
 def selectAll():

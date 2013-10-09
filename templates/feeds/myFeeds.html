@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-Feed Test
+<title>FeedMe!</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/static/feeds/bootstrap/css/bootstrap.css" type="text/css/">
+	<link rel="stylesheet" href="/static/feeds/bootstrap/css/bootstrap-responsive.css" type="text/css/">
+	<script src="/static/feeds/jquery.pjax.js"></script>
+	<script>
+	$(document).ready(function(){
+		$("#feedpage").load("/feeds");
+		$(document).pjax('a',"#feedpage");
+	})
+	</script>
 </head>
 
 <body>
-Feed Test
-
-<br>
+	
+	<h1>Feed Test</h1><br>
 	<div>
-		<h1>Feed me!</h1><br/>
 		<ul>
 			{{lover | safe}}
 		</ul>
@@ -30,7 +39,13 @@ Feed Test
 			<input type="submit" name="submit"/>
 		</form>
 	</div>
-
+	
+	<div class="container" id="feedpage">
+	
+		
+	</div>
+	<script src="/static/feeds/jquery-1.10.2.js"></script>
+	<script src="/static/feeds/bootstrap/js/bootstrap.js"></script>
 </body>
 
 </html>

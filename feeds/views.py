@@ -5,6 +5,7 @@ from django.core.context_processors import csrf
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 import feedparser
+import feedme.settings as settings
 from feeds.models import Feeds
 
 
@@ -44,15 +45,10 @@ def myFeeds(request):
         # Hyperlinked /showfeed?url=feed.url
         ret_str += "<li><a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\">" + feed.url + "</a>"
         # delete icon
-#         del_input = '<input type="image" src="{imgsrc}" name="feedurl" value="{value}" alt="Delete Button" width="16" height="16">'
-#         del_input = del_input.format(imgsrc = os.path.join("", "static", "img", "delete.png"),
-#                                      value = feed.url)
-#         # make the image a form to submit to delete
-#         del_form = "<form method='post' action='/feeds/deleteFeed'>" + del_input + "</form>"
-        del_img = '<input type="image" src="{imgsrc}" name="feedurl" value="{value}" alt="Delete Button" width="16" height="16">'
-        del_img = del_img.format(imgsrc = os.path.join("", "static", "img", "delete.png"),
-                                 value = feed.url)
-        ret_str += " " + del_img + "</li>"
+        del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
+        del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))
+        del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url + "\">"
+        ret_str += " " + del_link_tag + del_img + "</a></li>"
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
         'lover':ret_str
@@ -60,16 +56,19 @@ def myFeeds(request):
     return HttpResponse(t.render(c))
 
 def deleteFeed(request):
-    delete(request.POST['feedurl'])
+    if request.method == "POST":
+        delete(request.POST['feedurl'])
+    elif request.method == "GET":
+        qkey, qvalue = request.META['QUERY_STRING'].split('=')
+        if qkey == "url":
+            delete(qvalue)
     return HttpResponseRedirect("/feeds/myFeeds")
 
 def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
 
-# RANDOM NOTE: apparently using the request metadata can be dangerous - http://stackoverflow.com/questions/1451138/how-can-i-get-the-domain-name-of-my-site-within-a-django-template
-
-import feedme.settings as settings
+# NOTE: apparently using the request metadata can be dangerous - http://stackoverflow.com/questions/1451138/how-can-i-get-the-domain-name-of-my-site-within-a-django-template
 
 def showFeed(request):
     # CURRENTLY ONLY SUPPORTS ONE KEY=VALUE IN QUERY STRING (and doesn't even care what the key is!)

@@ -43,7 +43,7 @@ def insertFeed(request):
 def myFeeds(request):
     ret_str = ""
     for feed in selectAll():
-        ret_str += "<li><a href=\"" + request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\">" + feed.url + "</a></li>"
+        ret_str += "<li><a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\">" + feed.url + "</a></li>"
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
         'lover':ret_str

@@ -1,13 +1,14 @@
-from django.template import Context,loader
-from django.http import HttpResponse
+import sys, codecs, time
+from datetime import datetime
+
+from django.core.context_processors import csrf
+from django.template import Context, loader, RequestContext
+from django.http import HttpResponse, HttpResponseRedirect
 import feedparser
 from feeds.models import Feeds
-from django.core.context_processors import csrf
-from django.template import RequestContext
-import sys, codecs
-import time
-from datetime import datetime
-from django.http import HttpResponseRedirect
+
+
+
 
 def insert(insertURL):
     f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
@@ -25,7 +26,7 @@ def index(request):
     })	
     return HttpResponse(t.render(c))
 
-def feedTest(request):
+def addFeed(request):
     pythonUrl="http://feeds.gawker.com/kotaku/full"
     feed = feedparser.parse(pythonUrl)
     t=loader.get_template('feeds/feedTest.html')
@@ -42,14 +43,12 @@ def insertFeed(request):
 def myFeeds(request):
     ret_str = ""
     for feed in selectAll():
-	ret_str += "<li>" + feed.url + "</li>"
-
+        ret_str += "<li><a href=\"" +"http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\">" + feed.url + "</a></li>"
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
         'lover':ret_str
     })
     return HttpResponse(t.render(c))
-
 
 def deleteFeed(request):
     delete(request.POST['feedurl'])
@@ -60,11 +59,9 @@ def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
 
-
 def feedTestRoar(request):
     # so i can print out the debug msgs without exploding
     sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout, errors='replace')
-    
     url = "http://feeds.feedburner.com/RockPaperShotgun"
     #url = "http://www.theverge.com/rss/frontpage"
     #url = "http://kotaku.com/vip.xml"
@@ -73,6 +70,17 @@ def feedTestRoar(request):
         if k != "entries": print ">>", k, ":", feed[k]
     for k in feed['feed'].keys():
         print ">>", k, ":", feed['feed'][k]
+    return HttpResponse(make_feed_page(feed))
+
+# RANDOM NOTE: apparently using the request metadata can be dangerous - http://stackoverflow.com/questions/1451138/how-can-i-get-the-domain-name-of-my-site-within-a-django-template
+
+def showFeed(request):
+    sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout, errors='replace')
+    # CURRENTLY ONLY SUPPORTS ONE KEY=VALUE IN QUERY STRING (and doesn't even care what the key is!)
+    # but please use 'url' as key
+    qkey, qvalue = request.META['QUERY_STRING'].split('=')
+    url = qvalue
+    feed = feedparser.parse(url)
     return HttpResponse(make_feed_page(feed))
 
 def make_feed_page(feed):

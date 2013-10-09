@@ -43,7 +43,7 @@ def myFeeds(request):
     ret_str = ""
     for feed in selectAll():
         # Hyperlinked /showfeed?url=feed.url
-        ret_str += "<li><a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\">" + feed.url + "</a>"
+        ret_str += "<li><a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.url + "</a>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
         del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))

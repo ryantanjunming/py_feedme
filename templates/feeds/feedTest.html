@@ -10,7 +10,7 @@ Feed Test
 <br>
 	<div>
 		<h1>Feed me!</h1><br/>
-		<form method='post' action='/feeds/insertFeed'>
+		<form method='post' action='/feeds/addFeed/insertFeed'>
 		{% csrf_token %}
 			<input type="text" name="username" placeholder="Username"/><br/>
 			<input type="text" name="feedurl" placeholder="Website Url"/><br/>

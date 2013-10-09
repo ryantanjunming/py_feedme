@@ -18,6 +18,5 @@ urlpatterns = patterns('',
     (r'^feeds/insertFeed$','feeds.views.insertFeed'),
     (r'^feeds/(?i)myFeeds$','feeds.views.myFeeds'),
     (r'^feeds/deleteFeed$','feeds.views.deleteFeed'),
-    (r'^feeds/feedTestRoar$','feeds.views.feedTestRoar'),
     (r'^feeds/(?i)showfeed$', 'feeds.views.showFeed')
 )

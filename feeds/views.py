@@ -38,7 +38,7 @@ def addFeed(request):
 def insertFeed(request):
     #print request.POST['feedurl']
     insert(request.POST['feedurl'])
-    return HttpResponse("Thanks for the feed!")
+    return HttpResponseRedirect("/feeds/myFeeds")
 
 def myFeeds(request):
     ret_str = ""

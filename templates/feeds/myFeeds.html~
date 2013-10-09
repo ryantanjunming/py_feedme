@@ -21,7 +21,7 @@ Feed Test
 			<br/><br/>
 			<input type="submit" name="submit"/>
 		</form>
-		<h1>Add Feed!</h1>
+		<h1>Remove Feed!</h1>
 		<form method='post' action='/feeds/deleteFeed'>
 		{% csrf_token %}
 			<input type="text" name="username" placeholder="Username"/><br/>

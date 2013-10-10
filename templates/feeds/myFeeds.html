@@ -1,36 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-Feed Test
+<title>FeedMe!</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/static/feeds/bootstrap/css/bootstrap.css" type="text/css/">
+	<link rel="stylesheet" href="/static/feeds/bootstrap/css/bootstrap-responsive.css" type="text/css/">
+	
+	
 </head>
 
 <body>
-Feed Test
-
-<br>
-	<div>
-		<h1>Feed me!</h1><br/>
-		<ul>
-			{{lover | safe}}
-		</ul>
-		<h1>Add Feed!</h1>
-		<form method='post' action='/feeds/insertFeed'>
-		{% csrf_token %}
-			<input type="text" name="username" placeholder="Username"/><br/>
-			<input type="text" name="feedurl" placeholder="Website Url"/><br/>
-			<br/><br/>
-			<input type="submit" name="submit"/>
-		</form>
-		<h1>Remove Feed!</h1>
-		<form method='post' action='/feeds/deleteFeed'>
-		{% csrf_token %}
-			<input type="text" name="username" placeholder="Username"/><br/>
-			<input type="text" name="feedurl" placeholder="Website Url"/><br/>
-			<br/><br/>
-			<input type="submit" name="submit"/>
-		</form>
+	<div class="row">
+		<a href='/feeds'>Feeds</a> 
+		<h1>Feed Test</h1><br>
+		<div class="span4">
+			<ul id="feedbut">
+				{{lover | safe}}
+			</ul>
+			<h1>Add Feed!</h1>
+			<form method='post' action='/feeds/insertFeed'>
+			{% csrf_token %}
+				<input type="text" name="username" placeholder="Username"/><br/>
+				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
+				<br/><br/>
+				<input type="submit" name="submit"/>
+			</form>
+			<h1>Remove Feed!</h1>
+			<form method='post' action='/feeds/deleteFeed'>
+			{% csrf_token %}
+				<input type="text" name="username" placeholder="Username"/><br/>
+				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
+				<br/><br/>
+				<input type="submit" name="submit"/>
+			</form>
+		</div>
+	
+		<div class="span8" id="feedpage">
+	
+		
+		</div>
+		<script src="/static/feeds/jquery-1.10.2.js"></script>
+		<script src="/static/feeds/jquery.pjax.js"></script>
+		<script src="/static/feeds/pagify.js"></script>
+		<script src="/static/feeds/bootstrap/js/bootstrap.js"></script>
+		<script type='text/javascript'>
+			$(document).ready(function(){
+				$("#feedbut").click(function(){
+					$("#feedpage").load("http://localhost:8000/feeds/showfeed?url=http://www.io9.com/vip.xml")
+				});
+			});
+		</script>
 	</div>
-
 </body>
 
 </html>

@@ -11,11 +11,11 @@
 </head>
 
 <body>
-	<div id="container">
+	<div class="row">
 		<a href='/feeds'>Feeds</a> 
 		<h1>Feed Test</h1><br>
-		<div>
-			<ul>
+		<div class="span4">
+			<ul id="feedbut">
 				{{lover | safe}}
 			</ul>
 			<h1>Add Feed!</h1>
@@ -36,7 +36,7 @@
 			</form>
 		</div>
 	
-		<div id="feedpage">
+		<div class="span8" id="feedpage">
 	
 		
 		</div>
@@ -46,8 +46,9 @@
 		<script src="/static/feeds/bootstrap/js/bootstrap.js"></script>
 		<script type='text/javascript'>
 			$(document).ready(function(){
-				$("#feedpage").load("http://localhost:8000/feeds/showfeed?url=http://www.io9.com/vip.xml")
-				
+				$("#feedbut").click(function(){
+					$("#feedpage").load("http://localhost:8000/feeds/showfeed?url=http://www.io9.com/vip.xml")
+				});
 			});
 		</script>
 	</div>

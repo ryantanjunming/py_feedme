@@ -8,6 +8,7 @@ import feedparser
 import feedme.settings as settings
 from feeds.models import Feeds
 
+import stripe
 
 def insert(insertURL):
     f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
@@ -152,3 +153,24 @@ def make_entry_string(entry):
         fields[k] = fields[k].encode('utf-8')
     return "<h3><a href=\"{link}\">{title}</a></h3>{author}, published on {published}<br>{summary}".format(**fields)
     
+
+def billStripeToken(request):
+    # Set your secret key: remember to change this to your live secret key in production
+    # See your keys here https://manage.stripe.com/account
+    stripe.api_key = "sk_test_eCmqaN318lcvnTskneiJhPoj"
+
+    # Get the credit card details submitted by the form
+    token = request.POST['stripeToken']
+
+    # Create the charge on Stripe's servers - this will charge the user's card
+    try:
+        charge = stripe.Charge.create(
+		amount=1000, # amount in cents, again
+        currency="usd",
+        card=token,
+        description="payinguser@example.com"
+    )
+    except stripe.CardError, e:
+        # The card has been declined
+        pass
+    return HttpResponseRedirect("/feeds/myFeeds")

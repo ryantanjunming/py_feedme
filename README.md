@@ -48,6 +48,14 @@ Run `python manage.py runserver` and navigate to `localhost:8000`.
     OR
     
     $ pip install feedparser
+    
+### Install Stripe
+
+    $ sudo pip install --index-url https://code.stripe.com --upgrade stripe
+    
+    OR
+    
+    $ sudo easy_install --index-url https://code.stripe.com --upgrade stripe
 
 If you encounter errors, you might need to install this first (setupTools)
 

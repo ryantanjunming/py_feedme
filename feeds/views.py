@@ -141,8 +141,9 @@ def selectAllR():
     allrec = Recommendations.objects.all()
     return allrec
 
-# NOTE: apparently using the request metadata can be dangerous - http://stackoverflow.com/questions/1451138/how-can-i-get-the-domain-name-of-my-site-within-a-django-template
 
+# NOTE: apparently using the request metadata can be dangerous 
+# - http://stackoverflow.com/questions/1451138/how-can-i-get-the-domain-name-of-my-site-within-a-django-template
 def showFeed(request):
     # CURRENTLY ONLY SUPPORTS ONE KEY=VALUE IN QUERY STRING (and doesn't even care what the key is!)
     # but please use 'url' as key
@@ -151,10 +152,10 @@ def showFeed(request):
     feed = feedparser.parse(url)
     if settings.DEBUG: debug_feed_display(feed)
     return render(make_feed_page(feed))
-    
+
+
 
 # some feed display functions (will prob move to another file later)
-
 def debug_feed_display(feed, show_entries=0):
     """
     Prints string representation of the feed's contents, for debugging purposes.
@@ -175,6 +176,7 @@ def debug_feed_display(feed, show_entries=0):
                 print ">>>", k, ":", entry[k]
     print ">>> Finished displaying feed <<< \n"
     
+
 
 def make_feed_page(feed):
     """
@@ -212,6 +214,7 @@ def make_feed_page(feed):
     page = feed_header + "<br>" + entries.decode('utf-8')
     return page
 
+
 def make_entry_string(entry):
     """
     From feedparser.parse(url)['entries'] objects, returns HTML string
@@ -226,6 +229,7 @@ def make_entry_string(entry):
         fields[k] = fields[k].encode('utf-8')
     return "<h3><a href=\"{link}\">{title}</a></h3>{author}, published on {published}<br>{summary}".format(**fields)
     
+
 
 def billStripeToken(request):
     # Set your secret key: remember to change this to your live secret key in production

@@ -14,10 +14,16 @@
 	<div class="row">
 		<a href='/feeds'>Feeds</a> 
 		<h1>Feed Test</h1><br>
+
+        <!--Side bar-->
 		<div class="span4">
+
+            <!--Display my feeds-->
 			<ul id="feedbut">
 				{{lover | safe}}
 			</ul>
+
+            <!--Add Feed-->
 			<h1>Add Feed!</h1>
 			<form method='post' action='/feeds/insertFeed'>
 			{% csrf_token %}
@@ -26,6 +32,8 @@
 				<br/><br/>
 				<input type="submit" name="submit"/>
 			</form>
+
+            <!--Remove Feed-->
 			<h1>Remove Feed!</h1>
 			<form method='post' action='/feeds/deleteFeed'>
 			{% csrf_token %}
@@ -34,6 +42,15 @@
 				<br/><br/>
 				<input type="submit" name="submit"/>
 			</form>
+
+            <!--Recommendations panel-->
+            <br>
+            <h1>My Recommendations</h1>
+            <ul id="recommendations">
+				{{recommendations | safe}}
+			</ul>
+            <br>
+
 
 		<!--Bitcoin, coinbase-->
 		<a class="coinbase-button" data-code="b97ef89f995ccdd3168978db39edb526" data-button-style="donation_small" href="https://coinbase.com/checkouts/b97ef89f995ccdd3168978db39edb526">Donate Bitcoins</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
@@ -52,13 +69,12 @@
 		</form>
 		</div>
 	
-		<div class="span8" id="feedpage">
-	
-		
-		</div>
+        <!--Where the RSS Feeds will load into-->
+		<div class="span8" id="feedpage"></div>
+
+        <!--All the scripts-->
 		<script src="/static/feeds/jquery-1.10.2.js"></script>
 		<script src="/static/feeds/jquery.pjax.js"></script>
-		<script src="/static/feeds/pagify.js"></script>
 		<script src="/static/feeds/bootstrap/js/bootstrap.js"></script>
 		<script type='text/javascript'>
 			$(document).ready(function(){

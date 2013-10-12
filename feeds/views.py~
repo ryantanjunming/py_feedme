@@ -4,14 +4,29 @@ from datetime import datetime
 from django.core.context_processors import csrf
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
+
 import feedparser
+import stripe
+
 import feedme.settings as settings
 from feeds.models import Feeds
 
-import stripe
+
+class BadFeedException(Exception):
+    def __init__(self, msg):
+        super(BadFeedException, self).__init__(msg)
 
 def insert(insertURL):
-    f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
+    feed = feedparser.parse(insertURL)
+    if hasattr(feed, "bozo_exception"):
+        raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
+    try:
+        feedname = feed['feed']['title']
+    except:
+        feedname = insertURL
+    f = Feeds(name = feedname,
+              url = str(insertURL),
+              dateAdded = datetime.now())
     f.save()
 
 def delete(deleteURL):
@@ -26,6 +41,7 @@ def index(request):
     })	
     return HttpResponse(t.render(c))
 
+#is this still used?
 def addFeed(request):
     pythonUrl="http://feeds.gawker.com/kotaku/full"
     feed = feedparser.parse(pythonUrl)
@@ -37,14 +53,16 @@ def addFeed(request):
 
 def insertFeed(request):
     #print request.POST['feedurl']
-    insert(request.POST['feedurl'])
-    return HttpResponseRedirect("/feeds/myFeeds")
+    try:
+        insert(request.POST['feedurl'])
+        return HttpResponseRedirect("/feeds/myFeeds")
+    except (BadFeedException):
+        return HttpResponseRedirect("/feeds/feederror")
 
 def myFeeds(request):
     ret_str = ""
     for feed in selectAll():
-        # Hyperlinked /showfeed?url=feed.url
-        ret_str += "<li><a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.url + "</a>"
+        ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</a>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
         del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))

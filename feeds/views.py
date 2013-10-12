@@ -63,7 +63,7 @@ def myFeeds(request):
     ret_str = ""
     for feed in selectAll():
         #Jackie I've changed the one line below will it affect anything else? like the del_link_tag
-        ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</a>"
+        ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
         del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))

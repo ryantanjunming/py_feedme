@@ -3,23 +3,59 @@ from datetime import datetime
 
 from django.core.context_processors import csrf
 from django.template import Context, loader, RequestContext
-# from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import *
-import feedparser
-import feedme.settings as settings
-from feeds.models import Feeds
 
+from django.shortcuts import render_to_response, redirect
+
+import feedparser
 import stripe
 
+import feedme.settings as settings
+from feeds.models import Feeds
+from feeds.models import Recommendations
+
+
+class BadFeedException(Exception):
+    def __init__(self, msg):
+        super(BadFeedException, self).__init__(msg)
+
 def insert(insertURL):
-    f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
+    feed = feedparser.parse(insertURL)
+    if hasattr(feed, "bozo_exception"):
+        raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
+    try:
+        feedname = feed['feed']['title']
+    except:
+        feedname = insertURL
+    f = Feeds(name = feedname,
+              url = str(insertURL),
+              dateAdded = datetime.now())
     f.save()
+
+def insertR(insertURL,insertSender,insertReceiver):
+    feed = feedparser.parse(insertURL)
+    if hasattr(feed, "bozo_exception"):
+        raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
+    try:
+        feedname = feed['feed']['title']
+    except:
+        feedname = insertURL
+    r = Recommendations(name = str(feedname),
+                        url = str(insertURL),
+                        sender = str(insertSender),
+                        receiver = str(insertReceiver))
+    r.save()
 
 def delete(deleteURL):
     f = Feeds.objects.get(url = str(deleteURL))
     f.delete()
 
-# Create your views here.
+def deleteR(deleteURL):
+    r = Recommendations.objects.get(url = str(deleteURL))
+    r.delete()
+
+"""
+================== CREATE YOUR VIEWS HERE ==================
+"""
 def index(request):
     
     c = RequestContext(request,{
@@ -28,35 +64,63 @@ def index(request):
 
     return render_to_response('feeds/index.html', c)
 
-def addFeed(request):
-    pythonUrl="http://feeds.gawker.com/kotaku/full"
-    feed = feedparser.parse(pythonUrl)
-    t=loader.get_template('feeds/feedTest.html')
-    c=RequestContext(request,{
-        'lala':'land'
-    })
-    return HttpResponse(t.render(c))
+
 
 def insertFeed(request):
     #print request.POST['feedurl']
-    insert(request.POST['feedurl'])
-    return HttpResponseRedirect("/feeds/myFeeds")
+    try:
+        insert(request.POST['feedurl'])
+        return redirect("/feeds/myFeeds")
+    except (BadFeedException):
+        return redirect("/feeds/feederror")
+
+def insertRecommendation(request):
+    try:
+        insertR(request.POST['feedurl'],request.POST['sender'],request.POST['receiver'])
+        return redirect("/feeds/myFeeds")
+    except (BadFeedException):
+        return redirect("/feeds/feederror")
+
+def deleteRecommendation(request):
+    if request.method == "POST":
+        deleteR(request.POST['feedurl'])
+    elif request.method == "GET":
+        qkey, qvalue = request.META['QUERY_STRING'].split('=')
+        if qkey == "url":
+            deleteR(qvalue)
+    return redirect("/feeds/myFeeds")
 
 def myFeeds(request):
+
+    #populating my current rss feeds
     ret_str = ""
     for feed in selectAll():
-        # Hyperlinked /showfeed?url=feed.url
-        ret_str += "<li><a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.url + "</a>"
+        #Jackie I've changed the one line below will it affect anything else? like the del_link_tag
+        ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
         del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))
         del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url + "\">"
         ret_str += " " + del_link_tag + del_img + "</a></li>"
+    
+    #populating my current recommendations
+    myRecommendations_str = ""
+    for r in selectAllR():
+        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.name + "</button>"
+        # delete icon
+        del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
+        del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))
+        del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url + "\">"
+        myRecommendations_str += " " + del_link_tag + del_img + "</a></li>"
+    
+    #rendering the page
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
-        'lover':ret_str
+        'lover':ret_str,
+        'recommendations':myRecommendations_str
     })
-    return HttpResponse(t.render(c))
+    return render_to_response('feeds/myFeeds.html', c)
+    
 
 def deleteFeed(request):
     if request.method == "POST":
@@ -65,11 +129,17 @@ def deleteFeed(request):
         qkey, qvalue = request.META['QUERY_STRING'].split('=')
         if qkey == "url":
             delete(qvalue)
-    return HttpResponseRedirect("/feeds/myFeeds")
+    return redirect("/feeds/myFeeds")
 
+#select all Feeds
 def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
+
+#select all Recommendations
+def selectAllR():
+    allrec = Recommendations.objects.all()
+    return allrec
 
 # NOTE: apparently using the request metadata can be dangerous - http://stackoverflow.com/questions/1451138/how-can-i-get-the-domain-name-of-my-site-within-a-django-template
 
@@ -80,7 +150,8 @@ def showFeed(request):
     url = qvalue
     feed = feedparser.parse(url)
     if settings.DEBUG: debug_feed_display(feed)
-    return HttpResponse(make_feed_page(feed))
+    return render(make_feed_page(feed))
+    
 
 # some feed display functions (will prob move to another file later)
 
@@ -175,4 +246,4 @@ def billStripeToken(request):
     except stripe.CardError, e:
         # The card has been declined
         pass
-    return HttpResponseRedirect("/feeds/myFeeds")
+    return redirect("/feeds/myFeeds")

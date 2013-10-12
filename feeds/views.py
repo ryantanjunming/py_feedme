@@ -22,9 +22,11 @@ def delete(deleteURL):
 # Create your views here.
 def index(request):
     
-    return render_to_response('feeds/index.html', {'foo': 'bar'},
-       context_instance=RequestContext(request)
-    )
+    c = RequestContext(request,{
+        'lala':'land'
+    })
+
+    return render_to_response('feeds/index.html', c)
 
 def addFeed(request):
     pythonUrl="http://feeds.gawker.com/kotaku/full"

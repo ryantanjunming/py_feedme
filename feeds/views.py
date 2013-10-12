@@ -4,14 +4,23 @@ from datetime import datetime
 from django.core.context_processors import csrf
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
+
 import feedparser
+import stripe
+
 import feedme.settings as settings
 from feeds.models import Feeds
 
-import stripe
 
 def insert(insertURL):
-    f = Feeds(url = "{}".format(insertURL),dateAdded = datetime.now())
+    feed = feedparser.parse(insertURL)
+    try:
+        feedname = feed['feed']['title']
+    except:
+        feedname = insertURL
+    f = Feeds(name = feedname,
+              url = str(insertURL),
+              dateAdded = datetime.now())
     f.save()
 
 def delete(deleteURL):
@@ -26,6 +35,7 @@ def index(request):
     })	
     return HttpResponse(t.render(c))
 
+#is this still used?
 def addFeed(request):
     pythonUrl="http://feeds.gawker.com/kotaku/full"
     feed = feedparser.parse(pythonUrl)
@@ -43,8 +53,7 @@ def insertFeed(request):
 def myFeeds(request):
     ret_str = ""
     for feed in selectAll():
-        # Hyperlinked /showfeed?url=feed.url
-        ret_str += "<li><a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.url + "</a>"
+        ret_str += "<li><a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</a>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
         del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))

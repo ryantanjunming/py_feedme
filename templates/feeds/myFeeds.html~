@@ -45,7 +45,7 @@
 
             <!--Recommendations panel-->
             <br>
-            <h3>My Recommendations</h3>
+            <h1>My Recommendations</h1>
             <ul id="recommendations">
 				{{recommendations | safe}}
 			</ul>

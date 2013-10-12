@@ -24,7 +24,7 @@
 			</ul>
 
             <!--Add Feed-->
-			<h1>Add Feed!</h1>
+			<h3>Add Feed!</h3>
 			<form method='post' action='/feeds/insertFeed'>
 			{% csrf_token %}
 				<input type="text" name="username" placeholder="Username"/><br/>
@@ -34,7 +34,7 @@
 			</form>
 
             <!--Remove Feed-->
-			<h1>Remove Feed!</h1>
+			<h3>Remove Feed!</h3>
 			<form method='post' action='/feeds/deleteFeed'>
 			{% csrf_token %}
 				<input type="text" name="username" placeholder="Username"/><br/>
@@ -45,7 +45,7 @@
 
             <!--Recommendations panel-->
             <br>
-            <h1>My Recommendations</h1>
+            <h3>My Recommendations</h3>
             <ul id="recommendations">
 				{{recommendations | safe}}
 			</ul>

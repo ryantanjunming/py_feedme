@@ -77,7 +77,7 @@ def myFeeds(request):
     for feed in selectAll():
         myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
     
-
+    #rendering the page
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
         'lover':ret_str,

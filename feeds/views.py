@@ -41,15 +41,7 @@ def index(request):
     })	
     return HttpResponse(t.render(c))
 
-#is this still used?
-def addFeed(request):
-    pythonUrl="http://feeds.gawker.com/kotaku/full"
-    feed = feedparser.parse(pythonUrl)
-    t=loader.get_template('feeds/feedTest.html')
-    c=RequestContext(request,{
-        'lala':'land'
-    })
-    return HttpResponse(t.render(c))
+
 
 def insertFeed(request):
     #print request.POST['feedurl']

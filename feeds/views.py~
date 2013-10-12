@@ -38,7 +38,8 @@ def insertR(insertURL,insertSender,insertReceiver):
         feedname = feed['feed']['title']
     except:
         feedname = insertURL
-    r = Recommendations(url = str(insertURL),
+    r = Recommendations(name = str(feedname)
+                        url = str(insertURL),
                         sender = str(insertSender),
                         receiver = str(insertReceiver))
     r.save()
@@ -101,7 +102,7 @@ def myFeeds(request):
     #populating my current recommendations
     myRecommendations_str = ""
     for r in selectAllR():
-        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.url + "</button>"
+        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
         del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))

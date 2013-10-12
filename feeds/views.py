@@ -60,6 +60,8 @@ def insertFeed(request):
         return HttpResponseRedirect("/feeds/feederror")
 
 def myFeeds(request):
+
+    #populating my current rss feeds
     ret_str = ""
     for feed in selectAll():
         #Jackie I've changed the one line below will it affect anything else? like the del_link_tag
@@ -69,9 +71,17 @@ def myFeeds(request):
         del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))
         del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url + "\">"
         ret_str += " " + del_link_tag + del_img + "</a></li>"
+    
+    #populating my current recommendations
+    myRecommendations_str = ""
+    for feed in selectAll():
+        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
+    
+    #rendering the page
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
-        'lover':ret_str
+        'lover':ret_str,
+        'recommendations':myRecommendations_str
     })
     return HttpResponse(t.render(c))
 

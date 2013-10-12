@@ -45,9 +45,9 @@
 
             <!--Recommendations panel-->
             <br>
-            <h1>My Recommendations</h1>
+            <h3>My Recommendations</h3>
             <ul id="recommendations">
-				{{lover | safe}}
+				{{recommendations | safe}}
 			</ul>
             <br>
 
@@ -78,6 +78,7 @@
 		<script src="/static/feeds/bootstrap/js/bootstrap.js"></script>
 		<script type='text/javascript'>
 			$(document).ready(function(){
+                <!--Used to display feeds on current page-->
 				$("#feedbut button").click(function(e){
 					$("#feedpage").load($(this).attr("value"));
 				});

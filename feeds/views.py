@@ -3,7 +3,8 @@ from datetime import datetime
 
 from django.core.context_processors import csrf
 from django.template import Context, loader, RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
+# from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import *
 import feedparser
 import feedme.settings as settings
 from feeds.models import Feeds
@@ -20,11 +21,10 @@ def delete(deleteURL):
 
 # Create your views here.
 def index(request):
-    t=loader.get_template('feeds/index.html')
-    c=RequestContext(request,{
-        'lover':'Jack'
-    })	
-    return HttpResponse(t.render(c))
+    
+    return render_to_response('feeds/index.html', {'foo': 'bar'},
+       context_instance=RequestContext(request)
+    )
 
 def addFeed(request):
     pythonUrl="http://feeds.gawker.com/kotaku/full"

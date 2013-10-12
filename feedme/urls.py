@@ -1,4 +1,6 @@
 from django.conf.urls import patterns, include, url
+from django.views.generic import TemplateView
+
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -21,5 +23,6 @@ urlpatterns = patterns('',
     (r'^feeds/insertFeed$','feeds.views.insertFeed'),
     (r'^feeds/deleteFeed$','feeds.views.deleteFeed'),
     (r'^feeds/(?i)showfeed$', 'feeds.views.showFeed'),
-    (r'^feeds/(?i)billStripeToken$','feeds.views.billStripeToken')
+    (r'^feeds/(?i)billStripeToken$','feeds.views.billStripeToken'),
+    (r'^feeds/(?i)feederror$', TemplateView.as_view(template_name="feeds/feederror.html"))
 )

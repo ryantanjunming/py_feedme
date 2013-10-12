@@ -12,8 +12,14 @@ import feedme.settings as settings
 from feeds.models import Feeds
 
 
+class BadFeedException(Exception):
+    def __init__(self, msg):
+        super(BadFeedException, self).__init__(msg)
+
 def insert(insertURL):
     feed = feedparser.parse(insertURL)
+    if hasattr(feed, "bozo_exception"):
+        raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
     try:
         feedname = feed['feed']['title']
     except:
@@ -47,8 +53,11 @@ def addFeed(request):
 
 def insertFeed(request):
     #print request.POST['feedurl']
-    insert(request.POST['feedurl'])
-    return HttpResponseRedirect("/feeds/myFeeds")
+    try:
+        insert(request.POST['feedurl'])
+        return HttpResponseRedirect("/feeds/myFeeds")
+    except (BadFeedException):
+        return HttpResponseRedirect("/feeds/feederror")
 
 def myFeeds(request):
     ret_str = ""

@@ -10,6 +10,7 @@ import stripe
 
 import feedme.settings as settings
 from feeds.models import Feeds
+from feeds.models import Recommendations
 
 
 class BadFeedException(Exception):
@@ -28,6 +29,19 @@ def insert(insertURL):
               url = str(insertURL),
               dateAdded = datetime.now())
     f.save()
+
+def insertR(insertURL):
+    feed = feedparser.parse(insertURL)
+    if hasattr(feed, "bozo_exception"):
+        raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
+    try:
+        feedname = feed['feed']['title']
+    except:
+        feedname = insertURL
+    r = Recommendations(url = str(insertURL),
+                        sender = "God",
+                        receiver = "Jack")
+    r.save()
 
 def delete(deleteURL):
     f = Feeds.objects.get(url = str(deleteURL))
@@ -51,6 +65,13 @@ def insertFeed(request):
     except (BadFeedException):
         return HttpResponseRedirect("/feeds/feederror")
 
+def insertRecommendation(request):
+    try:
+        insertR(request.POST['feedurl'])
+        return HttpResponseRedirect("/feeds/myFeeds")
+    except (BadFeedException):
+        return HttpResponseRedirect("/feeds/feederror")
+
 def myFeeds(request):
 
     #populating my current rss feeds
@@ -66,8 +87,8 @@ def myFeeds(request):
     
     #populating my current recommendations
     myRecommendations_str = ""
-    for feed in selectAll():
-        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
+    for r in selectAllR():
+        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.url + "</button></li>"
     
     #rendering the page
     t=loader.get_template('feeds/myFeeds.html')
@@ -86,9 +107,15 @@ def deleteFeed(request):
             delete(qvalue)
     return HttpResponseRedirect("/feeds/myFeeds")
 
+#select all Feeds
 def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
+
+#select all Recommendations
+def selectAllR():
+    allrec = Recommendations.objects.all()
+    return allrec
 
 # NOTE: apparently using the request metadata can be dangerous - http://stackoverflow.com/questions/1451138/how-can-i-get-the-domain-name-of-my-site-within-a-django-template
 

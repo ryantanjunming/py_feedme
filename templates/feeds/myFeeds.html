@@ -43,6 +43,16 @@
 				<input type="submit" name="submit"/>
 			</form>
 
+            <!--Add Recommendations-->
+			<h3>Add Recommendations!</h3>
+			<form method='post' action='/feeds/insertRecommendation'>
+			{% csrf_token %}
+				<input type="text" name="username" placeholder="Username"/><br/>
+				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
+				<br/><br/>
+				<input type="submit" name="submit"/>
+			</form>
+
             <!--Recommendations panel-->
             <br>
             <h3>My Recommendations</h3>

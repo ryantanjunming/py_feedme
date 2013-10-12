@@ -30,7 +30,7 @@ def insert(insertURL):
               dateAdded = datetime.now())
     f.save()
 
-def insertR(insertURL):
+def insertR(insertURL,insertSender,insertReceiver):
     feed = feedparser.parse(insertURL)
     if hasattr(feed, "bozo_exception"):
         raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
@@ -39,13 +39,17 @@ def insertR(insertURL):
     except:
         feedname = insertURL
     r = Recommendations(url = str(insertURL),
-                        sender = "God",
-                        receiver = "Jack")
+                        sender = str(insertSender),
+                        receiver = str(insertReceiver))
     r.save()
 
 def delete(deleteURL):
     f = Feeds.objects.get(url = str(deleteURL))
     f.delete()
+
+def deleteR(deleteURL):
+    r = Recommendations.objects.get(url = str(deleteURL))
+    r.delete()
 
 # Create your views here.
 def index(request):
@@ -67,10 +71,19 @@ def insertFeed(request):
 
 def insertRecommendation(request):
     try:
-        insertR(request.POST['feedurl'])
+        insertR(request.POST['feedurl'],request.POST['sender'],request.POST['receiver'])
         return HttpResponseRedirect("/feeds/myFeeds")
     except (BadFeedException):
         return HttpResponseRedirect("/feeds/feederror")
+
+def deleteRecommendation(request):
+    if request.method == "POST":
+        deleteR(request.POST['feedurl'])
+    elif request.method == "GET":
+        qkey, qvalue = request.META['QUERY_STRING'].split('=')
+        if qkey == "url":
+            deleteR(qvalue)
+    return HttpResponseRedirect("/feeds/myFeeds")
 
 def myFeeds(request):
 
@@ -88,7 +101,12 @@ def myFeeds(request):
     #populating my current recommendations
     myRecommendations_str = ""
     for r in selectAllR():
-        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.url + "</button></li>"
+        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.url + "</button>"
+        # delete icon
+        del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
+        del_img = del_img.format(imgsrc = os.path.join("..", "static", "img", "delete.png"))
+        del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url + "\">"
+        myRecommendations_str += " " + del_link_tag + del_img + "</a></li>"
     
     #rendering the page
     t=loader.get_template('feeds/myFeeds.html')

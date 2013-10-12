@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     (r'^feeds/insertFeed$','feeds.views.insertFeed'),
     (r'^feeds/deleteFeed$','feeds.views.deleteFeed'),
     (r'^feeds/insertRecommendation$','feeds.views.insertRecommendation'),
+    (r'^feeds/deleteRecommendation','feeds.views.deleteRecommendation'),
     (r'^feeds/(?i)showfeed$', 'feeds.views.showFeed'),
     (r'^feeds/(?i)billStripeToken$','feeds.views.billStripeToken'),
     (r'^feeds/(?i)feederror$', TemplateView.as_view(template_name="feeds/feederror.html"))

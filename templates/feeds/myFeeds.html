@@ -14,7 +14,7 @@
 
             <!--Display my feeds-->
 			<ul id="feedbut">
-				{{lover | safe}}
+				{{myFeeds | safe}}
 			</ul>
 
             <!--Add Feed-->
@@ -29,7 +29,9 @@
 
             <!--Remove Feed-->
 			<h3>Remove Feed!</h3>
-			<form method='post' action='/deleteFeed/'>
+
+			<form method='post' action='/feeds/deleteFeed/'>
+
 			{% csrf_token %}
 				<input type="text" name="username" placeholder="Username"/><br/>
 				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
@@ -39,7 +41,8 @@
 
             <!--Add Recommendations-->
 			<h3>Add Recommendations!</h3>
-			<form method='post' action='/insertRecommendation/'>
+
+			<form method='post' action='/feeds/insertRecommendation/'>
 			{% csrf_token %}
 				<input type="text" name="sender" placeholder="Sender"/><br/>
                 <input type="text" name="receiver" placeholder="Receiver"/><br/>
@@ -59,7 +62,9 @@
             <br>
 
 
+
 		
+		</div>
 	
         <!--Where the RSS Feeds will load into-->
 		<div class="span8" id="feedpage"></div>

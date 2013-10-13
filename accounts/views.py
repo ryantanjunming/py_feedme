@@ -1,5 +1,3 @@
-# Create your views here.
-
 # (r'^accounts?/$','accounts.views.index'),
 # (r'^accounts/(?i)login?/$','accounts.views.login'),
 # (r'^accounts/(?i)logout?/$','accounts.views.logout'),
@@ -15,6 +13,7 @@ from datetime import datetime
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
 import socket
 # from django.http import HttpResponse
@@ -31,16 +30,22 @@ def index(request):
 
 
 def login(request):
+	results = {'success' : False,
+				'message' : 'Username and Password were incorrect'}
+
 	if request.POST.get('formType') == "login":
-		username = request.POST.username
-		password = request.POST.password
+		username = request.POST.get('username')
+		password = request.POST.get('password')
 		user = authenticate(username=username, password=password)
+
 		if user is not None:
 			# the password verified for the user
 			if user.is_active:
-				print("User is valid, active and authenticated")
+				results = {'success' : True,
+				'message' : 'Successful Login, you will be redirected',
+				'redirect' : '/feeds/myFeeds/' }
 			else:
-				print("The password is valid, but the account has been disabled!")
-		else:
-			# the authentication system was unable to verify the username and password
-			print("The username and password were incorrect.")
+				results = {'success' : False,
+				'message' : 'Account has been disabled'}
+	json = simplejson.dumps(results)
+	return HttpResponse(json, mimetype='application/json')

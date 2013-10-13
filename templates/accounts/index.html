@@ -1,0 +1,58 @@
+{% extends 'extends/base.html' %}
+{% block title %}Login/Register to FeedMe{% endblock %}
+{% block stylesheets %}
+	<link href="/static/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" media="screen">
+    <!-- custom css pages -->
+    <link href="/static/css/custom/login.css" rel="stylesheet" media="screen">
+{% endblock %}
+{% block content %}
+	<script type="text/javascript">
+		
+	</script>
+
+	<div class="container">
+		<div class="row">
+			<div class="span6 well">
+				<div id="login" class="login-block">
+			      	<div class="form-signin">
+				        <h2 class="form-signin-heading">Sign in</h2>
+				        {% csrf_token %}
+				        <input id="formSigninUsername" type="text" class="form-control" placeholder="Username" autofocus>
+				        <input id="formSigninPassword" type="password" class="form-control" placeholder="Password">
+				        
+				        <div id="formSigninAlert"></div>
+				        <button id="loginSubmit" type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
+				    </div>
+			    </div>
+			</div>
+		    
+		    <div class="span6 well">
+			    <div id="rego" class="rego-block">
+			      <form class="form-rego" id="regoForm" method="get" action="">
+			        <h2 class="form-rego-heading">Register</h2>
+			        {% csrf_token %}
+			        <input id="formRegoUsername" name="formRegoUsername" type="text" class="form-control" placeholder="User Name" autofocus />
+			        <input id="formRegoPassword" name="formRegoPassword" type="password" class="form-control" placeholder="Password" />
+			        <input id="formRegoConfirmPassword" name="formRegoConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
+			        <input id="formRegoFirstName" name="formRegoFirstName" type="text" class="form-control" placeholder="First Name" autofocus />
+			        <input id="formRegoLastName" name="formRegoLastName" type="text" class="form-control" placeholder="Last Name" autofocus />
+			        <input id="formRegoEmail" name="formRegoEmail" type="email" class="form-control" placeholder="Email address" autofocus />
+			        
+			        <div id="formRegoAlert"></div>
+			      	<button id="regoSubmit" type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
+			      </form>
+			    </div>
+			</div>
+		</div>
+	</div>    
+
+{% endblock %}
+{% block javascript %}
+	<!-- loaded scripts for animation & validation -->
+	<script src="/static/js/jquery.validate.min.js"></script>
+	<script src="/static/js/additional-methods.min.js"></script>
+	<script src="/static/js/jquery-ui-1.10.3.custom.min.js"></script>
+
+	<!-- custom scripts -->
+	<script src="/static/js/custom/login_rego.js"></script>
+{% endblock %}

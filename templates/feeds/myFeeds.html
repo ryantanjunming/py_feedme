@@ -30,6 +30,7 @@
             <!--Remove Feed-->
 			<h3>Remove Feed!</h3>
 			<form method='post' action='/feeds/deleteFeed/'>
+
 			{% csrf_token %}
 				<input type="text" name="username" placeholder="Username"/><br/>
 				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
@@ -39,6 +40,7 @@
 
             <!--Add Recommendations-->
 			<h3>Add Recommendations!</h3>
+
 			<form method='post' action='/feeds/insertRecommendation/'>
 			{% csrf_token %}
 				<input type="text" name="sender" placeholder="Sender"/><br/>
@@ -57,6 +59,7 @@
 				{{recommendations | safe}}
 			</ul>
             <br>
+
 
 
 		<!--Bitcoin, coinbase-->

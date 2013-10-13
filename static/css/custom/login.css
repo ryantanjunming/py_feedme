@@ -1,0 +1,81 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+ /*for the sign-in */
+
+.form-signin {
+  max-width: 206px;
+  margin:0px auto;
+  display: block;
+}
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+  font-weight: normal;
+}
+
+.form-signin .form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+.form-signin input{
+  margin-bottom: 5px;
+}
+
+/* for the rego */
+
+.rego-block{
+
+}
+
+.form-rego {
+  max-width: 206px;
+  margin:0px auto;
+ }
+
+.form-rego .form-rego-heading,
+.form-rego .checkbox {
+  margin-bottom: 10px;
+}
+
+.form-rego .checkbox {
+  font-weight: normal;
+}
+
+.form-rego .form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.form-rego .form-control:focus {
+  z-index: 2;
+}
+
+.form-rego input {
+  margin-bottom: 5px;
+}
+
+.form-rego label.error {
+	color: #800000;
+}

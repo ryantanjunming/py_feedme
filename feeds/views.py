@@ -103,7 +103,7 @@ def myFeeds(request):
     
     #populating my current recommendations
     myRecommendations_str = ""
-    for r in selectAllR():
+    for r in selectAllR(request.user.username):
         myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
@@ -136,8 +136,8 @@ def selectAll():
     return allfeeds
 
 #select all Recommendations
-def selectAllR():
-    allrec = Recommendations.objects.all()#filter(receiver="Jack")
+def selectAllR(username):
+    allrec = Recommendations.objects.filter(receiver=username)
     return allrec
 
 

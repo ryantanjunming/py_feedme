@@ -70,9 +70,9 @@ def insertFeed(request):
     #print request.POST['feedurl']
     try:
         insert(request.POST['feedurl'])
-        return redirect("/feeds/myFeeds")
+        return redirect("/feeds/myFeeds/")
     except (BadFeedException):
-        return redirect("/feeds/feederror")
+        return redirect("/feeds/feederror/")
 
 def insertRecommendation(request):
     try:
@@ -116,7 +116,7 @@ def myFeeds(request):
     #rendering the page
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
-        'lover':ret_str,
+        'myFeeds':ret_str,
         'recommendations':myRecommendations_str
     })
     return render_to_response('feeds/myFeeds.html', c)

@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>FeedMe!</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/static/feeds/bootstrap/css/bootstrap.css" type="text/css/">
-	<link rel="stylesheet" href="/static/feeds/bootstrap/css/bootstrap-responsive.css" type="text/css/">
-	
-	
-</head>
+{% extends 'extends/base.html' %}
 
-<body>
+{% block title %}FeedMe!{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block content %}
 	<div class="row">
 		<a href='/feeds'>Feeds</a> 
 		<h1>Feed Test</h1><br>
@@ -20,7 +14,7 @@
 
             <!--Display my feeds-->
 			<ul id="feedbut">
-				{{lover | safe}}
+				{{myFeeds | safe}}
 			</ul>
 
             <!--Add Feed-->
@@ -54,16 +48,7 @@
 				<input type="submit" name="submit"/>
 			</form>
 
-            <!--Add Recommendations-->
-			<h3>Add Recommendations!</h3>
-			<form method='post' action='/feeds/insertRecommendation'>
-			{% csrf_token %}
-				<input type="text" name="sender" placeholder="Sender"/><br/>
-                <input type="text" name="receiver" placeholder="Receiver"/><br/>
-				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
-				<br/><br/>
-				<input type="submit" name="submit"/>
-			</form>
+            
 
             <!--Recommendations panel-->
             <br>
@@ -93,20 +78,17 @@
 	
         <!--Where the RSS Feeds will load into-->
 		<div class="span8" id="feedpage"></div>
+			
+		</div>
+{% endblock %}
 
-        <!--All the scripts-->
-		<script src="/static/feeds/jquery-1.10.2.js"></script>
-		<script src="/static/feeds/jquery.pjax.js"></script>
-		<script src="/static/feeds/bootstrap/js/bootstrap.js"></script>
-		<script type='text/javascript'>
-			$(document).ready(function(){
-                <!--Used to display feeds on current page-->
-				$("#feedbut button").click(function(e){
-					$("#feedpage").load($(this).attr("value"));
-				});
+{% block javascript %}
+	<script type='text/javascript'>
+		$(document).ready(function(){
+	        <!--Used to display feeds on current page-->
+			$("#feedbut button").click(function(e){
+				$("#feedpage").load($(this).attr("value"));
 			});
-		</script>
-	</div>
-</body>
-
-</html>
+		});
+	</script>
+{% endblock %}

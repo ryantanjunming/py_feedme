@@ -5,13 +5,16 @@
 {% block stylesheets %}{% endblock %}
 
 {% block content %}
-	<div class="row">
+	<div class="row-fluid">
 		<a href='/feeds'>Feeds</a> 
 		<h1>Feed Test</h1><br>
 
         <!--Side bar-->
 		<div class="span4">
 
+            <!--Side bar-->
+            <h1>{{username | safe}}</h1>
+            
             <!--Display my feeds-->
 			<ul id="feedbut">
 				{{myFeeds | safe}}

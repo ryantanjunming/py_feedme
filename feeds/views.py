@@ -115,7 +115,8 @@ def myFeeds(request):
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
         'myFeeds':ret_str,
-        'recommendations':myRecommendations_str
+        'recommendations':myRecommendations_str,
+        'username':request.user.get_full_name()
     })
     return render_to_response('feeds/myFeeds.html', c)
     

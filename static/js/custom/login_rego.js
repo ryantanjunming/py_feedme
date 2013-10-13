@@ -26,13 +26,16 @@ $().ready( function(){
 	            	csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
 	            },
 	            success: function(data) {
-	        		$('#formSigninAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
-	        		setTimeout(function() {
-	        			window.location.href = data.redirect;
-	        		}, 500);
+	            	if(data.success == true){
+		        		$('#formSigninAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
+		        		setTimeout(function() {window.location.href = data.redirect;}, 500);
+		        	}else{
+		        		$('#formSigninAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
+		        		$('#formSigninPassword').val('');
+		        	}
 	            },error : function(xhr,errmsg,err) {
-	            	$('#formSigninAlert').show().html(
-	            		'<div class="alert alert-danger">'+xhr.status+": "+xhr.responseText+'</div>');
+	            	$('#formSigninAlert').show().html('<div class="alert alert-danger">'+xhr.status+": "+xhr.responseText+'</div>');
+	            	$('#formSigninPassword').val('');
 				}
 	     	});
 	 		return false;

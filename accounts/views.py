@@ -11,7 +11,7 @@ from datetime import datetime
 # from django.core.context_processors import csrf
 # from django.template import Context, loader, RequestContext
 from django.shortcuts import render_to_response, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
@@ -25,8 +25,11 @@ class BadAuthException(Exception):
         super(BadFeedException, self).__init__(msg)
 
 def index(request):
-    return render_to_response('accounts/index.html', 
-    	context_instance=RequestContext(request))
+	if(request.user.is_authenticated()):
+		return redirect("/feeds/myFeeds/")
+	else:
+		return render_to_response('accounts/index.html', context_instance=RequestContext(request))
+    	
 
 
 def login(request):
@@ -37,15 +40,19 @@ def login(request):
 		username = request.POST.get('username')
 		password = request.POST.get('password')
 		user = authenticate(username=username, password=password)
-
 		if user is not None:
 			# the password verified for the user
 			if user.is_active:
+				auth_login(request, user)
 				results = {'success' : True,
-				'message' : 'Successful Login, you will be redirected',
+				'message' : 'Successful Login, Welcome <strong>'+user.get_full_name()+'</strong>',
 				'redirect' : '/feeds/myFeeds/' }
 			else:
 				results = {'success' : False,
 				'message' : 'Account has been disabled'}
 	json = simplejson.dumps(results)
 	return HttpResponse(json, mimetype='application/json')
+
+def logout(request):
+    auth_logout(request)
+    return redirect("/accounts/")

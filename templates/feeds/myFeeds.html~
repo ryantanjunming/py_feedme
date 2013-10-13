@@ -29,9 +29,9 @@
 
             <!--Remove Feed-->
 			<h3>Remove Feed!</h3>
-<<<<<<< HEAD
+
 			<form method='post' action='/feeds/deleteFeed/'>
-=======	
+
 			{% csrf_token %}
 				<input type="text" name="username" placeholder="Username"/><br/>
 				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
@@ -41,9 +41,8 @@
 
             <!--Add Recommendations-->
 			<h3>Add Recommendations!</h3>
-<<<<<<< HEAD
+
 			<form method='post' action='/feeds/insertRecommendation/'>
-=======
 			{% csrf_token %}
 				<input type="text" name="sender" placeholder="Sender"/><br/>
                 <input type="text" name="receiver" placeholder="Receiver"/><br/>
@@ -63,24 +62,9 @@
             <br>
 
 
-<<<<<<< HEAD
-		<!--Bitcoin, coinbase-->
-		<a class="coinbase-button" data-code="b97ef89f995ccdd3168978db39edb526" data-button-style="donation_small" href="https://coinbase.com/checkouts/b97ef89f995ccdd3168978db39edb526">Donate Bitcoins</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
 
-		<!--stripe-->
-		<form action="/feeds/billStripeToken/" method="POST">
-		{% csrf_token %}
-		<script
-		    src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button"
-		    data-key="pk_test_muKy9OSJ9uqulyQOq8lCpvng"
-		    data-amount="2000"
-		    data-name="Demo Site"
-		    data-description="2 widgets ($20.00)"
-		    data-image="/128x128.png">
-		  </script>
-		</form>
+		
 		</div>
-=======
 	
         <!--Where the RSS Feeds will load into-->
 		<div class="span8" id="feedpage"></div>

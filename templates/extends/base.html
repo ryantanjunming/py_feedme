@@ -15,12 +15,15 @@
 	</head>
 	<body>
 		{% block content %}{% endblock %}
+
 		
-		<!-- custom js pages -->
-		{% block javascript %}{% endblock %}
 		<!-- standard css includes -->
 		<script src="/static/js/jquery-1.10.2.js"></script>
 		<script src="/static/js/bootstrap.min.js"></script>
+
+		<!-- custom js pages -->
+		{% block javascript %}{% endblock %}
+			
 	</body>
 
 </html>

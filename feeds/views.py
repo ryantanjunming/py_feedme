@@ -99,7 +99,7 @@ def myFeeds(request):
         ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
-        del_img = del_img.format(imgsrc = os.path.join("static", "img", "delete.png"))
+        del_img = del_img.format(imgsrc = os.path.join("/static", "img", "delete.png"))
         del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url + "\">"
         ret_str += " " + del_link_tag + del_img + "</a></li>"
     
@@ -109,7 +109,7 @@ def myFeeds(request):
         myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
-        del_img = del_img.format(imgsrc = os.path.join("static", "img", "delete.png"))
+        del_img = del_img.format(imgsrc = os.path.join("/static", "img", "delete.png"))
         del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url + "\">"
         myRecommendations_str += " " + del_link_tag + del_img + "</a></li>"
     

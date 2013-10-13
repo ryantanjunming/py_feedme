@@ -137,7 +137,7 @@ def selectAll():
 
 #select all Recommendations
 def selectAllR(username):
-    allrec = Recommendations.objects.all()#filter(receiver="Jack")
+    allrec = Recommendations.objects.filter(receiver=username)
     return allrec
 
 

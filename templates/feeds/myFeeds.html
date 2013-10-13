@@ -5,12 +5,12 @@
 {% block stylesheets %}{% endblock %}
 
 {% block content %}
-	<div class="row-fluid">
-		<a href='/feeds'>Feeds</a> 
-		<h1>Feed Test</h1><br>
-
+	<div class="row">
         <!--Side bar-->
-		<div class="span4">
+		<div class="span3">
+
+            <a href='/feeds'>Feeds</a> 
+            <h1>Feed Test</h1><br>
 
             <!--Side bar-->
             <h1>{{username | safe}}</h1>
@@ -70,7 +70,7 @@
 		</div>
 	
         <!--Where the RSS Feeds will load into-->
-		<div class="span8" id="feedpage"></div>
+		<div class="span9" id="feedpage"></div>
 			
 		</div>
 {% endblock %}

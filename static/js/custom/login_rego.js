@@ -89,31 +89,34 @@ $().ready( function(){
 			},
 		},
 		submitHandler: function(form) {
-			var register = new Object();
-			register.username = $('#formRegoUsername').val();
-			register.password = $('#formRegoPassword').val();
-			register.confirmPassword = $('#formRegoRepeatPassword').val();
-			register.firstName = $('#formRegoFirstName').val();
-			register.lastName = $('#formRegoLastName').val();
-			register.email = $('#formRegoEmail').val();
 			
-			var registerDataString = "ajax=addUser&data=" + JSON.stringify(register);			
-			$.ajax({
-	     		url: "controller",
-	            type: 'POST',
-	            dataType: 'json',
-	            data: registerDataString,
-	            success: function(data) {
-	            	if(data.success){
-	            		$('#formRegoAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
-	            		setTimeout(function() {
-	            			window.location.href = data.redirect;
-	            		}, 2000);
-	            	}else{
-	            		$('#formRegoAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
-	            	}
-	            }
-	     	});
+			var password = $('#formRegoPassword').val();
+			var confirmPassword = $('#formRegoRepeatPassword').val();
+
+			if(password == confirmPassword){
+				$.ajax({
+		     		url: "controller",
+		            type: 'POST',
+		            dataType: 'json',
+		            data: {
+		            	'username' : $('#formRegoUsername').val(),
+		            	'password' : password,
+		            	'first_name' : $('#formRegoFirstName').val(),
+		            	'last_name' : $('#formRegoLastName').val(),
+		            	'email' : $('#formRegoEmail').val()
+		            },
+		            success: function(data) {
+		            	if(data.success){
+		            		$('#formRegoAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
+		            		setTimeout(function() {
+		            			window.location.href = data.redirect;
+		            		}, 2000);
+		            	}else{
+		            		$('#formRegoAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
+		            	}
+		            }
+		     	});
+		     }
 		}
 	});
 	

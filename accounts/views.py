@@ -1,17 +1,13 @@
-# (r'^accounts?/$','accounts.views.index'),
-# (r'^accounts/(?i)login?/$','accounts.views.login'),
-# (r'^accounts/(?i)logout?/$','accounts.views.logout'),
-# (r'^accounts/(?i)register?/$','accounts.views.register'),
 # (r'^accounts/(?i)profileView?/$','accounts.views.profileView'),
 # (r'^accounts/(?i)profileSubmit?/$','accounts.views.profileSubmit'),
 
 import os, sys, codecs, time
 from datetime import datetime
 
-# from django.core.context_processors import csrf
 # from django.template import Context, loader, RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login
+from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
@@ -56,3 +52,16 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect("/accounts/")
+
+def register(request):
+	results = {'success' : False,
+				'message' : 'Whoops, something went wrong' }
+
+	if request.POST.get('formType') == "register":
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		email = request.POST.get('email')
+		first_name = request.POST.get('first_name')
+		last_name = request.POST.get('last_name')
+
+	return redirect("/accounts/login/")

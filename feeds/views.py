@@ -11,7 +11,7 @@ import feedparser
 import stripe
 import feedme.settings as settings
 
-from feeds.models import Feeds
+from feeds.models import Feeds, SubscribesTo
 from feeds.models import Recommendations
 
 
@@ -19,7 +19,7 @@ class BadFeedException(Exception):
     def __init__(self, msg):
         super(BadFeedException, self).__init__(msg)
 
-def insert(insertURL):
+def insert(insertURL, user_id):
     feed = feedparser.parse(insertURL)
     if hasattr(feed, "bozo_exception"):
         raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
@@ -31,11 +31,13 @@ def insert(insertURL):
               url = str(insertURL),
               dateAdded = datetime.now())
     f.save()
+    subscribe = SubscribesTo(user = user_id, feed = f.id)
+    subscribe.save()
 
 def insertR(insertURL,insertSender,insertReceiver):
     feed = feedparser.parse(insertURL)
     if hasattr(feed, "bozo_exception"):
-        raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
+        raise BadFeedException("Error occured while trying to make recommendation. Please check input feed URL.")
     try:
         feedname = feed['feed']['title']
     except:
@@ -66,7 +68,7 @@ def index(request):
 def insertFeed(request):
     #print request.POST['feedurl']
     try:
-        insert(request.POST['feedurl'])
+        insert(request.POST['feedurl'], request.user.id)
         return redirect("/feeds/myFeeds/")
     except (BadFeedException):
         return redirect("/feeds/feederror/")
@@ -93,8 +95,7 @@ def deleteRecommendation(request):
 def myFeeds(request):
     #populating my current rss feeds
     ret_str = ""
-    for feed in selectAll():
-        #Jackie I've changed the one line below will it affect anything else? like the del_link_tag
+    for feed in selectFeedByUser(request.user.id):
         ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
@@ -135,6 +136,14 @@ def deleteFeed(request):
 def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
+
+def selectFeedByUser(user_id):
+    """Selects all Feeds that the given user_id subscribes to."""
+    # get list of IDs of the Feeds that user_id subscribes to
+    feed_ids = SubscribesTo.objects.filter(user = user_id)
+    feed_ids = map(lambda subscribe: subscribe.feed, feed_ids)
+    # use list of IDs to fetch the Feeds
+    return Feeds.objects.filter(id__in=feed_ids)
 
 #select all Recommendations
 def selectAllR(username):

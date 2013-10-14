@@ -146,6 +146,22 @@ def deleteFeed(request):
 # (if we can use a template for this, will be super good for the feed error page, since I'm currently using a generic error page...)
 
 @login_required(login_url='/accounts/index/')
+def get_categories(user):
+    """
+    For the given user, returns a dict of
+        category_name : [Feed, Feed, Feed, ...]
+    Corresponding to the user's categories and their Feeds in the categories.
+    """
+    categories = {}
+    curr_cat = ""
+    for cat in FCategory.objects.filter(user = user):
+        if cat.cat_name != curr_cat:
+            curr_cat = cat.cat_name
+            if not categories.has_key(curr_cat): categories[curr_cat] = []
+        categories[curr_cat].append(cat.feed)
+    return categories
+
+@login_required(login_url='/accounts/index/')
 def categorise_feed(request):
     """
     For current user, processes query string and adds feed to given category.

@@ -11,8 +11,9 @@ import feedparser
 import stripe
 import feedme.settings as settings
 
-from feeds.models import Feeds, SubscribesTo
+from feeds.models import Feeds, SubscribesTo, FCategory
 from feeds.models import Recommendations
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class BadFeedException(Exception):
@@ -35,7 +36,7 @@ def insert(insertURL, user):
     except:
         feedname = insertURL
     f = Feeds(name = feedname,
-              url = str(insertURL),
+              url = str(insertURL).lower(),
               dateAdded = datetime.now())
     f.save()
     subscribe = SubscribesTo(user = user, feed = f)
@@ -139,6 +140,61 @@ def deleteFeed(request):
         if qkey == "url":
             delete(qvalue)
     return redirect("/feeds/myFeeds")
+
+
+# NOTE: we really need a shortcut for a delayed redirect view (display input message + auto redirect in 3 seconds kind of thing - maybe a template will help)
+# (if we can use a template for this, will be super good for the feed error page, since I'm currently using a generic error page...)
+
+@login_required(login_url='/accounts/index/')
+def categorise_feed(request):
+    """
+    For current user, processes query string and adds feed to given category.
+    Assumes the form
+        /feeds/categorise?name=cat_name&url=feed_url
+        where feed_url corresponds to a feed that the user is subscribed to
+    """
+    cat_name, feed_url = request.GET.get('name', None), request.GET.get('url', None) # TODO Check for invalid?
+    if not (cat_name and feed_url):
+        print "Bad query values", cat_name, feed_url
+        return redirect("/feeds/feederror/")
+    feed_url = feed_url.lower()
+    try:
+        feed = Feeds.objects.get(url = feed_url)
+    except ObjectDoesNotExist:
+        print "Tried to fetch a Feeds object that doesn't exist! UserID:", request.user.pk, "Feed url:", feed_url
+        return redirect("/feeds/feederror/")
+    c = FCategory(user = request.user,
+                  feed = feed,
+                  cat_name = cat_name)
+    c.save()
+    return redirect("/feeds/myFeeds")
+
+@login_required(login_url='/accounts/index/')
+def category_delete(request):
+    """
+    Used for deleting categories, from query string. Has two modes:
+        /feeds/catdel?delete=category&name=cat_name                deletes category with name cat_name
+        /feeds/catdel?delete=feed&name=cat_name&url=feed_url       deletes feed from given cat_name 
+    """
+    # TODO should check for invalid query strings
+    del_type = request.GET.get('delete', None)
+    cat_name = request.GET.get('name', None) # remember this is case sensitive!
+    if del_type == "category" and cat_name:
+        # delete category records with given cat_name
+        FCategory.objects.filter(cat_name = cat_name).delete()
+    elif del_type == "feed" and cat_name:
+        feed_url = request.GET.get('url', None)
+        if feed_url:
+            try:
+                # delete all category records linked with feeds that have the url feed_url
+                FCategory.objects.filter(feed = Feeds.objects.get(url = feed_url)).delete()
+            except ObjectDoesNotExist:
+                print "Tried to fetch a Feeds object that doesn't exist! UserID:", request.user.pk, "Feed url:", feed_url
+                return redirect("/feeds/feederror/")
+    return redirect("/feeds/myFeeds")
+
+
+"""Some nice utility stuff"""
 
 #select all Feeds
 def selectAll():

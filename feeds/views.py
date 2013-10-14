@@ -132,13 +132,11 @@ def deleteFeed(request):
     return redirect("/feeds/myFeeds")
 
 #select all Feeds
-@login_required(login_url='/accounts/index/')
 def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
 
 #select all Recommendations
-@login_required(login_url='/accounts/index/')
 def selectAllR(username):
     allrec = Recommendations.objects.filter(receiver=username)
     return allrec

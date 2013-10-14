@@ -19,9 +19,16 @@ class BadFeedException(Exception):
     def __init__(self, msg):
         super(BadFeedException, self).__init__(msg)
 
-def insert(insertURL, user_id):
+def insert(insertURL, user):
+    """
+    Adds Feeds record corresponding to insertURL, and SubscribesTo record for
+    the feed and given user.
+    """
     feed = feedparser.parse(insertURL)
-    if hasattr(feed, "bozo_exception"):
+    if hasattr(feed, "bozo_exception") and feed['bozo_exception'].message == "syntax error":
+        if settings.DEBUG: 
+            print "Something bozo happened:", feed['bozo_exception']
+            debug_feed_display(feed)
         raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
     try:
         feedname = feed['feed']['title']
@@ -31,12 +38,13 @@ def insert(insertURL, user_id):
               url = str(insertURL),
               dateAdded = datetime.now())
     f.save()
-    subscribe = SubscribesTo(user = user_id, feed = f.id)
+    subscribe = SubscribesTo(user = user, feed = f)
     subscribe.save()
 
 def insertR(insertURL,insertSender,insertReceiver):
     feed = feedparser.parse(insertURL)
-    if hasattr(feed, "bozo_exception"):
+    if hasattr(feed, "bozo_exception") and feed['bozo_exception'].message == "syntax error":
+        if settings.DEBUG: print "Something bozo happened:", feed['bozo_exception']
         raise BadFeedException("Error occured while trying to make recommendation. Please check input feed URL.")
     try:
         feedname = feed['feed']['title']
@@ -68,9 +76,9 @@ def index(request):
 def insertFeed(request):
     #print request.POST['feedurl']
     try:
-        insert(request.POST['feedurl'], request.user.id)
+        insert(request.POST['feedurl'], request.user)
         return redirect("/feeds/myFeeds/")
-    except (BadFeedException):
+    except BadFeedException as e:
         return redirect("/feeds/feederror/")
 
 @login_required(login_url='/accounts/index/')
@@ -95,7 +103,7 @@ def deleteRecommendation(request):
 def myFeeds(request):
     #populating my current rss feeds
     ret_str = ""
-    for feed in selectFeedByUser(request.user.id):
+    for feed in select_feed_by_user(request.user.pk):
         ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
@@ -137,13 +145,14 @@ def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
 
-def selectFeedByUser(user_id):
+def select_feed_by_user(user_id):
     """Selects all Feeds that the given user_id subscribes to."""
     # get list of IDs of the Feeds that user_id subscribes to
     feed_ids = SubscribesTo.objects.filter(user = user_id)
-    feed_ids = map(lambda subscribe: subscribe.feed, feed_ids)
+    feed_ids = map(lambda subscribe: subscribe.feed.pk, feed_ids)
     # use list of IDs to fetch the Feeds
-    return Feeds.objects.filter(id__in=feed_ids)
+    print feed_ids
+    return Feeds.objects.filter(pk__in=feed_ids)
 
 #select all Recommendations
 def selectAllR(username):
@@ -161,8 +170,6 @@ def showFeed(request):
     feed = feedparser.parse(url)
     if settings.DEBUG: debug_feed_display(feed)
     return HttpResponse(make_feed_page(feed))
-
-
 
 # some feed display functions (will prob move to another file later)
 def debug_feed_display(feed, show_entries=0):
@@ -184,8 +191,6 @@ def debug_feed_display(feed, show_entries=0):
             for k in entry.keys():
                 print ">>>", k, ":", entry[k]
     print ">>> Finished displaying feed <<< \n"
-    
-
 
 def make_feed_page(feed):
     """

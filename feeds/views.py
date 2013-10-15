@@ -14,6 +14,7 @@ import feedme.settings as settings
 from feeds.models import Feeds, SubscribesTo, FCategory
 from feeds.models import Recommendations
 from django.core.exceptions import ObjectDoesNotExist
+from collections import OrderedDict
 
 
 class BadFeedException(Exception):
@@ -35,6 +36,8 @@ def insert(insertURL, user):
         feedname = feed['feed']['title']
     except:
         feedname = insertURL
+    # TODO check if feed has already been added - IMPORTANT because multiple users add feeds to same database table!
+    # if feed already exists, fetch that one and set to f
     f = Feeds(name = feedname,
               url = str(insertURL).lower(),
               dateAdded = datetime.now())
@@ -104,7 +107,7 @@ def insertFeedFromRecommendation(request):
         return redirect("/feeds/feederror/")
 
 @login_required(login_url='/accounts/index/')
-def insertRecommendation(request):
+def insertRecommendation(request): # NOTE: it makes more sense for sender to be request.user!
     try:
         insertR(request.POST['feedurl'],request.POST['sender'],request.POST['receiver'])
         return redirect("/feeds/myFeeds")
@@ -124,13 +127,15 @@ def deleteRecommendation(request):
 @login_required(login_url='/accounts/index/')
 def myFeeds(request):
     #populating my current rss feeds
-    feed_entries = []
-    for feed in select_feed_by_user(request.user.pk):
-        feed_entries.append({'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
-                             'name' : feed.name,
-                             'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
-                            })
-        
+    feed_entries = get_categorised_feeds(request.user)
+#     for k, v in feed_entries.iteritems():
+#         print ">>", k, ":", v
+    for cat in feed_entries:
+        feed_entries[cat] = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+                                              'name' : feed.name,
+                                              'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+                                              }, 
+                                feed_entries[cat])
     #populating my current recommendations
     myRecommendations_str = ""
     for r in selectAllR(request.user.username):
@@ -168,20 +173,40 @@ def deleteFeed(request):
 # NOTE: we really need a shortcut for a delayed redirect view (display input message + auto redirect in 3 seconds kind of thing - maybe a template will help)
 # (if we can use a template for this, will be super good for the feed error page, since I'm currently using a generic error page...)
 
-@login_required(login_url='/accounts/index/')
-def get_categories(user):
+# def get_categories(user):
+#     """
+#     For the given user, returns a dict of
+#         category_name : [Feed, Feed, Feed, ...]
+#     Corresponding to the user's categories and their Feeds in the categories.
+#     """
+#     categories = {}
+#     curr_cat = ""
+#     for cat in FCategory.objects.filter(user = user):
+#         if cat.cat_name != curr_cat:
+#             curr_cat = cat.cat_name
+#             if not categories.has_key(curr_cat): categories[curr_cat] = []
+#         categories[curr_cat].append(cat.feed)
+#     return categories
+
+def get_categorised_feeds(user):
     """
     For the given user, returns a dict of
         category_name : [Feed, Feed, Feed, ...]
     Corresponding to the user's categories and their Feeds in the categories.
+    Feeds without categories default to the category name "Cat-less".
     """
-    categories = {}
-    curr_cat = ""
-    for cat in FCategory.objects.filter(user = user):
-        if cat.cat_name != curr_cat:
-            curr_cat = cat.cat_name
-            if not categories.has_key(curr_cat): categories[curr_cat] = []
-        categories[curr_cat].append(cat.feed)
+    categories = OrderedDict({'Cat-less' : []})
+    for feed in select_feed_by_user(user.pk):
+        # grab all FCategorys that feed belongs to
+        feed_cats = FCategory.objects.filter(feed = feed)
+        if feed_cats:
+            # add feed to each of its category listings
+            for cat in feed_cats:
+                if not categories.has_key(cat.cat_name): categories[cat.cat_name] = []
+                categories[cat.cat_name].append(feed)
+        else:
+            # default listing
+            categories['Cat-less'].append(feed)
     return categories
 
 @login_required(login_url='/accounts/index/')
@@ -246,7 +271,6 @@ def select_feed_by_user(user_id):
     feed_ids = SubscribesTo.objects.filter(user = user_id)
     feed_ids = map(lambda subscribe: subscribe.feed.pk, feed_ids)
     # use list of IDs to fetch the Feeds
-    print feed_ids
     return Feeds.objects.filter(pk__in=feed_ids)
 
 #select all Recommendations

@@ -7,17 +7,25 @@
 {% block content %}
 	<div class="row">
         <!--Side bar-->
-		<div class="span3 offset 4">
+		<div class="span3">
 
             <a href='/feeds'>Feeds</a> 
             <h1>Feed Test</h1><br>
 
             <!--Side bar-->
             <h1>{{username | safe}}</h1>
+			<a href="/accounts/logout">Logout</a>
             
             <!--Display my feeds-->
 			<ul id="feedbut">
-				{{myFeeds | safe}}
+				{% for entry in feed_entries %}
+				<li>
+					<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+					<a href="{{ entry.del_url }}">
+						<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+					</a>
+				</li>
+				{% endfor %}
 			</ul>
 
             <!--Add Feed-->
@@ -80,6 +88,9 @@
 		$(document).ready(function(){
 	        <!--Used to display feeds on current page-->
 			$("#feedbut button").click(function(e){
+				$("#feedpage").load($(this).attr("value"));
+			});
+            $("#feedbut button").click(function(e){
 				$("#feedpage").load($(this).attr("value"));
 			});
 		});

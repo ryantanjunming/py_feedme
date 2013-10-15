@@ -18,7 +18,14 @@
             
             <!--Display my feeds-->
 			<ul id="feedbut">
-				{{myFeeds | safe}}
+				{% for entry in feed_entries %}
+				<li>
+					<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+					<a href="{{ entry.del_url }}">
+						<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+					</a>
+				</li>
+				{% endfor %}
 			</ul>
 
             <!--Add Feed-->

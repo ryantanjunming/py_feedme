@@ -103,15 +103,13 @@ def deleteRecommendation(request):
 @login_required(login_url='/accounts/index/')
 def myFeeds(request):
     #populating my current rss feeds
-    ret_str = ""
+    feed_entries = []
     for feed in select_feed_by_user(request.user.pk):
-        ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
-        # delete icon
-        del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
-        del_img = del_img.format(imgsrc = os.path.join("/static", "img", "delete.png"))
-        del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url + "\">"
-        ret_str += " " + del_link_tag + del_img + "</a></li>"
-    
+        feed_entries.append({'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+                             'name' : feed.name,
+                             'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+                            })
+        
     #populating my current recommendations
     myRecommendations_str = ""
     for r in selectAllR(request.user.username):
@@ -125,7 +123,7 @@ def myFeeds(request):
     #rendering the page
     t=loader.get_template('feeds/myFeeds.html')
     c=RequestContext(request,{
-        'myFeeds':ret_str,
+        'feed_entries' : feed_entries,
         'recommendations':myRecommendations_str,
         'username':request.user.username
     })

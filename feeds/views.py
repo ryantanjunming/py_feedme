@@ -240,7 +240,7 @@ def showFeed(request):
     qkey, qvalue = request.META['QUERY_STRING'].split('=')
     url = qvalue
     feed = feedparser.parse(url)
-    if settings.DEBUG: debug_feed_display(feed)
+    #if settings.DEBUG: debug_feed_display(feed)
     return HttpResponse(make_feed_page(feed))
 
 # some feed display functions (will prob move to another file later)

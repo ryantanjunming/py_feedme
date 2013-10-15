@@ -21,7 +21,7 @@ import feedme.settings as settings
 
 class BadAuthException(Exception):
     def __init__(self, msg):
-        super(BadFeedException, self).__init__(msg)
+        super(BadAuthException, self).__init__(msg)
 
 def index(request):
 	if(request.user.is_authenticated()):

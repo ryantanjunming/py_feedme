@@ -34,5 +34,7 @@ urlpatterns = patterns('',
     (r'^feeds/(?i)deleteRecommendation?/$','feeds.views.deleteRecommendation'),
     (r'^feeds/(?i)showfeed?/$', 'feeds.views.showFeed'),
     (r'^feeds/(?i)billStripeToken?/$','feeds.views.billStripeToken'),
-    (r'^feeds/(?i)feederror?/$', TemplateView.as_view(template_name="feeds/feederror.html"))
+    (r'^feeds/(?i)feederror?/$', TemplateView.as_view(template_name="feeds/feederror.html")),
+    (r'^feeds/(?i)categorise?/$','feeds.views.categorise_feed'),
+    (r'^feeds/(?i)catdel?/$','feeds.views.category_delete')
 )

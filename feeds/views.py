@@ -11,31 +11,42 @@ import feedparser
 import stripe
 import feedme.settings as settings
 
-from feeds.models import Feeds
+from feeds.models import Feeds, SubscribesTo, FCategory
 from feeds.models import Recommendations
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class BadFeedException(Exception):
     def __init__(self, msg):
         super(BadFeedException, self).__init__(msg)
 
-def insert(insertURL):
+def insert(insertURL, user):
+    """
+    Adds Feeds record corresponding to insertURL, and SubscribesTo record for
+    the feed and given user.
+    """
     feed = feedparser.parse(insertURL)
-    if hasattr(feed, "bozo_exception"):
+    if hasattr(feed, "bozo_exception") and feed['bozo_exception'].message == "syntax error":
+        if settings.DEBUG: 
+            print "Something bozo happened:", feed['bozo_exception']
+            debug_feed_display(feed)
         raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
     try:
         feedname = feed['feed']['title']
     except:
         feedname = insertURL
     f = Feeds(name = feedname,
-              url = str(insertURL),
+              url = str(insertURL).lower(),
               dateAdded = datetime.now())
     f.save()
+    subscribe = SubscribesTo(user = user, feed = f)
+    subscribe.save()
 
 def insertR(insertURL,insertSender,insertReceiver):
     feed = feedparser.parse(insertURL)
-    if hasattr(feed, "bozo_exception"):
-        raise BadFeedException("Error occured while trying to insert feed. Please check input URL.")
+    if hasattr(feed, "bozo_exception") and feed['bozo_exception'].message == "syntax error":
+        if settings.DEBUG: print "Something bozo happened:", feed['bozo_exception']
+        raise BadFeedException("Error occured while trying to make recommendation. Please check input feed URL.")
     try:
         feedname = feed['feed']['title']
     except:
@@ -66,9 +77,9 @@ def index(request):
 def insertFeed(request):
     #print request.POST['feedurl']
     try:
-        insert(request.POST['feedurl'])
+        insert(request.POST['feedurl'], request.user)
         return redirect("/feeds/myFeeds/")
-    except (BadFeedException):
+    except BadFeedException as e:
         return redirect("/feeds/feederror/")
 
 @login_required(login_url='/accounts/index/')
@@ -93,8 +104,7 @@ def deleteRecommendation(request):
 def myFeeds(request):
     #populating my current rss feeds
     ret_str = ""
-    for feed in selectAll():
-        #Jackie I've changed the one line below will it affect anything else? like the del_link_tag
+    for feed in select_feed_by_user(request.user.pk):
         ret_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url + "\" target=\"_blank\">" + feed.name + "</button>"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
@@ -131,10 +141,90 @@ def deleteFeed(request):
             delete(qvalue)
     return redirect("/feeds/myFeeds")
 
+
+# NOTE: we really need a shortcut for a delayed redirect view (display input message + auto redirect in 3 seconds kind of thing - maybe a template will help)
+# (if we can use a template for this, will be super good for the feed error page, since I'm currently using a generic error page...)
+
+@login_required(login_url='/accounts/index/')
+def get_categories(user):
+    """
+    For the given user, returns a dict of
+        category_name : [Feed, Feed, Feed, ...]
+    Corresponding to the user's categories and their Feeds in the categories.
+    """
+    categories = {}
+    curr_cat = ""
+    for cat in FCategory.objects.filter(user = user):
+        if cat.cat_name != curr_cat:
+            curr_cat = cat.cat_name
+            if not categories.has_key(curr_cat): categories[curr_cat] = []
+        categories[curr_cat].append(cat.feed)
+    return categories
+
+@login_required(login_url='/accounts/index/')
+def categorise_feed(request):
+    """
+    For current user, processes query string and adds feed to given category.
+    Assumes the form
+        /feeds/categorise?name=cat_name&url=feed_url
+        where feed_url corresponds to a feed that the user is subscribed to
+    """
+    cat_name, feed_url = request.GET.get('name', None), request.GET.get('url', None) # TODO Check for invalid?
+    if not (cat_name and feed_url):
+        print "Bad query values", cat_name, feed_url
+        return redirect("/feeds/feederror/")
+    feed_url = feed_url.lower()
+    try:
+        feed = Feeds.objects.get(url = feed_url)
+    except ObjectDoesNotExist:
+        print "Tried to fetch a Feeds object that doesn't exist! UserID:", request.user.pk, "Feed url:", feed_url
+        return redirect("/feeds/feederror/")
+    c = FCategory(user = request.user,
+                  feed = feed,
+                  cat_name = cat_name)
+    c.save()
+    return redirect("/feeds/myFeeds")
+
+@login_required(login_url='/accounts/index/')
+def category_delete(request):
+    """
+    Used for deleting categories, from query string. Has two modes:
+        /feeds/catdel?delete=category&name=cat_name                deletes category with name cat_name
+        /feeds/catdel?delete=feed&name=cat_name&url=feed_url       deletes feed from given cat_name 
+    """
+    # TODO should check for invalid query strings
+    del_type = request.GET.get('delete', None)
+    cat_name = request.GET.get('name', None) # remember this is case sensitive!
+    if del_type == "category" and cat_name:
+        # delete category records with given cat_name
+        FCategory.objects.filter(cat_name = cat_name).delete()
+    elif del_type == "feed" and cat_name:
+        feed_url = request.GET.get('url', None)
+        if feed_url:
+            try:
+                # delete all category records linked with feeds that have the url feed_url
+                FCategory.objects.filter(feed = Feeds.objects.get(url = feed_url)).delete()
+            except ObjectDoesNotExist:
+                print "Tried to fetch a Feeds object that doesn't exist! UserID:", request.user.pk, "Feed url:", feed_url
+                return redirect("/feeds/feederror/")
+    return redirect("/feeds/myFeeds")
+
+
+"""Some nice utility stuff"""
+
 #select all Feeds
 def selectAll():
     allfeeds = Feeds.objects.all()
     return allfeeds
+
+def select_feed_by_user(user_id):
+    """Selects all Feeds that the given user_id subscribes to."""
+    # get list of IDs of the Feeds that user_id subscribes to
+    feed_ids = SubscribesTo.objects.filter(user = user_id)
+    feed_ids = map(lambda subscribe: subscribe.feed.pk, feed_ids)
+    # use list of IDs to fetch the Feeds
+    print feed_ids
+    return Feeds.objects.filter(pk__in=feed_ids)
 
 #select all Recommendations
 def selectAllR(username):
@@ -150,10 +240,8 @@ def showFeed(request):
     qkey, qvalue = request.META['QUERY_STRING'].split('=')
     url = qvalue
     feed = feedparser.parse(url)
-    if settings.DEBUG: debug_feed_display(feed)
+    #if settings.DEBUG: debug_feed_display(feed)
     return HttpResponse(make_feed_page(feed))
-
-
 
 # some feed display functions (will prob move to another file later)
 def debug_feed_display(feed, show_entries=0):
@@ -175,8 +263,6 @@ def debug_feed_display(feed, show_entries=0):
             for k in entry.keys():
                 print ">>>", k, ":", entry[k]
     print ">>> Finished displaying feed <<< \n"
-    
-
 
 def make_feed_page(feed):
     """

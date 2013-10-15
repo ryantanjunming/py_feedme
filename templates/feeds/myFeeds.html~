@@ -90,7 +90,7 @@
 			$("#feedbut button").click(function(e){
 				$("#feedpage").load($(this).attr("value"));
 			});
-            $("#feedbut button").click(function(e){
+            $("#recommendations button").click(function(e){
 				$("#feedpage").load($(this).attr("value"));
 			});
 		});

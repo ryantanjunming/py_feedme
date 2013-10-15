@@ -77,8 +77,29 @@ def index(request):
 def insertFeed(request):
     #print request.POST['feedurl']
     try:
-        insert(request.POST['feedurl'], request.user)
-        return redirect("/feeds/myFeeds/")
+        if request.method == "POST":
+            insert(request.POST['feedurl'], request.user)
+            return redirect("/feeds/myFeeds/")
+        elif request.method == "GET":
+            qkey, qvalue = request.META['QUERY_STRING'].split('=')
+            if qkey == "url":
+                insert(qvalue,request.user)
+            return redirect("/feeds/myFeeds/")
+    except BadFeedException as e:
+        return redirect("/feeds/feederror/")
+
+@login_required(login_url='/accounts/index/')
+def insertFeedFromRecommendation(request):
+    #print request.POST['feedurl']
+    try:
+        if request.method == "POST":
+            insert(request.POST['feedurl'], request.user)
+            return deleteRecommendation(request)
+        elif request.method == "GET":
+            qkey, qvalue = request.META['QUERY_STRING'].split('=')
+            if qkey == "url":
+                insert(qvalue,request.user)
+            return deleteRecommendation(request)
     except BadFeedException as e:
         return redirect("/feeds/feederror/")
 
@@ -114,11 +135,15 @@ def myFeeds(request):
     myRecommendations_str = ""
     for r in selectAllR(request.user.username):
         myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.name + "</button>"
+         # add icon
+        add_img = '<img src="{imgsrc}" alt="Add Button" width="16" height="16">'
+        add_img = add_img.format(imgsrc = os.path.join("/static", "img", "tick.ico"))
+        add_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeedFromRecommendation?url=" + r.url + "\">"
         # delete icon
         del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
         del_img = del_img.format(imgsrc = os.path.join("/static", "img", "delete.png"))
         del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url + "\">"
-        myRecommendations_str += " " + del_link_tag + del_img + "</a></li>"
+        myRecommendations_str += " " + add_link_tag + add_img+"</a> " + del_link_tag + del_img + "</a></li>"
     
     #rendering the page
     t=loader.get_template('feeds/myFeeds.html')

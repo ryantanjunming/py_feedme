@@ -10,7 +10,7 @@
 		<div class="span3">
 
             <a href='/feeds'>Back to Home (?) Page</a> 
-            <h1>My Feeds</h1><br>
+            <h1>My FeedMe</h1>
 
             <!--Side bar-->
             <h3>Welcome back, {{username | safe}}!</h3>
@@ -19,14 +19,19 @@
             <!--Display my feeds-->
 			<p>Check out your feeds:</p>
 			<ul id="feedbut">
-				{% for entry in feed_entries %}
-				<li>
-					<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
-					<a href="{{ entry.del_url }}">
-						<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
-					</a>
-				</li>
-				{% endfor %}
+			{% for cat, feeds in feed_entries.iteritems %}
+				{{ cat }}
+				<ul>
+					{% for entry in feeds %}
+					<li>
+						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+						<a href="{{ entry.del_url }}">
+							<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+			{% endfor %}
 			</ul>
 			<br>
 			

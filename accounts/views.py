@@ -5,12 +5,15 @@ import os, sys, codecs, time
 from datetime import datetime
 
 # from django.template import Context, loader, RequestContext
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
+from django.core.mail import EmailMessage
+
 import socket
 # from django.http import HttpResponse
 
@@ -56,6 +59,7 @@ def logout(request):
 def register(request):
 	results = {'success' : False,
 				'message' : 'Whoops, something went wrong' }
+	print("hello there")
 
 	if request.POST.get('formType') == "register":
 		username = request.POST.get('username')
@@ -64,4 +68,12 @@ def register(request):
 		first_name = request.POST.get('first_name')
 		last_name = request.POST.get('last_name')
 
-	return redirect("/accounts/login/")
+		user = User.objects.create_user(username, email, password)
+		user.first_name = first_name
+		user.last_name = last_name
+		user.save();
+
+		msg = EmailMessage('Request Callback','Here is the message.', to=['ryantanjunming@gmail.com'])
+  		msg.send()
+		
+	return redirect("/accounts/")

@@ -163,3 +163,17 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'mefeeed@gmail.com'
+EMAIL_HOST_PASSWORD = '7534mV6I03'
+
+DEFAULT_FROM_EMAIL = 'mefeeed@gmail.com'
+SERVER_EMAIL = 'mefeeed@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mefeeed@gmail.com'
+EMAIL_HOST_PASSWORD = '7534mV6I03'

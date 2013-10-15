@@ -9,7 +9,7 @@ $().ready( function(){
 		  }
 		});
 	$('form').submit(false);
-	
+
 
 	$('#loginSubmit').click(function(event) {	
 		var username = $('#formSigninUsername').val();
@@ -89,16 +89,18 @@ $().ready( function(){
 			},
 		},
 		submitHandler: function(form) {
-			
-			var password = $('#formRegoPassword').val();
-			var confirmPassword = $('#formRegoRepeatPassword').val();
 
-			if(password == confirmPassword){
+			var password = $('#formRegoPassword').val();
+			var confirmPassword = $('#formRegoConfirmPassword').val();
+			
+			if(password === confirmPassword){
 				$.ajax({
-		     		url: "controller",
+		     		url: "/accounts/register/",
 		            type: 'POST',
 		            dataType: 'json',
 		            data: {
+		            	formType : 'register',
+		            	csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
 		            	'username' : $('#formRegoUsername').val(),
 		            	'password' : password,
 		            	'first_name' : $('#formRegoFirstName').val(),
@@ -108,18 +110,22 @@ $().ready( function(){
 		            success: function(data) {
 		            	if(data.success){
 		            		$('#formRegoAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
-		            		setTimeout(function() {
-		            			window.location.href = data.redirect;
-		            		}, 2000);
-		            	}else{
-		            		$('#formRegoAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
+		            		if(data.success == true){
+			        			$('#formRegoAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
+					        		setTimeout(function() {window.location.href = data.redirect;}, 500);
+					        }else{
+				        		$('#formRegoAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
+				        		$('#formRegoPassword').val('');
+	            				$('#formRegoConfirmPassword').val('');
+					        }
 		            	}
+		            },error : function(xhr,errmsg,err) {
+	            		$('#formRegoAlert').show().html('<div class="alert alert-danger">'+xhr.status+": "+xhr.responseText+'</div>');
+	            		$('#formRegoPassword').val('');
+	            		$('#formRegoConfirmPassword').val('');
 		            }
 		     	});
-		     }
+		    }
 		}
-	});
-	
-	
-	
+	});	
 });

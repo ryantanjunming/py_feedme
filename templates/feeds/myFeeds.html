@@ -9,30 +9,43 @@
         <!--Side bar-->
 		<div class="span3">
 
-            <a href='/feeds'>Feeds</a> 
-            <h1>Feed Test</h1><br>
+            <a href='/feeds'>Back to Home (?) Page</a> 
+            <h1>My FeedMe</h1>
 
             <!--Side bar-->
-            <h1>{{username | safe}}</h1>
-			<a href="/accounts/logout">Logout</a>
+            <h3>Welcome back, {{username | safe}}!</h3>
+			<a href="/accounts/logout">Logout</a><br><br>
             
             <!--Display my feeds-->
+			<p>Check out your feeds:</p>
 			<ul id="feedbut">
-				{{myFeeds | safe}}
+			{% for cat, feeds in feed_entries.iteritems %}
+				{{ cat }}
+				<ul>
+					{% for entry in feeds %}
+					<li>
+						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+						<a href="{{ entry.del_url }}">
+							<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+			{% endfor %}
 			</ul>
-
+			<br>
+			
             <!--Add Feed-->
-			<h3>Add Feed!</h3>
+			<h4>Add a new Feed!</h4>
 			<form method='post' action='/feeds/insertFeed/'>
 			{% csrf_token %}
-				<input type="text" name="username" placeholder="Username"/><br/>
+				<!-- <input type="text" name="username" placeholder="Username"/><br/> -->
 				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
-				<br/><br/>
 				<input type="submit" name="submit"/>
 			</form>
 
             <!--Remove Feed-->
-			<h3>Remove Feed!</h3>
+			<!-- <h3>Remove Feed!</h3>
 
 			<form method='post' action='/feeds/deleteFeed/'>
 
@@ -41,35 +54,29 @@
 				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
 				<br/><br/>
 				<input type="submit" name="submit"/>
-			</form>
+			</form> -->
 
             <!--Add Recommendations-->
-			<h3>Add Recommendations!</h3>
-
+			<br>
+			<h4>Recommend a Feed to a Friend!</h4>
 			<form method='post' action='/feeds/insertRecommendation/'>
 			{% csrf_token %}
 				<input type="text" name="sender" placeholder="Sender"/><br/>
                 <input type="text" name="receiver" placeholder="Receiver"/><br/>
 				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
-				<br/><br/>
 				<input type="submit" name="submit"/>
 			</form>
 
-            
-
             <!--Recommendations panel-->
             <br>
-            <h3>My Recommendations</h3>
+            <h4>My Recommendations</h4>
             <ul id="recommendations">
 				{{recommendations | safe}}
 			</ul>
             <br>
-
-
-
-		
-		</div>
 	
+		</div>
+	    
         <!--Where the RSS Feeds will load into-->
 		<div class="span9" id="feedpage"></div>
 			
@@ -83,6 +90,24 @@
 			$("#feedbut button").click(function(e){
 				$("#feedpage").load($(this).attr("value"));
 			});
+            $("#recommendations button").click(function(e){
+				$("#feedpage").load($(this).attr("value"));
+			});
 		});
 	</script>
+    <!-- AddThis Smart Layers BEGIN -->
+    <!-- Go to http://www.addthis.com/get/smart-layers to customize -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5205bc975600d164"></script>
+    <script type="text/javascript">
+      addthis.layers({
+        'theme' : 'transparent',
+        'share' : {
+          'position' : 'left',
+          'numPreferredServices' : 5
+        },  
+        'whatsnext' : {},  
+        'recommended' : {} 
+      });
+    </script>
+    <!-- AddThis Smart Layers END -->
 {% endblock %}

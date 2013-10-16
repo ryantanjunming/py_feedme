@@ -63,6 +63,14 @@ If you encounter errors, you might need to install this first (setupTools)
     $ python distribute_setup.py
 
 
+### Install dj-static
+
+    $ pip install dj_static
+    
+Or get it manually: https://pypi.python.org/pypi/dj-static
+
+
+
 Hi Guys!! I've took some time to change some settings and organize the folders(Based on Django tutorial style)
 The html files are in the folder "templates" and the dependencies like bootstrap and javascrip is in the folder
 "static". The directory structure may not be ideal(someone improve on this please) but its working, if you 

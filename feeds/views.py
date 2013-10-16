@@ -341,8 +341,23 @@ def make_feed_page(feed):
     feed_header = title_header + "<br>" + updated_time
 
     entries = ""
+    #tried to use addthis for each feed entry, Failed
     for entry in feed['entries']:
-        entries += "<hr>" + make_entry_string(entry)
+        entries += "<hr>" + make_entry_string(entry) +"<hr>" +\
+"""<div>
+<!-- AddThis Button BEGIN --> 
+<div class="addthis_toolbox addthis_default_style addthis_32x32_style"> 
+<a class="addthis_button_preferred_1"></a> 
+<a class="addthis_button_preferred_2"></a> 
+<a class="addthis_button_preferred_3"></a> 
+<a class="addthis_button_preferred_4"></a> 
+<a class="addthis_button_compact"></a> 
+<a class="addthis_counter addthis_bubble_style"></a> 
+</div> 
+<!-- AddThis Button END -->
+</div>"""
+
+
             
     page = feed_header + "<br>" + entries.decode('utf-8')
     return page
@@ -358,10 +373,21 @@ def make_entry_string(entry):
               'author' : entry['author'],
               'published' : str(datetime.fromtimestamp(time.mktime(entry['published_parsed']))),
               'summary' : entry['summary']}
+    #added custom facebook share button
     for k in fields.keys():
         fields[k] = fields[k].encode('utf-8')
-    return "<h3><a href=\"{link}\" target=\"_blank\">{title}</a></h3>{author}, published on {published}<br>{summary}".format(**fields)
-    
+    return "<div><h3><a href=\"{link}\" target=\"_blank\">{title}</a></h3>{author}, \
+published on {published}<br>{summary}<br></div>".format(**fields)+\
+"""<br><a href="#" 
+  onclick="
+    window.open(
+      'http://www.facebook.com/sharer/sharer.php?s=100&p[url]={link}&p[images][0]=&p[title]={title}&p[summary]={title}', 
+      'facebook-share-dialog', 
+      'width=626,height=436'); 
+    return false;">
+  Share on Facebook
+</a>""".format(**fields)
+
 
 
 def billStripeToken(request):

@@ -16,9 +16,8 @@ from django.core.mail import EmailMessage
 from django.db.models.signals import post_save
 
 import socket
-# from django.http import HttpResponse
-
 import feedme.settings as settings
+# from django.http import HttpResponse
 
 
 class BadAuthException(Exception):
@@ -107,8 +106,8 @@ def register(request):
 	return HttpResponse(json, mimetype='application/json')
 
 # To handle changes with the DB and fields
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        profile, created = UserProfile.\
-                 objects.get_or_create(user=instance)
-post_save.connect(create_profile, sender=User)
+# def create_profile(sender, instance, created, **kwargs):
+#     if created:
+#         profile, created = UserProfile.\
+#                  objects.get_or_create(user=instance)
+# post_save.connect(create_profile, sender=User)

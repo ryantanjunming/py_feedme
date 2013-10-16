@@ -29,8 +29,6 @@ def index(request):
 		return redirect("/feeds/myFeeds/")
 	else:
 		return render_to_response('accounts/index.html', context_instance=RequestContext(request))
-    	
-
 
 def login(request):
 	results = {'success' : False,

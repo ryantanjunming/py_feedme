@@ -324,8 +324,8 @@ def make_feed_page(feed):
         except (KeyError):
             img = "IMG"
     title_icon = "<img src=\"" + img + "\">"
-    title_header = "<h2><a href=\"" + feed['feed']['link'] + "\">" + feed['feed']['title'] + "</a></h2>" + \
-                   "<a href=\"" + feed['feed']['link'] + "\">" + title_icon + "</a>"
+    title_header = "<h2><a href=\"" + feed['feed']['link'] + "\" target=\"_blank\">" + feed['feed']['title'] + "</a></h2>" + \
+                   "<a href=\"" + feed['feed']['link'] + "\" target=\"_blank\">" + title_icon + "</a>"
     
     updated_time = "Last Updated: "
     # note: I actually don't know if this is accurate... or how to grab timezone info
@@ -360,7 +360,7 @@ def make_entry_string(entry):
               'summary' : entry['summary']}
     for k in fields.keys():
         fields[k] = fields[k].encode('utf-8')
-    return "<h3><a href=\"{link}\">{title}</a></h3>{author}, published on {published}<br>{summary}".format(**fields)
+    return "<h3><a href=\"{link}\" target=\"_blank\">{title}</a></h3>{author}, published on {published}<br>{summary}".format(**fields)
     
 
 

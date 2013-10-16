@@ -109,10 +109,10 @@ $().ready( function(){
 		            },
 		            success: function(data) {
 		            	if(data.success){
-		            		$('#formRegoAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
+		            		alert("im called");
 		            		if(data.success == true){
 			        			$('#formRegoAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
-					        		setTimeout(function() {window.location.href = data.redirect;}, 500);
+					        	setTimeout(function() {window.location.href = data.redirect;}, 500);
 					        }else{
 				        		$('#formRegoAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
 				        		$('#formRegoPassword').val('');

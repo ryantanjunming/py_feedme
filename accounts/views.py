@@ -72,7 +72,7 @@ def register(request):
 		last_name = request.POST.get('last_name')
 
 		# try:
-		user = User.objects.create_user(username, email, password)		
+		user = User.objects.create_user(username, email, password)
 		user.first_name = first_name
 		user.last_name = last_name
 		user.is_active = True

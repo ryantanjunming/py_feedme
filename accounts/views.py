@@ -29,8 +29,6 @@ def index(request):
 		return redirect("/feeds/myFeeds/")
 	else:
 		return render_to_response('accounts/index.html', context_instance=RequestContext(request))
-    	
-
 
 def login(request):
 	results = {'success' : False,
@@ -72,7 +70,7 @@ def register(request):
 		last_name = request.POST.get('last_name')
 
 		# try:
-		user = User.objects.create_user(username, email, password)		
+		user = User.objects.create_user(username, email, password)
 		user.first_name = first_name
 		user.last_name = last_name
 		user.is_active = True

@@ -109,7 +109,6 @@ $().ready( function(){
 		            },
 		            success: function(data) {
 		            	if(data.success){
-		            		alert("im called");
 		            		if(data.success == true){
 			        			$('#formRegoAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
 					        	setTimeout(function() {window.location.href = data.redirect;}, 500);

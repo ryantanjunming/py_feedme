@@ -36,12 +36,14 @@ def insert(insertURL, user):
         feedname = feed['feed']['title']
     except:
         feedname = insertURL
-    # TODO check if feed has already been added - IMPORTANT because multiple users add feeds to same database table!
     # if feed already exists, fetch that one and set to f
-    f = Feeds(name = feedname,
-              url = str(insertURL).lower(),
-              dateAdded = datetime.now())
-    f.save()
+    try:
+        f = Feeds.objects.get(url = str(insertURL).lower())
+    except:
+        f = Feeds(name = feedname,
+                  url = str(insertURL).lower(),
+                  dateAdded = datetime.now())
+        f.save()
     subscribe = SubscribesTo(user = user, feed = f)
     subscribe.save()
 
@@ -128,8 +130,6 @@ def deleteRecommendation(request):
 def myFeeds(request):
     #populating my current rss feeds
     feed_entries = get_categorised_feeds(request.user)
-#     for k, v in feed_entries.iteritems():
-#         print ">>", k, ":", v
     for cat in feed_entries:
         feed_entries[cat] = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
                                               'name' : feed.name,
@@ -172,21 +172,6 @@ def deleteFeed(request):
 
 # NOTE: we really need a shortcut for a delayed redirect view (display input message + auto redirect in 3 seconds kind of thing - maybe a template will help)
 # (if we can use a template for this, will be super good for the feed error page, since I'm currently using a generic error page...)
-
-# def get_categories(user):
-#     """
-#     For the given user, returns a dict of
-#         category_name : [Feed, Feed, Feed, ...]
-#     Corresponding to the user's categories and their Feeds in the categories.
-#     """
-#     categories = {}
-#     curr_cat = ""
-#     for cat in FCategory.objects.filter(user = user):
-#         if cat.cat_name != curr_cat:
-#             curr_cat = cat.cat_name
-#             if not categories.has_key(curr_cat): categories[curr_cat] = []
-#         categories[curr_cat].append(cat.feed)
-#     return categories
 
 def get_categorised_feeds(user):
     """
@@ -287,7 +272,7 @@ def showFeed(request):
     qkey, qvalue = request.META['QUERY_STRING'].split('=')
     url = qvalue
     feed = feedparser.parse(url)
-    #if settings.DEBUG: debug_feed_display(feed)
+    if settings.DEBUG: debug_feed_display(feed)
     return HttpResponse(make_feed_page(feed))
 
 # some feed display functions (will prob move to another file later)

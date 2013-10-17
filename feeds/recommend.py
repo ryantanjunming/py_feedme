@@ -1,18 +1,6 @@
-"""
-
-for all user other than this user
-    if user shares at least 75% of this user's subscriptions
-        for each not-mutually-subscribed feed
-            sub_tally[feed.url] += 1
-get top k feedUrls and display as feeds under "You might be interested in"
-
-"""
-
 from django.contrib.auth.models import User
 from friendship.models import Friend
 from feeds.models import Feeds, SubscribesTo
-
-
 
 def user_pref_recommendations(user):
     """

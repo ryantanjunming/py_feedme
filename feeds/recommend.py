@@ -2,8 +2,6 @@ from django.contrib.auth.models import User
 from friendship.models import Friend
 from feeds.models import Feeds, SubscribesTo
 
-# okay these are definitely bugged
-
 def user_pref_recommendations(user):
     """
     Given a User, returns a list of integers corresponding to the PKs of
@@ -14,7 +12,6 @@ def user_pref_recommendations(user):
     may be interested in (the assumption is that two users with overlapping
     subscribed feeds have similar interests).
     
-    The resulting list won't contain feeds that the user has subscribed to.
     You should probably check that the user given has at least a few feeds before
     calling this function.
     """
@@ -53,8 +50,6 @@ def friend_pref_recommendations(user):
     subscribed feeds, such that the highest scoring feed is the most popular
     feed among the given user's friends.
     
-    Note that the resulting list will only contain recommendations that the user
-    hasn't subscribed to.
     Returned list includes feeds that the user is subscribed to.
     """
     # get a list of pks corresponding to given user's friends

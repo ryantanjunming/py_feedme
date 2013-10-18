@@ -64,6 +64,7 @@
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function(response) {
           console.log('Good to see you, ' + response.name + '.');
+          $(".fbTesting").value="asd";//not working
         });
       }
     </script>
@@ -89,6 +90,7 @@
             <!--Side bar-->
             <h3>Welcome back, {{username | safe}}!</h3>
 			<a href="/accounts/logout">Logout</a><br><br>
+            <button id="fbTesting" type="button" value="hi">Hi</button>
             
             <!--Display my feeds-->
 			<p>Check out your feeds:</p>

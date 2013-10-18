@@ -146,30 +146,30 @@ def myFeeds(request):
                             'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url
                             })
     # friend preference recommendation
-    f_prefs = friend_pref_recommendations(request.user)[:3]
-    f_prefs = Feeds.objects.filter(pk__in=f_prefs) # pks to Feeds objects
-    f_prefs = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
-                                'name' : feed.name,
-                                'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeed?url=" + feed.url,
-                                #'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
-                                }, 
-                  f_prefs)
+    #f_prefs = friend_pref_recommendations(request.user)[:3]
+    #f_prefs = Feeds.objects.filter(pk__in=f_prefs) # pks to Feeds objects
+    #f_prefs = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+    #                            'name' : feed.name,
+    #                            'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeed?url=" + feed.url,
+    #                            #'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+    #                            }, 
+    #              f_prefs)
     # user preferences
-    user_recs = user_pref_recommendations(request.user)[:3]
-    user_recs = Feeds.objects.filter(pk__in=user_recs) # pks to Feeds objects
-    user_recs = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
-                                  'name' : feed.name,
-                                  'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeed?url=" + feed.url,
-                                  #'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
-                                  }, 
-                    user_recs)
+    #user_recs = user_pref_recommendations(request.user)[:3]
+    #user_recs = Feeds.objects.filter(pk__in=user_recs) # pks to Feeds objects
+    #user_recs = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+    #                              'name' : feed.name,
+    #                              'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeed?url=" + feed.url,
+    #                              #'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+    #                              }, 
+    #                user_recs)
     # rendering the page
     t = loader.get_template('feeds/myFeeds.html')
     c = RequestContext(request, {
         'feed_entries' : feed_entries,
         'rec_entries' : rec_entries,
-        'friend_recs' : f_prefs,
-        'user_recs' : user_recs,
+        #'friend_recs' : f_prefs,
+        #'user_recs' : user_recs,
         'username' : request.user.username
     })
     return render_to_response('feeds/myFeeds.html', c)

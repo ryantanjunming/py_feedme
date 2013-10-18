@@ -137,25 +137,19 @@ def myFeeds(request):
                                               }, 
                                 feed_entries[cat])
     #populating my current recommendations
-    myRecommendations_str = ""
+    rec_entries = []
     for r in selectAllR(request.user.username):
-        myRecommendations_str += "<li><button type=\"button\" value=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url + "\" target=\"_blank\">" + r.name + "</button>"
-         # add icon
-        add_img = '<img src="{imgsrc}" alt="Add Button" width="16" height="16">'
-        add_img = add_img.format(imgsrc = os.path.join("/static", "img", "tick.ico"))
-        add_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeedFromRecommendation?url=" + r.url + "\">"
-        # delete icon
-        del_img = '<img src="{imgsrc}" alt="Delete Button" width="16" height="16">'
-        del_img = del_img.format(imgsrc = os.path.join("/static", "img", "delete.png"))
-        del_link_tag = "<a href=\"" + "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url + "\">"
-        myRecommendations_str += " " + add_link_tag + add_img+"</a> " + del_link_tag + del_img + "</a></li>"
-    
+        rec_entries.append({'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url,
+                            'name' : r.name,
+                            'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeedFromRecommendation?url=" + r.url,
+                            'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url
+                            })
     #rendering the page
-    t=loader.get_template('feeds/myFeeds.html')
-    c=RequestContext(request,{
+    t = loader.get_template('feeds/myFeeds.html')
+    c = RequestContext(request, {
         'feed_entries' : feed_entries,
-        'recommendations':myRecommendations_str,
-        'username':request.user.username
+        'rec_entries' : rec_entries,
+        'username' : request.user.username
     })
     return render_to_response('feeds/myFeeds.html', c)
     

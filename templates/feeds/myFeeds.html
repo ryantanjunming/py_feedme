@@ -94,16 +94,16 @@
 			<p>Check out your feeds:</p>
 			<ul id="feedbut">
 			{% for cat, feeds in feed_entries.iteritems %}
-				{{ cat }}
+			{{ cat }}
 				<ul>
-					{% for entry in feeds %}
+				{% for entry in feeds %}
 					<li>
 						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
 						<a href="{{ entry.del_url }}">
 							<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
 						</a>
 					</li>
-					{% endfor %}
+				{% endfor %}
 				</ul>
 			{% endfor %}
 			</ul>
@@ -117,18 +117,6 @@
 				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
 				<input type="submit" name="submit"/>
 			</form>
-
-            <!--Remove Feed-->
-			<!-- <h3>Remove Feed!</h3>
-
-			<form method='post' action='/feeds/deleteFeed/'>
-
-			{% csrf_token %}
-				<input type="text" name="username" placeholder="Username"/><br/>
-				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
-				<br/><br/>
-				<input type="submit" name="submit"/>
-			</form> -->
 
             <!--Add Recommendations-->
 			<br>
@@ -144,9 +132,20 @@
             <!--Recommendations panel-->
             <br>
             <h4>My Recommendations</h4>
-            <ul id="recommendations">
-				{{recommendations | safe}}
+			<ul id="recommendations">
+			{% for entry in rec_entries %}
+				<li>
+					<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+					<a href="{{ entry.add_url }}">
+						<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+					</a>
+					<a href="{{ entry.del_url }}">
+						<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+					</a>
+				</li>
+			{% endfor %}
 			</ul>
+			
             <br>
 	
 		</div>

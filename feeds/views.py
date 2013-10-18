@@ -1,5 +1,6 @@
 import os, sys, codecs, time
 from datetime import datetime
+from collections import OrderedDict
 
 from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
@@ -14,7 +15,7 @@ import feedme.settings as settings
 from feeds.models import Feeds, SubscribesTo, FCategory
 from feeds.models import Recommendations
 from django.core.exceptions import ObjectDoesNotExist
-from collections import OrderedDict
+from recommend import *
 
 
 class BadFeedException(Exception):
@@ -128,7 +129,7 @@ def deleteRecommendation(request):
 
 @login_required(login_url='/accounts/index/')
 def myFeeds(request):
-    #populating my current rss feeds
+    # populating my current rss feeds
     feed_entries = get_categorised_feeds(request.user)
     for cat in feed_entries:
         feed_entries[cat] = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
@@ -136,7 +137,7 @@ def myFeeds(request):
                                               'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
                                               }, 
                                 feed_entries[cat])
-    #populating my current recommendations
+    # populating my current recommendations
     rec_entries = []
     for r in selectAllR(request.user.username):
         rec_entries.append({'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url,
@@ -144,11 +145,31 @@ def myFeeds(request):
                             'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeedFromRecommendation?url=" + r.url,
                             'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url
                             })
-    #rendering the page
+    # friend preference recommendation
+    f_prefs = friend_pref_recommendations(request.user)[:3]
+    f_prefs = Feeds.objects.filter(pk__in=f_prefs) # pks to Feeds objects
+    f_prefs = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+                                'name' : feed.name,
+                                'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeed?url=" + feed.url,
+                                #'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+                                }, 
+                  f_prefs)
+    # user preferences
+    user_recs = user_pref_recommendations(request.user)[:3]
+    user_recs = Feeds.objects.filter(pk__in=user_recs) # pks to Feeds objects
+    user_recs = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+                                  'name' : feed.name,
+                                  'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeed?url=" + feed.url,
+                                  #'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+                                  }, 
+                    user_recs)
+    # rendering the page
     t = loader.get_template('feeds/myFeeds.html')
     c = RequestContext(request, {
         'feed_entries' : feed_entries,
         'rec_entries' : rec_entries,
+        'friend_recs' : f_prefs,
+        'user_recs' : user_recs,
         'username' : request.user.username
     })
     return render_to_response('feeds/myFeeds.html', c)
@@ -336,8 +357,6 @@ def make_feed_page(feed):
 <!-- AddThis Button END -->
 </div>"""
 
-
-            
     page = feed_header + "<br>" + entries.decode('utf-8')
     return page
 

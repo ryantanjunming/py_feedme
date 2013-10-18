@@ -146,8 +146,43 @@
 			{% endfor %}
 			</ul>
 			
+			<!--Friend Recommendation panel-->
+			<br>
+			<h4>What your Friends are Following</h4>
+			{% if friend_recs %}
+				<ul id="friendrecs">
+				{% for entry in friend_recs %}
+					<li>
+						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+						<a href="{{ entry.add_url }}">
+							<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+						</a>
+					</li>
+				{% endfor %}
+				</ul>
+			{% else %}
+				<p>Sorry, we have no recommendations for you right now.</p>
+			{% endif %}
+			
+			<!--User Recommendation panel-->
+			<br>
+			<h4>Recommended for You</h4>
+			{% if user_recs %}
+				<ul id="userrec">
+				{% for entry in user_recs %}
+					<li>
+						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+						<a href="{{ entry.add_url }}">
+							<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+						</a>
+					</li>
+				{% endfor %}
+				</ul>
+			{% else %}
+				<p>Sorry, we have no recommendations for you right now.</p>
+			{% endif %}
+			
             <br>
-	
 		</div>
 	    
         <!--Where the RSS Feeds will load into-->

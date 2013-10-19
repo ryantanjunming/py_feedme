@@ -167,8 +167,8 @@ def myFeeds(request):
     t = loader.get_template('feeds/myFeeds.html')
     c = RequestContext(request, {
         'feed_entries' : feed_entries,
-        #'rec_entries' : rec_entries,
-        'friend_recs' : f_prefs,
+        'rec_entries' : rec_entries,
+        #'friend_recs' : f_prefs,
         #'user_recs' : user_recs,
         'username' : request.user.username
     })

@@ -60,7 +60,7 @@ def friend_pref_recommendations(user):
     """
     # get a list of pks corresponding to given user's friends
     friends = map(lambda f: f.pk, Friend.objects.friends(user))
-    if not friends: return # skip out if user has no friends
+    if not friends: return [] # skip out if user has no friends
     feed_scores = {}
     # accumulate score for feeds that the given user's friends are subscribed to
     for sub in SubscribesTo.objects.select_related().filter(user__in=friends):

@@ -56,7 +56,7 @@ class RecommendationTest(TestCase):
         SubscribesTo.objects.create(user = u2,
                                     feed = feeds[3])
         
-        self.assertTrue(friend_pref_recommendations(u0) == None)
+        self.assertTrue(len(friend_pref_recommendations(u0)) == 0)
         
         rec_feeds = user_pref_recommendations(u0, threshold=0)
         self.assertTrue(len(rec_feeds) == 2, "Expected length: {}".format(len(rec_feeds)))

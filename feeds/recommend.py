@@ -1,10 +1,12 @@
+from __future__ import division
+
 from django.contrib.auth.models import User
 from friendship.models import Friend
 from feeds.models import Feeds, SubscribesTo
 
 # okay these are definitely bugged
 
-def user_pref_recommendations(user):
+def user_pref_recommendations(user, threshold=0.3):
     """
     Given a User, returns a list of integers corresponding to the PKs of
     Feeds objects, sorted by score in descending order.
@@ -18,7 +20,7 @@ def user_pref_recommendations(user):
     You should probably check that the user given has at least a few feeds before
     calling this function.
     """
-    jc_threshold = 0.5
+    jc_threshold = threshold
     # construct sets corresponding to the feeds that each user is subscribed to
     sub_feeds = {}
     for sub in SubscribesTo.objects.select_related():
@@ -30,7 +32,7 @@ def user_pref_recommendations(user):
         # compute the Jaccard Coefficient for the given user and each other user for
         # their sets of subscribed feeds
         if upk != user.pk:
-            inter_set = sub_feeds[upk].intersection(sub_feeds[user.pk]) 
+            inter_set = sub_feeds[upk].intersection(sub_feeds[user.pk])
             jc = len(inter_set) / len(sub_feeds[upk].union(sub_feeds[user.pk]))
             # if similarity exceeds jc_thresh,
             # for each feed that the other user has that the given user does not have,
@@ -47,14 +49,13 @@ def user_pref_recommendations(user):
 def friend_pref_recommendations(user):
     """
     Given a User, returns a list of integers corresponding to the PKs of
-    Feeds objects, sorted by score in descending order.
+    Feeds objects, sorted by score in descending order, or None if the User
+    has no friends.
     
     Score is determined by examining the user's registered friends and their
     subscribed feeds, such that the highest scoring feed is the most popular
     feed among the given user's friends.
     
-    Note that the resulting list will only contain recommendations that the user
-    hasn't subscribed to.
     Returned list includes feeds that the user is subscribed to.
     """
     # get a list of pks corresponding to given user's friends

@@ -22,6 +22,18 @@ DATABASES = {
   }
 }
 
+##import sys
+##if 'test' in sys.argv:
+##    DATABASES['default'] = {
+##        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+##        'NAME': 'postgres',
+##        'HOST': 'localhost',
+##        'PORT': 5442,
+##        'USER': 'postgres',
+##        'PASSWORD': '123',
+##        'TEST_NAME' : 'test_pgs_db'
+##  }
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []

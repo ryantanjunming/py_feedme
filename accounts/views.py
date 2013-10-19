@@ -109,3 +109,6 @@ def register(request):
 #         profile, created = UserProfile.\
 #                  objects.get_or_create(user=instance)
 # post_save.connect(create_profile, sender=User)
+
+def fbrego(request):
+    print "hi";

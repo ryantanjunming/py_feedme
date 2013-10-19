@@ -376,7 +376,7 @@ def make_entry_string(entry):
         fields[k] = fields[k].encode('utf-8')
     return "<div><h3><a href=\"{link}\" target=\"_blank\">{title}</a></h3>{author}, \
 published on {published}<br>{summary}<br></div>".format(**fields)+\
-"""<br><a href="#" 
+"""<br><button href="#" 
   onclick="
     window.open(
       'http://www.facebook.com/sharer/sharer.php?s=100&p[url]={link}&p[images][0]=&p[title]={title}&p[summary]={title}', 
@@ -384,7 +384,13 @@ published on {published}<br>{summary}<br></div>".format(**fields)+\
       'width=626,height=436'); 
     return false;">
   Share on Facebook
-</a>""".format(**fields)
+</button>""".format(**fields)+\
+"""
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="{link}" data-text="{title}">Tweet</a>
+""".format(**fields)+\
+"""
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+"""
 
 
 

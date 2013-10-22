@@ -382,7 +382,7 @@ published on {published}<br>{summary}<br></div>".format(**fields)+\
       'http://www.facebook.com/sharer/sharer.php?s=100&p[url]={link}&p[images][0]=&p[title]={title}&p[summary]={title}', 
       'facebook-share-dialog', 
       'width=626,height=436'); 
-    return false;">
+    return false;" style="color:white;background-color:#3B5998">
   Share on Facebook
 </button>""".format(**fields)+\
 """

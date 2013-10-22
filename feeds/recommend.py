@@ -6,7 +6,7 @@ from feeds.models import Feeds, SubscribesTo
 
 # okay these are definitely bugged
 
-def user_pref_recommendations(user, threshold=0.3):
+def user_pref_recommendations(user, threshold=0.01):
     """
     Given a User, returns a list of integers corresponding to the PKs of
     Feeds objects, sorted by score in descending order.

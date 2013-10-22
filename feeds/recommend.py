@@ -22,10 +22,13 @@ def user_pref_recommendations(user, threshold=0.01):
     """
     jc_threshold = threshold
     # construct sets corresponding to the feeds that each user is subscribed to
-    sub_feeds = {}
+    sub_feeds = {user.pk : set()}
     for sub in SubscribesTo.objects.select_related():
         if not sub_feeds.has_key(sub.user.pk): sub_feeds[sub.user.pk] = set()
         sub_feeds[sub.user.pk].add(sub.feed.pk)
+    # the algorithm doesn't assign score for a given user's feeds if jc == 0 for that set and the user's set
+    # so we could check for emptiness in user's set and quit here if we want ... not too much difference tho
+    
     # use similarity between sets to score feeds
     feed_scores = {}
     for upk in sub_feeds.iterkeys():

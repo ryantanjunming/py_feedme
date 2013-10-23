@@ -8,14 +8,14 @@ class Feeds(models.Model):
     dateAdded = models.DateTimeField()
 
 class SubscribesTo(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey('django_facebook.FacebookCustomUser')
     feed = models.ForeignKey(Feeds)
 
 class FCategory(models.Model):
     """
     A named category for different Feeds, e.g. "Music" for music related feeds.
     """
-    user = models.ForeignKey(User)
+    user = models.ForeignKey('django_facebook.FacebookCustomUser')
     feed = models.ForeignKey(Feeds)
     cat_name = models.CharField(max_length=20)
 

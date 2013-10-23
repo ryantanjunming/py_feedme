@@ -71,10 +71,10 @@ def register(request):
 
 		# try:
 		user = User.objects.create_user(username, email, password)
-		user.first_name = first_name
-		user.last_name = last_name
-		user.is_active = True
-		user.save();
+		# user.first_name = first_name
+		# user.last_name = last_name
+		# user.is_active = True
+		# user.save();
 
 		# except:
 		# 	results = {
@@ -90,10 +90,9 @@ def register(request):
 		# profile.auth_key = m.hexdigest()
 		# profile.save()
 
-		msg = EmailMessage('Registration to FeedMe.','Hi, you have successfully registered for FeedMe.', to=[user.email])
+		msg = EmailMessage('Registration to FeedMe.','Hi, you have successfully registered for FeedMe as '+username, to=[user.email])
 		msg.send()
 		
-		print("ive reached here")
 
 		results = {'success' : True,
 				'message' : 'Successful Registration, Welcome <strong>'+user.get_full_name()+'</strong>',
@@ -110,5 +109,5 @@ def register(request):
 #                  objects.get_or_create(user=instance)
 # post_save.connect(create_profile, sender=User)
 
-def fbrego(request):
-    print "hi";
+# def fbrego(request):
+#     print "hi";

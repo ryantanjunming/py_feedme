@@ -24,7 +24,6 @@ urlpatterns = patterns('',
     (r'^accounts/(?i)login?/$','accounts.views.login'),
     (r'^accounts/(?i)logout?/$','accounts.views.logout'),
     (r'^accounts/(?i)register?/$','accounts.views.register'),
-    (r'^accounts/(?i)fbrego?/$','accounts.views.fbrego'),
     # (r'^accounts/(?i)profileView?/$','accounts.views.profileView'),
     # (r'^accounts/(?i)profileSubmit?/$','accounts.views.profileSubmit'),
 

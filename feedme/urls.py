@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
    # (r'','accounts.views.index'),
+
     
     (r'^accounts?/$','accounts.views.index'),
     (r'^accounts/(?i)index?/$','accounts.views.index'),
@@ -39,5 +40,8 @@ urlpatterns = patterns('',
     (r'^feeds/(?i)billStripeToken?/$','feeds.views.billStripeToken'),
     (r'^feeds/(?i)feederror?/$', TemplateView.as_view(template_name="feeds/feederror.html")),
     (r'^feeds/(?i)categorise?/$','feeds.views.categorise_feed'),
-    (r'^feeds/(?i)catdel?/$','feeds.views.category_delete')
+    (r'^feeds/(?i)catdel?/$','feeds.views.category_delete'),
+
+    (r'^friends?/$','friends.views.my_view')
+
 )

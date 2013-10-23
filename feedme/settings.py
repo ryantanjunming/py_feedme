@@ -2,6 +2,11 @@
 
 import os
 
+FACEBOOK_APP_ID = 168596560007390
+FACEBOOK_APP_SECRET = '6a402a9000c343c23b850fbe8557f730'
+
+
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -130,6 +135,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'django_facebook',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -183,3 +189,20 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'mefeeed@gmail.com'
 EMAIL_HOST_PASSWORD = '7534mV6I03'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
+    'django_facebook.context_processors.facebook',
+)
+AUTHENTICATION_BACKENDS = (
+    'django_facebook.auth_backends.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+#AUTH_USER_MODEL = 'django_facebook.FacebookCustomUser'

@@ -101,7 +101,10 @@ def register(request):
 
 	json = simplejson.dumps(results)
 	return HttpResponse(json, mimetype='application/json')
-
+def resetPassword(request):
+    user = User.objects.get(username==request.POST.get('username'))
+    user.set_password(str(request.POST.get('password')))
+    user.save()
 # To handle changes with the DB and fields
 # def create_profile(sender, instance, created, **kwargs):
 #     if created:

@@ -93,3 +93,11 @@ def reject_friendship(request):
         f_request = get_object_or_404(FriendshipRequest, id = requestid)
         f_request.reject()
     return redirect("/friends/")
+
+@login_required(login_url='/accounts/index/')
+def cancel_request(request):
+    if request.method == 'POST':
+	requestid = request.POST['sid']
+	f_request = get_object_or_404(FriendshipRequest, id = requestid)
+	f_request.cancel()
+    return redirect("/friends/")

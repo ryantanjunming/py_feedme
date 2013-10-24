@@ -44,6 +44,7 @@ urlpatterns = patterns('',
     (r'^friends?/$','friends.views.my_view'),
     (r'^friends/(?i)add?/$','friends.views.add_friend'),
     (r'^friends/(?i)remove?/$','friends.views.remove_friend'),
-    (r'^friends/(?i)accept?/$','friends.views.accept_friendship')
+    (r'^friends/(?i)accept?/$','friends.views.accept_friendship'),
+    (r'^friends/(?i)reject?/$','friends.views.reject_friendship')
 
 )

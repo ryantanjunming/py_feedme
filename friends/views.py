@@ -84,3 +84,11 @@ def accept_friendship(request):
         f_request = get_object_or_404(FriendshipRequest, id = requestid)
         f_request.accept()
     return redirect("/friends/")
+
+@login_required(login_url='/accounts/index/')
+def reject_friendship(request):
+    if request.method == 'POST':
+	requestid = request.POST['rid']
+	f_request = get_object_or_404(FriendshipRequest, id = requestid)
+	f_request.reject()
+    return redirect("/friends/")

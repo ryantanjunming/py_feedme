@@ -8,7 +8,14 @@
    <br>
    <br>
    <br>
-  	<p>Your friends:</p>
+   <h4>Send a Friend request!</h4>
+		<form method='post' action='/friends/add/'>
+		{% csrf_token %}
+				<input type="text" name="username" placeholder="Username"/><br/>
+				<input type="submit" name="submit"/>
+			</form>
+
+  	<h4>Your friends:</h4>
 	<ul id="friend-list">
 	{% for f in friends %}
      <li>
@@ -18,19 +25,26 @@
 	</ul>
 	<br>
 
-  	<p>New friend requests:</p>
+  	<h4>New friend requests:</h4>
 	<ul id="friend-list">
    {% if not friend_requests %}
    <em>No new friend requests :(</em>
    {% else %}
 	  {% for r in friend_requests %}
        <li>
-	    Friend request from {{ r.from_user }}
+	    Friend request from {{ r.from_user }} 
        </li>
 	  {% endfor %}
    {% endif %}
 	</ul>
 	<br>
+
+   <h4>Remove that annoying friend:</h4>
+		<form method='post' action='/friends/remove/'>
+		{% csrf_token %}
+				<input type="text" name="username" placeholder="Username"/><br/>
+				<input type="submit" name="submit"/>
+			</form>
 
 
 {% endblock %}

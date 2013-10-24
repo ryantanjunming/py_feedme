@@ -9,6 +9,8 @@ from django.http import *
 from django.contrib.auth.models import User
 from friendship.models import Friend
 
+from friends.exceptions import AlreadyExistsError
+
 @login_required(login_url='/accounts/index')
 def my_view(request):
 
@@ -17,7 +19,7 @@ def my_view(request):
     
 
     # List all unread friendship requests
-    requests = Friend.objects.unread_requests(user=request.user)
+    requests = Friend.objects.unread_requests(request.user)
 
     # List all rejected friendship requests
     #rejects = Friend.objects.rejected_requests(user=request.user)
@@ -50,4 +52,22 @@ def my_view(request):
 
     return render_to_response('friends/index.html', c)
     #return HttpResponse(all_friends)
-    
+
+@login_required(login_url='/accounts/index/')
+def add_friend(request):
+    if request.method == 'POST':
+       to_username = request.POST['username']
+       to_user = User.objects.get(username = to_username)
+       from_user = request.user
+       try:
+           Friend.objects.add_friend(from_user, to_user)
+       except AlreadyExistsError as e:
+           print "Already exists " + str(from_user) + " " + str(to_user) 
+    return redirect("/friends/")
+
+
+@login_required(login_url='/accounts/index/')
+def remove_friend(request):
+    other_user = User.objects.get(username = request.POST['username'])
+    Friend.objects.remove_friend(request.user, other_user)
+    return redirect("/friends/") 

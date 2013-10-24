@@ -41,6 +41,8 @@ urlpatterns = patterns('',
     (r'^feeds/(?i)categorise?/$','feeds.views.categorise_feed'),
     (r'^feeds/(?i)catdel?/$','feeds.views.category_delete'),
 
-    (r'^friends?/$','friends.views.my_view')
+    (r'^friends?/$','friends.views.my_view'),
+    (r'^friends/(?i)add?/$','friends.views.add_friend'),
+    (r'^friends/(?i)remove?/$','friends.views.remove_friend')
 
 )

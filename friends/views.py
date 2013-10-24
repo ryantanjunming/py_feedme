@@ -29,7 +29,7 @@ def my_view(request):
     #rejects = Friend.objects.rejected_requests(user=request.user)
 
     # List all sent friendship requests
-    #sent = Friend.objects.sent_requests(user=request.user)
+    sent = Friend.objects.sent_requests(user=request.user)
 
     # List of this user's followers
     #all_followers = Following.objects.followers(request.user)
@@ -49,7 +49,8 @@ def my_view(request):
     c = RequestContext(request, {
         'friends' : all_friends,
         'friend_requests' : requests,
-        'users' : all_users
+        'users' : all_users,
+        'sent' : sent
         #'friend_recs' : f_prefs,
         #'user_recs' : user_recs,
         #'username' : request.user.usernase
@@ -88,7 +89,7 @@ def accept_friendship(request):
 @login_required(login_url='/accounts/index/')
 def reject_friendship(request):
     if request.method == 'POST':
-	requestid = request.POST['rid']
-	f_request = get_object_or_404(FriendshipRequest, id = requestid)
-	f_request.reject()
+        requestid = request.POST['rid']
+        f_request = get_object_or_404(FriendshipRequest, id = requestid)
+        f_request.reject()
     return redirect("/friends/")

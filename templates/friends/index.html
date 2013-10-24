@@ -47,10 +47,24 @@
           <input type="hidden" name="rid" value="{{r.id}}"/>
           <input type="submit" name="submit" value="Accept"/>
 			</form>
+         <form method='post' action='/friends/reject/'>
+	       {% csrf_token %}
+          <input type="hidden" name="rid" value="{{r.id}}"/>
+          <input type="submit" name="submit" value="Reject"/>
+			</form>
 
        </li>
 	  {% endfor %}
    {% endif %}
+	</ul>
+	<br>
+   <h4>Your sent requests:</h4>
+	<ul id="friend-list">
+	{% for s in sent %}
+     <li>
+	  {{ s.to_user }}
+     </li>
+	{% endfor %}
 	</ul>
 	<br>
 

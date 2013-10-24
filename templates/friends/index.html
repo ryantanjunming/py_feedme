@@ -4,8 +4,6 @@
 {% block content %}
   {% load friendshiptags %}
   
-  {{ friends }}
-
    <br>
    <br>
    <br>
@@ -22,11 +20,15 @@
 
   	<p>New friend requests:</p>
 	<ul id="friend-list">
-	{% for r in friend_requests %}
-     <li>
-	  {{ r }}
-     </li>
-	{% endfor %}
+   {% if not friend_requests %}
+   <em>No new friend requests :(</em>
+   {% else %}
+	  {% for r in friend_requests %}
+       <li>
+	    Friend request from {{ r.from_user }}
+       </li>
+	  {% endfor %}
+   {% endif %}
 	</ul>
 	<br>
 

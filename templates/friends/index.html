@@ -28,7 +28,11 @@
 	<ul id="friend-list">
 	{% for f in friends %}
      <li>
-	  {{ f }}
+	  {{ f }}<form method='post' action='/friends/remove/'>
+		{% csrf_token %}
+				<input type="hidden" name="username" value="{{ f }}"/>
+				<input type="submit" name="submit" value="Remove"/>
+			</form>
      </li>
 	{% endfor %}
 	</ul>

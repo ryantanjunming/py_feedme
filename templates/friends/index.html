@@ -41,7 +41,13 @@
    {% else %}
 	  {% for r in friend_requests %}
        <li>
-	    Friend request from {{ r.from_user }} 
+	    Friend request from {{ r.from_user }}
+       <form method='post' action='/friends/accept/'>
+	       {% csrf_token %}
+          <input type="hidden" name="rid" value="{{r.id}}"/>
+          <input type="submit" name="submit" value="Accept"/>
+			</form>
+
        </li>
 	  {% endfor %}
    {% endif %}

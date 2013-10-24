@@ -3,11 +3,11 @@
 from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
 from django.template import Context, loader, RequestContext
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.http import *
 
 from django.contrib.auth.models import User
-from friendship.models import Friend
+from friendship.models import Friend, FriendshipRequest
 
 from friends.exceptions import AlreadyExistsError
 
@@ -75,4 +75,12 @@ def add_friend(request):
 def remove_friend(request):
     other_user = User.objects.get(username = request.POST['username'])
     Friend.objects.remove_friend(request.user, other_user)
-    return redirect("/friends/") 
+    return redirect("/friends/")
+
+@login_required(login_url='/accounts/index/')
+def accept_friendship(request):
+    if request.method == 'POST':
+        requestid = request.POST['rid']
+        f_request = get_object_or_404(FriendshipRequest, id = requestid)
+        f_request.accept()
+    return redirect("/friends/")

@@ -13,13 +13,11 @@ from friendship.models import Friend
 def my_view(request):
 
     # List of this user's friends
-    user = request.user
-    print user
-    all_friends = Friend.objects.friends(user)
+    all_friends = Friend.objects.friends(request.user)
     
 
     # List all unread friendship requests
-    #requests = Friend.objects.unread_requests(user=request.user)
+    requests = Friend.objects.unread_requests(user=request.user)
 
     # List all rejected friendship requests
     #rejects = Friend.objects.rejected_requests(user=request.user)
@@ -41,14 +39,15 @@ def my_view(request):
 
     # Create request.user follows other_user relationship
     #following_created = Following.objects.add_follower(request.user, other_user)
- 
+    t = loader.get_template('friends/index.html')
     c = RequestContext(request, {
-        'friends' : str(all_friends)
-     #   'friend_requests' : requests
+        'friends' : all_friends,
+        'friend_requests' : requests
         #'friend_recs' : f_prefs,
         #'user_recs' : user_recs,
-        #'username' : request.user.username
+        #'username' : request.user.usernase
     })
 
     return render_to_response('friends/index.html', c)
+    #return HttpResponse(all_friends)
     

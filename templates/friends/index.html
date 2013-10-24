@@ -3,8 +3,33 @@
 {% block stylesheets %}{% endblock %}
 {% block content %}
   {% load friendshiptags %}
-
+  
   {{ friends }}
+
+   <br>
+   <br>
+   <br>
+   <br>
+  	<p>Your friends:</p>
+	<ul id="friend-list">
+	{% for f in friends %}
+     <li>
+	  {{ f }}
+     </li>
+	{% endfor %}
+	</ul>
+	<br>
+
+  	<p>New friend requests:</p>
+	<ul id="friend-list">
+	{% for r in friend_requests %}
+     <li>
+	  {{ r }}
+     </li>
+	{% endfor %}
+	</ul>
+	<br>
+
 
 {% endblock %}
 {% block javascript %}{% endblock %}

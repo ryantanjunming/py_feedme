@@ -415,8 +415,3 @@ def billStripeToken(request):
         pass
     return redirect("/feeds/myFeeds")
 
-@login_required(login_url='/accounts/index')
-def friend_views(request):
-    all_friends = Friend.objects.friends(request.user)
-
-    return render_to_response('friends/index.html',c)

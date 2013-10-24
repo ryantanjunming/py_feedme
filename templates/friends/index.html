@@ -12,12 +12,11 @@
 	<ul id="user-list">
 	{% for u in users %}
      <li>
-	  {{ u.username }}
+	  {{ u }}
      </li>
 	{% endfor %}
 	</ul>
    <br>
-	<br>
    <h4>Send a Friend request!</h4>
 		<form method='post' action='/friends/add/'>
 		{% csrf_token %}

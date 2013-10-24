@@ -21,6 +21,10 @@ def my_view(request):
     # List all unread friendship requests
     requests = Friend.objects.unread_requests(request.user)
 
+    # List all users
+    all_users = User.objects.all()
+    
+
     # List all rejected friendship requests
     #rejects = Friend.objects.rejected_requests(user=request.user)
 
@@ -44,7 +48,8 @@ def my_view(request):
     t = loader.get_template('friends/index.html')
     c = RequestContext(request, {
         'friends' : all_friends,
-        'friend_requests' : requests
+        'friend_requests' : requests,
+        'users' : all_users
         #'friend_recs' : f_prefs,
         #'user_recs' : user_recs,
         #'username' : request.user.usernase

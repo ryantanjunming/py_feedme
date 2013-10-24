@@ -35,7 +35,7 @@
 	<br>
 
   	<h4>New friend requests:</h4>
-	<ul id="friend-list">
+	<ul id="request-list">
    {% if not friend_requests %}
    <em>No new friend requests :(</em>
    {% else %}
@@ -58,18 +58,18 @@
    {% endif %}
 	</ul>
 	<br>
-   <h4>Your sent requests:</h4>
+   <h4>Your pending sent requests:</h4>
 	<ul id="sent-request-list">
    {% if not sent %}
-   <em>No sent requests :(</em>
+   <em>No pending sent requests yay! :)</em>
    {% else %}
 	  {% for s in sent %}
        <li>
-	    {{ s.to_user }}
+	    {{ s.to_user }} 
        <form method='post' action='/friends/cancel/'>
 	       {% csrf_token %}
-	  <input type="hidden" name="sid" value="{{s.id}}"/>
-	  <input type="submit" name="submit" value="Cancel"/>
+          <input type="hidden" name="sid" value="{{s.id}}"/>
+          <input type="submit" name="submit" value="Cancel"/>
 		  </form>
        </li>
 	  {% endfor %}

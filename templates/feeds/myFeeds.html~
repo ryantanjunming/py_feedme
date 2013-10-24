@@ -148,12 +148,47 @@
 			{% endfor %}
 			</ul>
 			
+			<!--Friend Recommendation panel-->
+			<br>
+			<h4>What your Friends are Following</h4>
+			{% if friend_recs %}
+				<ul id="friendrecs">
+				{% for entry in friend_recs %}
+					<li>
+						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+						<a href="{{ entry.add_url }}">
+							<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+						</a>
+					</li>
+				{% endfor %}
+				</ul>
+			{% else %}
+				<p>Sorry, we have no recommendations for you right now.</p>
+			{% endif %}
+			
+			<!--User Recommendation panel-->
+			<br>
+			<h4>Recommended for You</h4>
+			{% if user_recs %}
+				<ul id="userrec">
+				{% for entry in user_recs %}
+					<li>
+						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+						<a href="{{ entry.add_url }}">
+							<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+						</a>
+					</li>
+				{% endfor %}
+				</ul>
+			{% else %}
+				<p>Sorry, we have no recommendations for you right now.</p>
+			{% endif %}
+			
             <br>
-	
 		</div>
 	    
         <!--Where the RSS Feeds will load into-->
-		<div class="span9" id="feedpage"> <!-- AddThis Button BEGIN -->
+<div class="span9" id="feedpage"> <!-- AddThis Button BEGIN -->
 <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="www.google.com">
 <a class="addthis_button_preferred_1"></a>
 <a class="addthis_button_preferred_2"></a>
@@ -165,14 +200,14 @@
 
 <!-- AddThis Button END -->       
 <!-- AddThis Button BEGIN -->
-<div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="www.youtube.com">
+<!-- <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="www.youtube.com">
 <a class="addthis_button_preferred_1"></a>
 <a class="addthis_button_preferred_2"></a>
 <a class="addthis_button_preferred_3"></a>
 <a class="addthis_button_preferred_4"></a>
 <a class="addthis_button_compact"></a>
 <a class="addthis_counter addthis_bubble_style"></a>
-</div>
+</div> -->
 <!-- AddThis Button END -->                  
 
 </div>
@@ -202,7 +237,7 @@
       addthis.layers({
         'theme' : 'transparent',
         'share' : {
-          'position' : 'left',
+          'position' : 'right',
           'numPreferredServices' : 5
         },  
         'whatsnext' : {},  

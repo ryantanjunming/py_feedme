@@ -1,0 +1,17 @@
+.form-friend .form-friend-heading,
+.form-friend .checkbox {
+  margin-bottom: 10px;
+}
+.form-friend .checkbox {
+  font-weight: normal;
+}
+
+.form-friend .form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}

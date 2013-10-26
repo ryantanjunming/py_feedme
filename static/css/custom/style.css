@@ -4,6 +4,7 @@
 html,
 body {
   height: 100%;
+  padding-top: 25px;
 }
 
 /* Wrapper for page content to push down footer */
@@ -52,7 +53,6 @@ code {
 }
 
 .content_body {
-  padding-top: 25px;
   max-width: 90%;
   padding: 15px;
   margin: 0 auto;

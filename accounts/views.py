@@ -122,9 +122,3 @@ def resetPassword(request):
     user.save()
     return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
 
-# To handle changes with the DB and fields
-# def create_profile(sender, instance, created, **kwargs):
-#     if created:
-#         profile, created = UserProfile.\
-#                  objects.get_or_create(user=instance)
-# post_save.connect(create_profile, sender=User)

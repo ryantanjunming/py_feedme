@@ -2,119 +2,127 @@
 
 {% block title %}FeedMe!{% endblock %}
 
-{% block stylesheets %}{% endblock %}
+{% block stylesheets %}
+	<link href="/static/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" media="screen">
+    <!-- custom css pages -->
+    <link href="/static/css/custom/feed.css" rel="stylesheet" media="screen">
+{% endblock %}
 
 {% block content %}
     
 	<div class="row">
         <!--Side bar-->
 		<div class="col-md-3">
+	        <div class="container">
+	            <!--Display my feeds-->
+	            <div class="well">
+					<p>Check out your feeds:</p>
+					<ul id="feedbut">
+					{% for cat, feeds in feed_entries.iteritems %}
+					{{ cat }}
+						<ul>
+						{% for entry in feeds %}
+							<li>
+								<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+								<a href="{{ entry.del_url }}">
+									<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+								</a>
+							</li>
+						{% endfor %}
+						</ul>
+					{% endfor %}
+					</ul>
+				</div>
+				
+	            <!--Add Feed-->
+	            <div class="well">
+					<h4>Add a new Feed!</h4>
+					<form method='post' action='/feeds/insertFeed/'>
+					{% csrf_token %}
+						<!-- <input type="text" name="username" placeholder="Username"/><br/> -->
+						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/><br/>
+						<input type="submit" class="btn btn-primary btn-block" name="submit"/>
+					</form>
+				</div>
 
-            <!--Side bar-->
-            <h3>Welcome back, {{username | safe}}!</h3>
-            
-            <!--Display my feeds-->
-			<p>Check out your feeds:</p>
-			<ul id="feedbut">
-			{% for cat, feeds in feed_entries.iteritems %}
-			{{ cat }}
-				<ul>
-				{% for entry in feeds %}
-					<li>
-						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
-						<a href="{{ entry.del_url }}">
-							<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
-						</a>
-					</li>
-				{% endfor %}
-				</ul>
-			{% endfor %}
-			</ul>
-			<br>
-			
-            <!--Add Feed-->
-			<h4>Add a new Feed!</h4>
-			<form method='post' action='/feeds/insertFeed/'>
-			{% csrf_token %}
-				<!-- <input type="text" name="username" placeholder="Username"/><br/> -->
-				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
-				<input type="submit" name="submit"/>
-			</form>
+	            <!--Add Recommendations-->
+	            <div class="well">
+					<h4>Recommend a Feed to a Friend!</h4>
+					<form method='post' class="form-friend" action='/feeds/insertRecommendation/'>
+					{% csrf_token %}
+						<input type="text" class="form-control" name="sender" placeholder="Sender"/><br/>
+		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/><br/>
+						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/><br/>
+						<input type="submit" class="btn btn-primary btn-block" name="submit"/>
+					</form>
+				</div>
 
-            <!--Add Recommendations-->
-			<br>
-			<h4>Recommend a Feed to a Friend!</h4>
-			<form method='post' action='/feeds/insertRecommendation/'>
-			{% csrf_token %}
-				<input type="text" name="sender" placeholder="Sender"/><br/>
-                <input type="text" name="receiver" placeholder="Receiver"/><br/>
-				<input type="text" name="feedurl" placeholder="Website Url"/><br/>
-				<input type="submit" name="submit"/>
-			</form>
+	            <!--Recommendations panel-->
+	            <div class="well">
+		            
+		            <h4>My Recommendations</h4>
+					<ul id="recommendations">
+					{% for entry in rec_entries %}
+						<li>
+							<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+							<a href="{{ entry.add_url }}">
+								<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+							</a>
+							<a href="{{ entry.del_url }}">
+								<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+				
+				<!--Friend Recommendation panel-->
+				<div class="well">
+					<h4>What your Friends are Following</h4>
+					{% if friend_recs %}
+						<ul id="friendrecs">
+						{% for entry in friend_recs %}
+							<li>
+								<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+								<a href="{{ entry.add_url }}">
+									<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+								</a>
+							</li>
+						{% endfor %}
+						</ul>
+					{% else %}
+						<p>Sorry, we have no recommendations for you right now.</p>
+					{% endif %}
+				</div>
 
-            <!--Recommendations panel-->
-            <br>
-            <h4>My Recommendations</h4>
-			<ul id="recommendations">
-			{% for entry in rec_entries %}
-				<li>
-					<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
-					<a href="{{ entry.add_url }}">
-						<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
-					</a>
-					<a href="{{ entry.del_url }}">
-						<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
-					</a>
-				</li>
-			{% endfor %}
-			</ul>
-			
-			<!--Friend Recommendation panel-->
-			<br>
-			<h4>What your Friends are Following</h4>
-			{% if friend_recs %}
-				<ul id="friendrecs">
-				{% for entry in friend_recs %}
-					<li>
-						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
-						<a href="{{ entry.add_url }}">
-							<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
-						</a>
-					</li>
-				{% endfor %}
-				</ul>
-			{% else %}
-				<p>Sorry, we have no recommendations for you right now.</p>
-			{% endif %}
-			
-			<!--User Recommendation panel-->
-			<br>
-			<h4>Recommended for You</h4>
-			{% if user_recs %}
-				<ul id="userrec">
-				{% for entry in user_recs %}
-					<li>
-						<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
-						<a href="{{ entry.add_url }}">
-							<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
-						</a>
-					</li>
-				{% endfor %}
-				</ul>
-			{% else %}
-				<p>Sorry, we have no recommendations for you right now.</p>
-			{% endif %}
-			
-            <br>
-		</div>
-	    
-        <!--Where the RSS Feeds will load into-->
-<div class="col-md-9" id="feedpage"></div>
+				<!--User Recommendation panel-->
+				<br>
+				<h4>Recommended for You</h4>
+				{% if user_recs %}
+					<ul id="userrec">
+					{% for entry in user_recs %}
+						<li>
+							<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+							<a href="{{ entry.add_url }}">
+								<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
+				{% else %}
+					<p>Sorry, we have no recommendations for you right now.</p>
+				{% endif %}
+				
+	            <br>
+			</div>
 
-</div>
+
+	    <!--Where the RSS Feeds will load into-->
+		<div class="col-md-9" id="feedpage"></div>
+	</div>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        	
 			
-		</div>
+</div>
         
 {% endblock %}
 

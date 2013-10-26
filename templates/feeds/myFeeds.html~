@@ -21,8 +21,8 @@
 					<!-- <div id="accordian"> -->
 						<ul id="feedbut">
 						{% for cat, feeds in feed_entries.iteritems %}
-						{{ cat }}
-							<ul>
+						<b>{{ cat }}</b>
+							<!--<ul>-->
 							{% for entry in feeds %}
 								<li>
 									<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
@@ -32,7 +32,7 @@
 									</a>
 								</li>
 							{% endfor %}
-							</ul>
+							<!--</ul>-->
 						{% endfor %}
 						</ul>
 					<!-- </div> -->
@@ -104,22 +104,24 @@
 
 				<!--User Recommendation panel-->
 				<br>
-				<h4>Recommended for You</h4>
-				{% if user_recs %}
-					<ul id="userrec">
-					{% for entry in user_recs %}
-						<li>
-							<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
-							<a href="{{ entry.add_url }}">
-								<!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
-                                <span class="glyphicon glyphicon-ok"></span> 
-							</a>
-						</li>
-					{% endfor %}
-					</ul>
-				{% else %}
-					<p>Sorry, we have no recommendations for you right now.</p>
-				{% endif %}
+                <div class="well">
+				    <h4>Recommended for You</h4>
+				    {% if user_recs %}
+					    <ul id="userrec">
+					    {% for entry in user_recs %}
+						    <li>
+							    <button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
+							    <a href="{{ entry.add_url }}">
+								    <!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
+                                    <span class="glyphicon glyphicon-ok"></span> 
+							    </a>
+						    </li>
+					    {% endfor %}
+					    </ul>
+				    {% else %}
+					    <p>Sorry, we have no recommendations for you right now.</p>
+				    {% endif %}
+                </div>
 				
 	            <br>
 			</div>

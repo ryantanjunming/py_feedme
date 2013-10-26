@@ -69,26 +69,17 @@ def register(request):
 		first_name = request.POST.get('first_name')
 		last_name = request.POST.get('last_name')
 
-		# try:
-		user = User.objects.create_user(username, email, password)
-		# user.first_name = first_name
-		# user.last_name = last_name
-		# user.is_active = True
-		# user.save();
+		try:
+			user = User.objects.create_user(username, email, password)
+			user.save();
 
-		# except:
-		# 	results = {
-		# 			'success' : False,
-		# 			'message' : 'Registration Unsucessful'
-		# 		}
-		# 	json = simplejson.dumps(results)
-		# 	return HttpResponse(json, mimetype='application/json')
-
-		# profile = user.get_profile()
-		# m = hashlib.md5()
-		# m = m.update(random.random())
-		# profile.auth_key = m.hexdigest()
-		# profile.save()
+		except:
+			results = {
+					'success' : False,
+					'message' : 'Registration Unsucessful'
+				}
+			json = simplejson.dumps(results)
+			return HttpResponse(json, mimetype='application/json')
 
 		msg = EmailMessage('Registration to FeedMe.','Hi, you have successfully registered for FeedMe as '+username, to=[user.email])
 		msg.send()

@@ -44,6 +44,10 @@ $().ready( function(){
 	 	}
     });
 
+    $('#forgetPass').click(function(event) {	
+		window.open("http://localhost:8000/accounts/resetPasswordUser/","_blank");
+    });
+
 	$('#formRegoUsername').focusout( function() {
 		var userNameCheck = $('#formRegoUsername').val();
 		$.ajax({

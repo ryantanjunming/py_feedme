@@ -14,10 +14,9 @@
     <br>
     <form method="post" action="/accounts/resetPassword/">
     {% csrf_token %}
-        <input type="text" name="username" />
+        {{ username|safe }}
 	    <input type="password" name="pass"/>
         <input type="submit" name="submit"/>
-<p>asd</p>
     </form>
     </div>
 

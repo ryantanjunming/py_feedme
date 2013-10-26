@@ -27,7 +27,8 @@
 								<li>
 									<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
 									<a href="{{ entry.del_url }}">
-										<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+										<!--<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">-->
+                                        <span class="glyphicon glyphicon-remove"></span> 
 									</a>
 								</li>
 							{% endfor %}
@@ -69,10 +70,12 @@
 						<li>
 							<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
 							<a href="{{ entry.add_url }}">
-								<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+								<!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
+                                <span class="glyphicon glyphicon-ok"></span> 
 							</a>
 							<a href="{{ entry.del_url }}">
-								<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">
+								<!--<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">-->
+                                <span class="glyphicon glyphicon-remove"></span> 
 							</a>
 						</li>
 					{% endfor %}
@@ -88,7 +91,8 @@
 							<li>
 								<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
 								<a href="{{ entry.add_url }}">
-									<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+									<!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
+                                    <span class="glyphicon glyphicon-ok"></span> 
 								</a>
 							</li>
 						{% endfor %}
@@ -107,7 +111,8 @@
 						<li>
 							<button type="button" value="{{ entry.url }}" target="_blank">{{ entry.name }}</button>
 							<a href="{{ entry.add_url }}">
-								<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">
+								<!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
+                                <span class="glyphicon glyphicon-ok"></span> 
 							</a>
 						</li>
 					{% endfor %}

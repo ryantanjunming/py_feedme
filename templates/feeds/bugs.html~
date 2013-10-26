@@ -12,10 +12,10 @@
     <div>
     <br>
     <br>
+    <i class="glyphicon glyphicon-remove"></i>
     <form method="post" action="/feeds/sentBugs/">
     {% csrf_token %}
         <h1>Sumbit your bugs</h1>
-        <!--<input class="text" style="width: 500px;height: 150px"  name="bugs"/>-->
         <textarea name="bugs"></textarea>
         <input type="submit" name="submit"/>
     </form>

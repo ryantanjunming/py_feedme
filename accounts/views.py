@@ -117,7 +117,7 @@ def resetPasswordEmail(request):
     if usernameValidation(request):
         user = User.objects.get(username=request.POST.get('username'))
         #change te url when it goes live
-        msg = EmailMessage('Reset your password to FeedMe.','Hi '+request.POST.get('username')+'\n Please click this link to reset your password <a href="http://localhost:8000/accounts/resetPasswordUserRedirect/?username='+request.POST.get('username')+'">Reset Password</a>', to=[user.email])
+        msg = EmailMessage('Reset your password to FeedMe.','Hi '+request.POST.get('username')+'\n Please go to this link to reset your password http://localhost:8000/accounts/resetPasswordUserRedirect/?username='+request.POST.get('username'), to=[user.email])
         msg.send()
     return render_to_response('accounts/emailSent.html', context_instance=RequestContext(request))
 

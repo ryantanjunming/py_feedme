@@ -58,7 +58,6 @@
 					<h4>Recommend a Feed to a Friend!</h4>
 					<form method='post' class="form-friend" action='/feeds/insertRecommendation/'>
 					{% csrf_token %}
-						<input type="text" class="form-control" name="sender" placeholder="Sender"/><br/>
 		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/><br/>
 						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/><br/>
 						<input type="submit" class="btn btn-primary btn-block" name="submit"/>

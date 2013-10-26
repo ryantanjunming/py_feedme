@@ -51,8 +51,8 @@
 					<h4>Recommend to a Friend</h4>
 					<form method='post' class="form-friend" action='/feeds/insertRecommendation/'>
 					{% csrf_token %}
-		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/><br/>
-						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/><br/>
+		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/>
+						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/>
 						<input type="submit" class="btn btn-primary btn-block" name="submit"/>
 					</form>
 				</div>
@@ -87,7 +87,7 @@
 							<li>
 								<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
 								<a href="{{ entry.add_url }}">
-									<!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
+									
                                     <span class="glyphicon glyphicon-ok"></span> 
 								</a>
 							</li>
@@ -99,7 +99,6 @@
 				</div>
 
 				<!--User Recommendation panel-->
-				<br>
                 <div class="well">
 				    <h4>Recommended for You</h4>
 				    {% if user_recs %}
@@ -124,7 +123,7 @@
 		</div>
 
 	    <!--Where the RSS Feeds will load into-->
-		<div class="col-md-9 well feed-container">
+		<div class="col-md-9 feed-container">
 			<div id="feedpage" class="feed-reading"></div>
 		</div>
 			
@@ -139,23 +138,7 @@
 	<script src="/static/js/jquery.infinitescroll.min.js"></script>
 	
 	<!-- custom scripts -->
-	<script src="/static/js/custom/feed_panel.js"></script>
-
-	<script type='text/javascript'>
-		$(document).ready(function(){
-	        <!--Used to display feeds on current page-->
-			$("#feedbut button").click(function(e){
-				$("#feedpage").load($(this).attr("value"));
-                
-			});
-            $("#recommendations button").click(function(e){
-				$("#feedpage").load($(this).attr("value"));
-			});
-            $("#feedbut feed").click(function(e){
-				$("#feedpage").load($(this).attr("value"));
-			});
-		});
-	</script>
+	<script src="/static/js/custom/feed_page.js"></script>
 
     <!-- AddThis Smart Layers BEGIN -->
     <!-- Go to http://www.addthis.com/get/smart-layers to customize -->

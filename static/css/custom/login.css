@@ -78,4 +78,7 @@ body {
 
 .form-rego label.error {
 	color: #800000;
+  font-size: 12px;
+  font-weight: 400;
 }
+

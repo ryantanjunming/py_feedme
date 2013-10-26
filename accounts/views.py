@@ -97,14 +97,16 @@ def register(request):
 #for ryan username validation
 #pass the username in
 def usernameValidation(request):
-    candidateUsername=request.POST.get('username')#replace me with whatever the user has typed
-    try:
-        user = User.objects.get(username=candidateUsername)
-        return 1
-    except:
-        print "Invalid Username"
-        return 0
-    
+	candidateUsername=request.POST.get('username')
+	user = User.objects.get(username=candidateUsername)
+	if user.is_active:
+		results = {
+    			'result' : True,
+				'message' : 'Username is not Unique' 
+			}
+	
+	json = simplejson.dumps(results)
+	return HttpResponse(json, mimetype='application/json')
 
 
 #harry potter has visited here do not touchl

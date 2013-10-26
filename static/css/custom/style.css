@@ -4,7 +4,6 @@
 html,
 body {
   height: 100%;
-  /* The html and body elements cannot have any padding or margin. */
 }
 
 /* Wrapper for page content to push down footer */
@@ -43,4 +42,18 @@ body {
 
 code {
   font-size: 80%;
+}
+
+
+.header {
+  max-width: 90%;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.content_body {
+  padding-top: 25px;
+  max-width: 90%;
+  padding: 15px;
+  margin: 0 auto;
 }

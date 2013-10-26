@@ -28,7 +28,7 @@ $().ready( function(){
 	            success: function(data) {
 	            	if(data.success == true){
 		        		$('#formSigninAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
-		        		setTimeout(function() {window.location.href = data.redirect;}, 500);
+		        		window.location.href = data.redirect;
 		        	}else{
 		        		$('#formSigninAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
 		        		$('#formSigninPassword').val('');

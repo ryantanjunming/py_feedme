@@ -347,20 +347,7 @@ def make_feed_page(feed):
     entries = ""
     #tried to use addthis for each feed entry, Failed
     for entry in feed['entries']:
-        entries += "<hr>" + make_entry_string(entry) +\
-        """<div>
-        <!-- AddThis Button BEGIN --> 
-        <div class="addthis_toolbox addthis_default_style addthis_32x32_style"> 
-        <a class="addthis_button_preferred_1"></a> 
-        <a class="addthis_button_preferred_2"></a> 
-        <a class="addthis_button_preferred_3"></a> 
-        <a class="addthis_button_preferred_4"></a> 
-        <a class="addthis_button_compact"></a> 
-        <a class="addthis_counter addthis_bubble_style"></a> 
-        </div> 
-        <!-- AddThis Button END -->
-        </div>"""
-
+        entries += "<hr>" + make_entry_string(entry)
     page = feed_header + "<br>" + entries.decode('utf-8')
     return page
 

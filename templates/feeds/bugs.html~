@@ -12,11 +12,11 @@
     <div>
     <br>
     <br>
-    <i class="glyphicon glyphicon-remove"></i>
+    
     <form method="post" action="/feeds/sentBugs/">
     {% csrf_token %}
-        <h1>Sumbit your bugs</h1>
-        <textarea name="bugs"></textarea>
+        <h1>Sumbit your Feedback and Bugs here!</h1>
+        <textarea name="bugs" class="form-control" placeholder="Sumbit your Feedback and Bugs here!"></textarea><br>
         <input type="submit" name="submit"/>
     </form>
     </div>

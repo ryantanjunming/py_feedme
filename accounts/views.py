@@ -118,24 +118,44 @@ def resetPasswordUser(request):
 def resetPasswordEmail(request):
     if usernameValidation(request):
         user = User.objects.get(username=request.POST.get('username'))
-        msg = EmailMessage('Reset your password to FeedMe.','Hi '+request.POST.get('username')+'\n Please click this link to reset your password <a href="http://localhost:8000/accounts/resetPasswordNewPassword/?username='+request.POST.get('username')+'">Reset Password</a>', to=[user.email])
+        #change te url when it goes live
+        msg = EmailMessage('Reset your password to FeedMe.','Hi '+request.POST.get('username')+'\n Please go to this link to reset your password http://localhost:8000/accounts/resetPasswordUserRedirect/?username='+request.POST.get('username'), to=[user.email])
         msg.send()
     return render_to_response('accounts/emailSent.html', context_instance=RequestContext(request))
 
+#get username 
+def resetPasswordUserRedirect(request):
+    print request.GET.get("username")
+    c=RequestContext(request, {
+        'username' : '<input type="hidden" name="username" value="'+request.GET.get("username")+'">'
+    })
+    return render_to_response('accounts/resetPass.html', context_instance=c)
+
 #the email will show them this page for them to type their new password
 def resetPasswordNewPassword(request):
-    return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
+    return render_to_response('accounts/resetPass.html', c)
 
 #and this will change their password
 def resetPassword(request):
     print request.POST.get('username')
     print request.GET.get('username')
     print request.POST.get('pass')
-   # return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
-    #return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
-    user = User.objects.get(username=request.POST.get('username'))
-    #print vars(user)+"asd"
-    user.set_password(str(request.POST.get('pass')))
-    user.save()
-    return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
+    if request.POST.get('pass')==request.POST.get('pass2'):
+       # return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
+        #return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
+        user = User.objects.get(username=request.POST.get('username'))
+        #print vars(user)+"asd"
+        user.set_password(str(request.POST.get('pass')))
+        user.save()
+        c=RequestContext(request, {
+            'feedback' : 'Congrates',
+            'username' : '<input type="hidden" name="username" value="'+request.POST.get("username")+'">'
+         })
+        return render_to_response('accounts/resetPass.html', c)
+    else:
+        c=RequestContext(request, {
+            'feedback' : 'Invalid Password or not matching password',
+            'username' : '<input type="hidden" name="username" value="'+request.POST.get("username")+'">'
+         })
+        return render_to_response('accounts/resetPass.html', context_instance=c)
 

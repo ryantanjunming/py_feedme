@@ -12,12 +12,13 @@
     <div>
     <br>
     <br>
+    {{ feedback }}
     <form method="post" action="/accounts/resetPassword/">
     {% csrf_token %}
-        <input type="text" name="username" />
-	    <input type="password" name="pass"/>
+        {{ username|safe }}
+	    Please type your new password <input type="password" class="form-control" placeholder="Password" name="pass"/><br>
+        Please type your password again <input type="password" class="form-control" placeholder="Password again" name="pass2"/><br>
         <input type="submit" name="submit"/>
-<p>asd</p>
     </form>
     </div>
 

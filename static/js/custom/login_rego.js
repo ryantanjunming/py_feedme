@@ -43,6 +43,28 @@ $().ready( function(){
 	 		$('#formSigninAlert').show().html('<div class="alert alert-danger">Please Login with your <strong>Username</strong> & <strong>Password</strong></div>');
 	 	}
     });
+
+	$('#formRegoUsername').focusout( function() {
+		var userNameCheck = $('#formRegoUsername').val();
+		$.ajax({
+			url: "/accounts/usernameValidation/",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+            	'username' : userNameCheck,
+            	csrfmiddlewaretoken : document.getElementsByName('csrfmiddlewaretoken')[0].value
+            },
+            success: function(data) {
+            	if(data.result == true){
+            		$('#formRegoUsernameAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
+            	}
+            }
+		});
+	});
+
+	$('#formRegoUsername').focus( function() {
+		$('#formRegoUsernameAlert').hide().html('');
+	});		
 	
 	// validate signup form on keyup and submit
 	$("#regoForm").validate({
@@ -111,7 +133,7 @@ $().ready( function(){
 		            	if(data.success){
 		            		if(data.success == true){
 			        			$('#formRegoAlert').show().html('<div class="alert alert-success">'+data.message+'</div>');
-					        	setTimeout(function() {window.location.href = data.redirect;}, 500);
+					        	setTimeout(function() {window.location.href = data.redirect;}, 100);
 					        }else{
 				        		$('#formRegoAlert').show().html('<div class="alert alert-danger">'+data.message+'</div>');
 				        		$('#formRegoPassword').val('');

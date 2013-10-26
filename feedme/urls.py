@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     (r'^accounts/(?i)logout?/$','accounts.views.logout'),
     (r'^accounts/(?i)register?/$','accounts.views.register'),
     
+    (r'^accounts/(?i)usernameValidation?/$','accounts.views.usernameValidation'),
     (r'^accounts/(?i)resetPassword?/$','accounts.views.resetPassword'),
     (r'^accounts/(?i)resetPasswordUser?/$','accounts.views.resetPasswordUser'),
     (r'^accounts/(?i)resetPasswordEmail?/$','accounts.views.resetPasswordEmail'),

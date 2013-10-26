@@ -22,14 +22,16 @@
 				    </div>
 			    </div>
 			</div>
-		
+			
 	    
 		    <div class="well">
 			    <div id="rego" class="rego-block">
 			      	<form class="form-rego" id="regoForm" method="get" action="">
 				        <h2 class="form-rego-heading">Register</h2>
 				        {% csrf_token %}
-				        <input id="formRegoUsername" name="formRegoUsername" type="text" class="form-control" placeholder="User Name" autofocus />
+				        <input id="formRegoUsername" name="formRegoUsername" type="text" class="form-control" placeholder="User Name" 
+				        autofocus />
+				        <div id="formRegoUsernameAlert"></div>
 				        <input id="formRegoEmail" name="formRegoEmail" type="email" class="form-control" placeholder="Email address" autofocus />
 				        <input id="formRegoPassword" name="formRegoPassword" type="password" class="form-control" placeholder="Password" />
 				        <input id="formRegoConfirmPassword" name="formRegoConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />

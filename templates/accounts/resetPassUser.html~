@@ -12,10 +12,9 @@
     <div>
     <br>
     <br>
-    <form method="post" action="/accounts/resetPassword/">
+    <form method="post" action="/accounts/resetPasswordEmail/">
     {% csrf_token %}
         <input type="text" name="username" />
-	    <input type="password" name="pass"/>
         <input type="submit" name="submit"/>
 <p>asd</p>
     </form>

@@ -1,3 +1,4 @@
+# coding: utf-8
 import os, sys, codecs, time
 from datetime import datetime
 from collections import OrderedDict
@@ -16,6 +17,9 @@ from feeds.models import Feeds, SubscribesTo, FCategory
 from feeds.models import Recommendations
 from django.core.exceptions import ObjectDoesNotExist
 from recommend import *
+
+from django.core.mail import EmailMessage
+
 
 
 class BadFeedException(Exception):
@@ -391,9 +395,17 @@ published on {published}<br>{summary}<br></div>".format(**fields)+\
 """
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 """
+#bugs page
+def bugs(request):
+    return render_to_response('feeds/bugs.html', context_instance=RequestContext(request))
 
+def sentBugs(request):
+    msg = EmailMessage('You have Bugs!.. in your room..',request.POST.get('bugs') , to=['hljw4@hotmail.com'])#to=['mefeeed@gmail.com'])
+    msg.send()
+    return render_to_response('feeds/sentBugs.html', context_instance=RequestContext(request))
 
-
+#payment system below
+#magic do not touch
 def billStripeToken(request):
     # Set your secret key: remember to change this to your live secret key in production
     # See your keys here https://manage.stripe.com/account

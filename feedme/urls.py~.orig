@@ -17,7 +17,12 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
    # (r'','accounts.views.index'),
+<<<<<<< HEAD
 
+=======
+    (r'^facebook/', include('django_facebook.urls')),
+    (r'^accounts/', include('django_facebook.auth_urls')),
+>>>>>>> fbRegister
     
     (r'^accounts?/$','accounts.views.index'),
     (r'^accounts/(?i)index?/$','accounts.views.index'),
@@ -27,15 +32,13 @@ urlpatterns = patterns('',
     
     (r'^accounts/(?i)resetPassword?/$','accounts.views.resetPassword'),
     (r'^accounts/(?i)resetPasswordUser?/$','accounts.views.resetPasswordUser'),
-    (r'^accounts/(?i)resetPasswordEmail?/$','accounts.views.resetPasswordEmail'),
+    (r'^accounts/(?i)resetPasswordEmail?/$','accounts.views.resetPasswordUserEmail'),
     (r'^accounts/(?i)resetPasswordNewPassword?/$','accounts.views.resetPasswordNewPassword'),
     # (r'^accounts/(?i)profileView?/$','accounts.views.profileView'),
     # (r'^accounts/(?i)profileSubmit?/$','accounts.views.profileSubmit'),
 
     
     (r'^feeds?/$','feeds.views.index'),
-    (r'^feeds?/(?i)bugs?/$','feeds.views.bugs'),
-    (r'^feeds?/(?i)sentBugs?/$','feeds.views.sentBugs'),
     (r'^feeds/(?i)myFeeds?/$','feeds.views.myFeeds'),
     (r'^feeds/(?i)insertFeed?/$','feeds.views.insertFeed'),
     (r'^feeds/(?i)insertFeedFromRecommendation?/$','feeds.views.insertFeedFromRecommendation'),
@@ -48,11 +51,15 @@ urlpatterns = patterns('',
     (r'^feeds/(?i)categorise?/$','feeds.views.categorise_feed'),
     (r'^feeds/(?i)catdel?/$','feeds.views.category_delete'),
 
+<<<<<<< HEAD
     (r'^friends?/$','friends.views.my_view'),
     (r'^friends/(?i)add?/$','friends.views.add_friend'),
     (r'^friends/(?i)remove?/$','friends.views.remove_friend'),
     (r'^friends/(?i)accept?/$','friends.views.accept_friendship'),
     (r'^friends/(?i)reject?/$','friends.views.reject_friendship'),
     (r'^friends/(?i)cancel?/$','friends.views.cancel_request')
+=======
+    (r'^friends?/$','friends.views.my_view')
+>>>>>>> fbRegister
 
 )

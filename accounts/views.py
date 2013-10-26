@@ -121,7 +121,7 @@ def resetPasswordNewPassword(request):
 #and this will change their password
 def resetPassword(request):
     print request.POST.get('username')
-    #print request.GET.get('username')
+    print request.GET.get('username')
     print request.POST.get('pass')
    # return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
     #return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))

@@ -116,7 +116,7 @@ def insertFeedFromRecommendation(request):
 @login_required(login_url='/accounts/index/')
 def insertRecommendation(request): # NOTE: it makes more sense for sender to be request.user!
     try:
-        insertR(request.POST['feedurl'],request.POST['sender'],request.POST['receiver'])
+        insertR(request.POST['feedurl'],request.user,request.POST['receiver'])
         return redirect("/feeds/myFeeds")
     except (BadFeedException):
         return redirect("/feeds/feederror")

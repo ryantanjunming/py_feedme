@@ -8,11 +8,13 @@
 }
 
 .feed-container {
-  overflow:auto;
+  max-height: 950px;
+  overflow: auto;
 }
 
 .feed-reading {
   max-width: 740px;
   margin: 0px auto;
+  
 }
 

@@ -1,18 +1,18 @@
-.form-friend .form-friend-heading,
-.form-friend .checkbox {
-  margin-bottom: 10px;
-}
-.form-friend .checkbox {
-  font-weight: normal;
+.category-list {
+  list-style-type: none;
+  padding-left: 0px;
 }
 
-.form-friend .form-control {
-  position: relative;
-  font-size: 16px;
-  height: auto;
-  padding: 10px;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+.category-list li{
+  margin-bottom: -12px;
+}
+
+.feed-container {
+  overflow:auto;
+}
+
+.feed-reading {
+  max-width: 740px;
+  margin: 0px auto;
 }
 

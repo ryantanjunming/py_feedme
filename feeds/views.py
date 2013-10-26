@@ -347,7 +347,7 @@ def make_feed_page(feed):
     entries = ""
     #tried to use addthis for each feed entry, Failed
     for entry in feed['entries']:
-        entries += "<hr>" + make_entry_string(entry) +"<hr>" +\
+        entries += "<hr>" + make_entry_string(entry) +\
         """<div>
         <!-- AddThis Button BEGIN --> 
         <div class="addthis_toolbox addthis_default_style addthis_32x32_style"> 

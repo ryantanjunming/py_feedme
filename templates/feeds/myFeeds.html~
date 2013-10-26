@@ -51,14 +51,8 @@
 					<h4>Recommend to a Friend</h4>
 					<form method='post' class="form-friend" action='/feeds/insertRecommendation/'>
 					{% csrf_token %}
-<<<<<<< HEAD
 		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/><br/>
 						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/><br/>
-=======
-						<input type="text" class="form-control" name="sender" placeholder="Sender"/>
-		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/>
-						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/>
->>>>>>> 89453ecf288807571535caf13928bdfcd9060b15
 						<input type="submit" class="btn btn-primary btn-block" name="submit"/>
 					</form>
 				</div>
@@ -126,9 +120,13 @@
                 </div>
 				
 	            <br>
+                <!--Bugs-->
+                <div class="well">
+                    <button type="button" class="btn btn-primary btn-block" id="feedbackBut">Feedback!</button>
+                </div>
 			</div>
 		</div>
-
+        
 	    <!--Where the RSS Feeds will load into-->
 		<div class="col-md-9 well feed-container">
 			<div id="feedpage" class="feed-reading"></div>
@@ -159,6 +157,9 @@
 			});
             $("#feedbut feed").click(function(e){
 				$("#feedpage").load($(this).attr("value"));
+			});
+            $("#feedbackBut").click(function(e){
+				window.open("http://localhost:7000/feeds/bugs/","_blank");
 			});
 		});
 	</script>

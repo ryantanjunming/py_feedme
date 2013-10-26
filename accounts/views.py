@@ -94,15 +94,30 @@ def register(request):
 	return HttpResponse(json, mimetype='application/json')
 
 
+#for ryan username validation
+#pass the username in
+def usernameValidation(request):
+    candidateUsername=request.POST.get('username')#replace me with whatever the user has typed
+    try:
+        user = User.objects.get(username=candidateUsername)
+        return 1
+    except:
+        print "Invalid Username"
+        return 0
+    
+
+
+#harry potter has visited here do not touchl
 #user go to a page to type their username
 def resetPasswordUser(request):
     return render_to_response('accounts/resetPassUser.html', context_instance=RequestContext(request))
 
 #they will then received an email
 def resetPasswordEmail(request):
-    user = User.objects.get(username=request.POST.get('username'))
-    msg = EmailMessage('Reset your password to FeedMe.','Hi '+request.POST.get('username')+'\n Please click this link to reset your password <a href="http://localhost:8000/accounts/resetPasswordNewPassword/?username='+request.POST.get('username')+'">Reset Password</a>', to=[user.email])
-    msg.send()
+    if usernameValidation(request):
+        user = User.objects.get(username=request.POST.get('username'))
+        msg = EmailMessage('Reset your password to FeedMe.','Hi '+request.POST.get('username')+'\n Please click this link to reset your password <a href="http://localhost:8000/accounts/resetPasswordNewPassword/?username='+request.POST.get('username')+'">Reset Password</a>', to=[user.email])
+        msg.send()
     return render_to_response('accounts/emailSent.html', context_instance=RequestContext(request))
 
 #the email will show them this page for them to type their new password

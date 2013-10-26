@@ -138,11 +138,22 @@ def resetPassword(request):
     print request.POST.get('username')
     print request.GET.get('username')
     print request.POST.get('pass')
-   # return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
-    #return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
-    user = User.objects.get(username=request.POST.get('username'))
-    #print vars(user)+"asd"
-    user.set_password(str(request.POST.get('pass')))
-    user.save()
-    return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
+    if request.POST.get('pass')==request.POST.get('pass2'):
+       # return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
+        #return render_to_response('accounts/resetPass.html', context_instance=RequestContext(request))
+        user = User.objects.get(username=request.POST.get('username'))
+        #print vars(user)+"asd"
+        user.set_password(str(request.POST.get('pass')))
+        user.save()
+        c=RequestContext(request, {
+            'feedback' : 'Congrates',
+            'username' : '<input type="hidden" name="username" value="'+request.POST.get("username")+'">'
+         })
+        return render_to_response('accounts/resetPass.html', c)
+    else:
+        c=RequestContext(request, {
+            'feedback' : 'Invalid Password or not matching password',
+            'username' : '<input type="hidden" name="username" value="'+request.POST.get("username")+'">'
+         })
+        return render_to_response('accounts/resetPass.html', context_instance=c)
 

@@ -15,30 +15,23 @@
 		<div class="col-md-3">
 	        <div class="container">
 
-
-	            <!--Display my feeds-->
-				<div id="treeview" class="feed-categories"></div>	
-
 	            <div class="well">
-					<p>Check out your feeds:</p>
-
-					<!-- <div id="accordian"> -->
-						<div id="feedbut">
+					<div id="feedbut">
 						{% for cat, feeds in feed_entries.iteritems %}
-						<b>{{ cat }}</b>
-							<ul style="list-style-type: none;">
-							{% for entry in feeds %}
-								<li>
-									<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
-									<a href="{{ entry.del_url }}">
-										<!--<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">-->
-                                        <span class="glyphicon glyphicon-remove"></span> 
-									</a>
-								</li>
-							{% endfor %}
-							</ul>
+						{{ cat }}
+						<ul class="category-list">
+						{% for entry in feeds %}
+							<li>
+								<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
+								<a href="{{ entry.del_url }}">
+									<!--<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">-->
+                                    <span class="glyphicon glyphicon-remove"></span> 
+								</a>
+							</li>
 						{% endfor %}
-						</div>
+						</ul>
+						{% endfor %}
+					</div>
 					<!-- </div> -->
 				</div>
 				
@@ -48,19 +41,19 @@
 					<form method='post' action='/feeds/insertFeed/'>
 					{% csrf_token %}
 						<!-- <input type="text" name="username" placeholder="Username"/><br/> -->
-						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/><br/>
+						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/>
 						<input type="submit" class="btn btn-primary btn-block" name="submit"/>
 					</form>
 				</div>
 
 	            <!--Add Recommendations-->
 	            <div class="well">
-					<h4>Recommend a Feed to a Friend!</h4>
+					<h4>Recommend to a Friend</h4>
 					<form method='post' class="form-friend" action='/feeds/insertRecommendation/'>
 					{% csrf_token %}
-						<input type="text" class="form-control" name="sender" placeholder="Sender"/><br/>
-		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/><br/>
-						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/><br/>
+						<input type="text" class="form-control" name="sender" placeholder="Sender"/>
+		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/>
+						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/>
 						<input type="submit" class="btn btn-primary btn-block" name="submit"/>
 					</form>
 				</div>
@@ -132,7 +125,9 @@
 		</div>
 
 	    <!--Where the RSS Feeds will load into-->
-		<div class="col-md-9" id="feedpage"></div>
+		<div class="col-md-9 well feed-container">
+			<div id="feedpage" class="feed-reading"></div>
+		</div>
 			
 	</div>
         
@@ -142,7 +137,8 @@
 	<!-- loaded scripts for animation & validation -->
 	<script src="/static/js/jquery.validate.min.js"></script>
 	<script src="/static/js/additional-methods.min.js"></script>
-
+	<script src="/static/js/jquery.infinitescroll.min.js"></script>
+	
 	<!-- custom scripts -->
 	<script src="/static/js/custom/feed_panel.js"></script>
 

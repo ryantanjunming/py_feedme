@@ -294,6 +294,16 @@ def showFeed(request):
     if settings.DEBUG: debug_feed_display(feed)
     return HttpResponse(make_feed_page(feed))
 
+def showFeed_json(request):
+    # CURRENTLY ONLY SUPPORTS ONE KEY=VALUE IN QUERY STRING (and doesn't even care what the key is!)
+    # but please use 'url' as key
+    qkey, qvalue = request.META['QUERY_STRING'].split('=')
+    url = qvalue
+    feed = feedparser.parse(url)
+    if settings.DEBUG: debug_feed_display(feed)
+    json = simplejson.dumps(results)
+    return HttpResponse(make_feed_json(feed), mimetype='application/json')
+
 # some feed display functions (will prob move to another file later)
 def debug_feed_display(feed, show_entries=0):
     """
@@ -350,6 +360,39 @@ def make_feed_page(feed):
         entries += "<hr>" + make_entry_string(entry)
     page = feed_header + "<br>" + entries.decode('utf-8')
     return page
+
+
+def make_feed_json(feed):
+    """
+    Does the same things as make_feed_page but in json
+    """
+    try:
+        img = feed['feed']['icon']
+    except (KeyError):
+        try:
+            img = feed['feed']['image']['href']
+        except (KeyError):
+            img = "IMG"
+
+    title_icon = img
+    title_link = feed['feed']['link']
+    title_title = feed['feed']['title']
+    last_updated = "(Time not found!)"
+
+    try:
+        last_updated = datetime.fromtimestamp(time.mktime(feed['feed']['updated_parsed']))
+    except (KeyError):
+        try:
+            last_updated = datetime.fromtimestamp(time.mktime(feed['updated_parsed']))
+        except (KeyError):
+            pass
+    
+    entry_title
+    entry_
+
+
+
+
 
 
 def make_entry_string(entry):

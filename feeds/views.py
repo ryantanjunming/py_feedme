@@ -13,7 +13,7 @@ import feedparser
 import stripe
 import feedme.settings as settings
 
-from feeds.models import Feeds, SubscribesTo, FCategory
+from feeds.models import Feeds, SubscribesTo, FCategory, HasRead
 from feeds.models import Recommendations
 from django.core.exceptions import ObjectDoesNotExist
 from recommend import *
@@ -135,36 +135,37 @@ def deleteRecommendation(request):
 def myFeeds(request):
     # populating my current rss feeds
     feed_entries = get_categorised_feeds(request.user)
+    host_site = request.META['HTTP_HOST']
     for cat in feed_entries:
-        feed_entries[cat] = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+        feed_entries[cat] = map(lambda feed: {'url' : "http://"+ host_site + "/feeds/showfeed?url=" + feed.url, 
                                               'name' : feed.name,
-                                              'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+                                              'del_url' : "http://"+ host_site + "/feeds/deleteFeed?url=" + feed.url
                                               }, 
                                 feed_entries[cat])
     # populating my current recommendations
     rec_entries = []
     for r in selectAllR(request.user.username):
-        rec_entries.append({'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + r.url,
+        rec_entries.append({'url' : "http://"+ host_site + "/feeds/showfeed?url=" + r.url,
                             'name' : r.name,
-                            'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeedFromRecommendation?url=" + r.url,
-                            'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteRecommendation?url=" + r.url
+                            'add_url' : "http://"+ host_site + "/feeds/insertFeedFromRecommendation?url=" + r.url,
+                            'del_url' : "http://"+ host_site + "/feeds/deleteRecommendation?url=" + r.url
                             })
     # friend preference recommendation
     f_prefs = friend_pref_recommendations(request.user)[:3]
     f_prefs = Feeds.objects.filter(pk__in=f_prefs) # pks to Feeds objects
-    f_prefs = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+    f_prefs = map(lambda feed: {'url' : "http://"+ host_site + "/feeds/showfeed?url=" + feed.url, 
                                 'name' : feed.name,
-                                'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeed?url=" + feed.url,
-                                'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+                                'add_url' : "http://"+ host_site + "/feeds/insertFeed?url=" + feed.url,
+                                'del_url' : "http://"+ host_site + "/feeds/deleteFeed?url=" + feed.url
                                 },
                   f_prefs) 
     # user preference
     user_recs = user_pref_recommendations(request.user)[:3]
     user_recs = Feeds.objects.filter(pk__in=user_recs) # pks to Feeds objects
-    user_recs = map(lambda feed: {'url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/showfeed?url=" + feed.url, 
+    user_recs = map(lambda feed: {'url' : "http://"+ host_site + "/feeds/showfeed?url=" + feed.url, 
                                   'name' : feed.name,
-                                  'add_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/insertFeed?url=" + feed.url,
-                                  'del_url' : "http://"+ request.META['HTTP_HOST'] + "/feeds/deleteFeed?url=" + feed.url
+                                  'add_url' : "http://"+ host_site + "/feeds/insertFeed?url=" + feed.url,
+                                  'del_url' : "http://"+ host_site + "/feeds/deleteFeed?url=" + feed.url
                                   }, 
                     user_recs)
     # rendering the page
@@ -177,7 +178,16 @@ def myFeeds(request):
         'username' : request.user.username
     })
     return render_to_response('feeds/myFeeds.html', c)
-    
+
+@login_required
+def mark_entry_read(request):
+    entry_url = request.GET.get('url', None)
+    if not entry_url: return redirect("/feeds/myFeeds")
+    mark = HasRead(user = request.user,
+                   entry = entry_url)
+    mark.save()
+    return redirect("/feeds/myFeeds")
+
 @login_required(login_url='/accounts/index/')
 def deleteFeed(request):
     if request.method == "POST":
@@ -292,7 +302,7 @@ def showFeed(request):
     url = qvalue
     feed = feedparser.parse(url)
     if settings.DEBUG: debug_feed_display(feed)
-    return HttpResponse(make_feed_page(feed))
+    return HttpResponse(make_feed_page(feed, request.META['HTTP_HOST'], request.user))
 
 def showFeed_json(request):
     # CURRENTLY ONLY SUPPORTS ONE KEY=VALUE IN QUERY STRING (and doesn't even care what the key is!)
@@ -325,7 +335,7 @@ def debug_feed_display(feed, show_entries=0):
                 print ">>>", k, ":", entry[k]
     print ">>> Finished displaying feed <<< \n"
 
-def make_feed_page(feed):
+def make_feed_page(feed, host_site, user=None):
     """
     Returns HTML (string) for displaying the feed object given.
     feed should be the returned value from feedparser.parse
@@ -342,8 +352,8 @@ def make_feed_page(feed):
                    "<a href=\"" + feed['feed']['link'] + "\" target=\"_blank\">" + title_icon + "</a>"
     
     updated_time = "Last Updated: "
-    # note: I actually don't know if this is accurate... or how to grab timezone info
     last_updated = "(Time not found!)"
+    # note: I actually don't know if this is accurate... or how to grab timezone info
     try:
         last_updated = datetime.fromtimestamp(time.mktime(feed['feed']['updated_parsed']))
     except (KeyError):
@@ -357,8 +367,14 @@ def make_feed_page(feed):
     entries = ""
     #tried to use addthis for each feed entry, Failed
     for entry in feed['entries']:
-        entries += "<hr>" + make_entry_string(entry)
-    page = feed_header + "<br>" + entries.decode('utf-8')
+        if user and \
+                HasRead.objects.filter(user=user, entry=entry['link']).exists(): # don't display feeds the user has marked as read
+            continue
+        entries += "<hr>" + make_entry_string(entry, host_site)
+    if entries:
+        page = feed_header + "<br>" + entries.decode('utf-8')
+    else:
+        page = feed_header + "<br>All entries read!."
     return page
 
 
@@ -391,25 +407,22 @@ def make_feed_json(feed):
     entry_
 
 
-
-
-
-
-def make_entry_string(entry):
+def make_entry_string(entry, host_site):
     """
     From feedparser.parse(url)['entries'] objects, returns HTML string
     to display an entry.
     """
     fields = {'link' : entry['link'],
               'title' : entry['title'],
-              'author' : entry['author'],
+              'author' : "No Author" if not entry.has_key('author') else entry['author'],
               'published' : str(datetime.fromtimestamp(time.mktime(entry['published_parsed']))),
+              'markreadlink' : host_site + "/feeds/markRead?url=" + entry['link'],
               'summary' : entry['summary']}
     #added custom facebook share button
     for k in fields.keys():
         fields[k] = fields[k].encode('utf-8')
     return "<div><h3><a href=\"{link}\" target=\"_blank\">{title}</a></h3>{author}, \
-published on {published}<br>{summary}<br></div>".format(**fields)+\
+published on {published}<br><a href=\"{markreadlink}\">Mark as Read</a><br>{summary}<br></div>".format(**fields)+\
 """<br><button href="#" 
   onclick="
     window.open(

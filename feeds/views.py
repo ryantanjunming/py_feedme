@@ -189,7 +189,7 @@ def mark_entry_read(request):
     mark = HasRead(user = request.user,
                    entry = entry_url)
     mark.save()
-    return redirect("/feeds/myFeeds")
+    return redirect(entry_url)
 
 @login_required(login_url='/accounts/index/')
 def deleteFeed(request):
@@ -445,17 +445,17 @@ def make_entry_string(entry, host_site):
     From feedparser.parse(url)['entries'] objects, returns HTML string
     to display an entry.
     """
-    fields = {'link' : entry['link'],
+    fields = {'markreadlink' : "http://" + host_site + "/feeds/markRead?url=" + entry['link'],
               'title' : entry['title'],
               'author' : "No Author" if not entry.has_key('author') else entry['author'],
               'published' : str(datetime.fromtimestamp(time.mktime(entry['published_parsed']))),
-              'markreadlink' : host_site + "/feeds/markRead?url=" + entry['link'],
-              'summary' : entry['summary']}
+              'summary' : entry['summary'],
+              'link' : entry['link']}
     #added custom facebook share button
     for k in fields.keys():
         fields[k] = fields[k].encode('utf-8')
-    return "<div><h3><a href=\"{link}\" target=\"_blank\">{title}</a></h3>{author}, \
-published on {published}<br><a href=\"{markreadlink}\">Mark as Read</a><br>{summary}<br></div>".format(**fields)+\
+    return "<div><h3><a href=\"{markreadlink}\" target=\"_blank\">{title}</a></h3>{author}, \
+published on {published}<br><br>{summary}<br></div></div>".format(**fields)+\
 """<br><button href="#" 
   onclick="
     window.open(

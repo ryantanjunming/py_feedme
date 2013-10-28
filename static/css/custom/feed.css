@@ -8,7 +8,7 @@
 }
 
 .feed-container {
-  max-height: 950px;
+  max-height: 700px;
   overflow: auto;
 }
 
@@ -18,3 +18,12 @@
   
 }
 
+.tab{
+	border:1px solid #666; 
+    padding: 10px; 
+    cursor: pointer;
+}
+
+.content{
+	display: block;
+}

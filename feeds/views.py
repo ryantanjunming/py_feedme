@@ -417,10 +417,9 @@ def make_feed_json(feed, host_site, user, tile):
                     'author' : "No Author" if not entry.author else entry.author,
                     'published' : str(datetime.fromtimestamp(time.mktime(entry['published_parsed']))),
                     'markreadlink' : host_site + "/feeds/markRead?url=" + entry.link,
-                    'summary' : entry.summary,
-                    'content' : entry.content
+                    'summary' : entry.summary
                 }
-
+                
         request_entries.append(fields)
 
     # pp.pprint(request_entries);

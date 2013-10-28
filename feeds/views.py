@@ -8,10 +8,13 @@ from django.core.context_processors import csrf
 from django.template import Context, loader, RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.http import *
+from django.utils import simplejson
 
 import feedparser
 import stripe
 import feedme.settings as settings
+
+import pprint
 
 from feeds.models import Feeds, SubscribesTo, FCategory, HasRead
 from feeds.models import Recommendations
@@ -137,7 +140,7 @@ def myFeeds(request):
     feed_entries = get_categorised_feeds(request.user)
     host_site = request.META['HTTP_HOST']
     for cat in feed_entries:
-        feed_entries[cat] = map(lambda feed: {'url' : "http://"+ host_site + "/feeds/showfeed?url=" + feed.url, 
+        feed_entries[cat] = map(lambda feed: {'url' : feed.url, 
                                               'name' : feed.name,
                                               'del_url' : "http://"+ host_site + "/feeds/deleteFeed?url=" + feed.url
                                               }, 
@@ -145,7 +148,7 @@ def myFeeds(request):
     # populating my current recommendations
     rec_entries = []
     for r in selectAllR(request.user.username):
-        rec_entries.append({'url' : "http://"+ host_site + "/feeds/showfeed?url=" + r.url,
+        rec_entries.append({'url' : r.url,
                             'name' : r.name,
                             'add_url' : "http://"+ host_site + "/feeds/insertFeedFromRecommendation?url=" + r.url,
                             'del_url' : "http://"+ host_site + "/feeds/deleteRecommendation?url=" + r.url
@@ -153,7 +156,7 @@ def myFeeds(request):
     # friend preference recommendation
     f_prefs = friend_pref_recommendations(request.user)[:3]
     f_prefs = Feeds.objects.filter(pk__in=f_prefs) # pks to Feeds objects
-    f_prefs = map(lambda feed: {'url' : "http://"+ host_site + "/feeds/showfeed?url=" + feed.url, 
+    f_prefs = map(lambda feed: {'url' : feed.url, 
                                 'name' : feed.name,
                                 'add_url' : "http://"+ host_site + "/feeds/insertFeed?url=" + feed.url,
                                 'del_url' : "http://"+ host_site + "/feeds/deleteFeed?url=" + feed.url
@@ -162,7 +165,7 @@ def myFeeds(request):
     # user preference
     user_recs = user_pref_recommendations(request.user)[:3]
     user_recs = Feeds.objects.filter(pk__in=user_recs) # pks to Feeds objects
-    user_recs = map(lambda feed: {'url' : "http://"+ host_site + "/feeds/showfeed?url=" + feed.url, 
+    user_recs = map(lambda feed: {'url' : feed.url, 
                                   'name' : feed.name,
                                   'add_url' : "http://"+ host_site + "/feeds/insertFeed?url=" + feed.url,
                                   'del_url' : "http://"+ host_site + "/feeds/deleteFeed?url=" + feed.url
@@ -295,24 +298,23 @@ def selectAllR(username):
 
 # NOTE: apparently using the request metadata can be dangerous 
 # - http://stackoverflow.com/questions/1451138/how-can-i-get-the-domain-name-of-my-site-within-a-django-template
+# def showFeed(request):
+#     # CURRENTLY ONLY SUPPORTS ONE KEY=VALUE IN QUERY STRING (and doesn't even care what the key is!)
+#     # but please use 'url' as key
+#     qkey, qvalue = request.META['QUERY_STRING'].split('=')
+#     url = qvalue
+#     feed = feedparser.parse(url)
+#     if settings.DEBUG: debug_feed_display(feed)
+#     return HttpResponse(make_feed_page(feed, request.META['HTTP_HOST'], request.user))
+
 def showFeed(request):
     # CURRENTLY ONLY SUPPORTS ONE KEY=VALUE IN QUERY STRING (and doesn't even care what the key is!)
     # but please use 'url' as key
-    qkey, qvalue = request.META['QUERY_STRING'].split('=')
-    url = qvalue
+    url = request.POST.get('url')
     feed = feedparser.parse(url)
-    if settings.DEBUG: debug_feed_display(feed)
-    return HttpResponse(make_feed_page(feed, request.META['HTTP_HOST'], request.user))
-
-def showFeed_json(request):
-    # CURRENTLY ONLY SUPPORTS ONE KEY=VALUE IN QUERY STRING (and doesn't even care what the key is!)
-    # but please use 'url' as key
-    qkey, qvalue = request.META['QUERY_STRING'].split('=')
-    url = qvalue
-    feed = feedparser.parse(url)
-    if settings.DEBUG: debug_feed_display(feed)
-    json = simplejson.dumps(results)
-    return HttpResponse(make_feed_json(feed), mimetype='application/json')
+    tile = int(request.POST.get('tile'))
+    
+    return HttpResponse(make_feed_json(feed, request.META['HTTP_HOST'], request.user, tile), mimetype='application/json')
 
 # some feed display functions (will prob move to another file later)
 def debug_feed_display(feed, show_entries=0):
@@ -378,7 +380,7 @@ def make_feed_page(feed, host_site, user=None):
     return page
 
 
-def make_feed_json(feed):
+def make_feed_json(feed, host_site, user, tile):
     """
     Does the same things as make_feed_page but in json
     """
@@ -390,11 +392,10 @@ def make_feed_json(feed):
         except (KeyError):
             img = "IMG"
 
-    title_icon = img
-    title_link = feed['feed']['link']
-    title_title = feed['feed']['title']
+    
+    updated_time = "Last Updated: "
     last_updated = "(Time not found!)"
-
+    # note: I actually don't know if this is accurate... or how to grab timezone info
     try:
         last_updated = datetime.fromtimestamp(time.mktime(feed['feed']['updated_parsed']))
     except (KeyError):
@@ -402,9 +403,42 @@ def make_feed_json(feed):
             last_updated = datetime.fromtimestamp(time.mktime(feed['updated_parsed']))
         except (KeyError):
             pass
+    updated_time += str(last_updated)
     
-    entry_title
-    entry_
+    pp = pprint.PrettyPrinter(indent=2)
+
+    request_entries = []
+    start = tile*20
+    end = start+20
+    for i in range(start, end):
+        entry = feed['entries'][i]
+        fields = {'link' : entry.link,
+                    'title' : entry.title,
+                    'author' : "No Author" if not entry.author else entry.author,
+                    'published' : str(datetime.fromtimestamp(time.mktime(entry['published_parsed']))),
+                    'markreadlink' : host_site + "/feeds/markRead?url=" + entry.link,
+                    'summary' : entry.summary,
+                    'content' : entry.content
+                }
+
+        request_entries.append(fields)
+
+    # pp.pprint(request_entries);
+    # print('<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>');
+    
+    responseObject = { 
+            'title_icon' : img,
+            'title_link' : feed['feed']['link'],
+            'title_title' : feed['feed']['title'],
+            'last_updated' : updated_time,
+            'request_entries' : request_entries
+            }
+    
+    # pp.pprint(responseObject)
+    
+    json = simplejson.dumps(responseObject)
+    
+    return json
 
 
 def make_entry_string(entry, host_site):

@@ -24,7 +24,7 @@
 						{% for entry in feeds %}
 							<li>
 								<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
-								<a href="{{ entry.del_url }}">
+								<a id="delete_feed" href="{{ entry.del_url }}">
 									<!--<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">-->
                                     <span class="glyphicon glyphicon-remove"></span> 
 								</a>
@@ -138,6 +138,7 @@
 
 {% block javascript %}
 	<!-- loaded scripts for animation & validation -->
+	<script src="/static/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<script src="/static/js/jquery.validate.min.js"></script>
 	<script src="/static/js/additional-methods.min.js"></script>
 	<script src="/static/js/jquery.infinitescroll.min.js"></script>

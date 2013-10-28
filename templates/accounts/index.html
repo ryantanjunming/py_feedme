@@ -1,46 +1,46 @@
 {% extends 'extends/base.html' %}
 {% block title %}Login/Register to FeedMe{% endblock %}
 {% block stylesheets %}
-	<link href="/static/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" media="screen">
     <!-- custom css pages -->
-    <link href="/static/css/custom/loglin.css" rel="stylesheet" media="screen">
+    <link href="/static/css/custom/login.css" rel="stylesheet" media="screen">
 {% endblock %}
 {% block content %}
-
-	<div class="container row">
-		<div class="col-md-4">
-			<div class="well">
-				<div id="login" class="login-block">
-			      	<div class="form-signin">
-				        <h2 class="form-signin-heading">Sign in</h2>
-				        {% csrf_token %}
-				        <input id="formSigninUsername" type="text" class="form-control" placeholder="Username" autofocus>
-				        <input id="formSigninPassword" type="password" class="form-control" placeholder="Password">
-				        
-				        <div id="formSigninAlert"></div>
-				        <button id="loginSubmit" type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
-                        <button id="forgetPass" type="submit" class="btn btn-lg btn-primary btn-block">Forget Password</button>
+	<div class="row">
+		<div class="container">
+			<div class="col-md-4">
+				<div class="well">
+					<div id="login" class="login-block">
+				      	<div class="form-signin">
+					        <h2 class="form-signin-heading">Sign in</h2>
+					        {% csrf_token %}
+					        <input id="formSigninUsername" type="text" class="form-control" placeholder="Username" autofocus>
+					        <input id="formSigninPassword" type="password" class="form-control" placeholder="Password">
+					        
+					        <div id="formSigninAlert"></div>
+					        <button id="loginSubmit" type="submit" class="btn btn-primary btn-block">Sign in</button>
+	                        <button id="forgetPass" type="submit" class="btn btn-primary btn-block">Forget Password</button>
+					    </div>
 				    </div>
-			    </div>
+				</div>
+				
+		    
+			    <div class="well">
+				    <div id="rego" class="rego-block">
+				      	<form class="form-rego" id="regoForm" method="get" action="">
+					        <h2 class="form-rego-heading">Register</h2>
+					        {% csrf_token %}
+					        <input id="formRegoUsername" name="formRegoUsername" type="text" class="form-control" placeholder="User Name" 
+					        autofocus />
+					        <div id="formRegoUsernameAlert"></div>
+					        <input id="formRegoEmail" name="formRegoEmail" type="email" class="form-control" placeholder="Email address" autofocus />
+					        <input id="formRegoPassword" name="formRegoPassword" type="password" class="form-control" placeholder="Password" />
+					        <input id="formRegoConfirmPassword" name="formRegoConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
+					        <div id="formRegoAlert"></div>
+					      	<button id="regoSubmit" type="submit" class="btn btn-primary btn-block">Register</button>
+				      	</form>
+				    </div>
+				</div>    
 			</div>
-			
-	    
-		    <div class="well">
-			    <div id="rego" class="rego-block">
-			      	<form class="form-rego" id="regoForm" method="get" action="">
-				        <h2 class="form-rego-heading">Register</h2>
-				        {% csrf_token %}
-				        <input id="formRegoUsername" name="formRegoUsername" type="text" class="form-control" placeholder="User Name" 
-				        autofocus />
-				        <div id="formRegoUsernameAlert"></div>
-				        <input id="formRegoEmail" name="formRegoEmail" type="email" class="form-control" placeholder="Email address" autofocus />
-				        <input id="formRegoPassword" name="formRegoPassword" type="password" class="form-control" placeholder="Password" />
-				        <input id="formRegoConfirmPassword" name="formRegoConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
-				        <div id="formRegoAlert"></div>
-				      	<button id="regoSubmit" type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
-			      	</form>
-			    </div>
-			</div>    
 		</div>
 	</div>
 </div>    

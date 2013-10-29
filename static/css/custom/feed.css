@@ -26,6 +26,8 @@ hr {
 	border:1px solid #666; 
     padding: 10px; 
     cursor: pointer;
+    border-radius: 5px;
+	background-color: #DDDDDD;
 }
 
 .content{

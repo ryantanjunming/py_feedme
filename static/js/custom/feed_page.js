@@ -1,14 +1,9 @@
 var curReadTile = 0;
 var curURL;
+// jQuery.fn.exists = function(){return this.length>0;}
 
 $(document).ready(function(){
 	
-	// <!--Used to display feeds on current page-->
-	// $("#feedbut button").click(function(e){
-	// 	$("#feed-page").load($(this).attr("value"));
- 	//        $("#feed-container").addClass("well");
-	// });
-
 	$("#feedbut button").click(function(e){
 		curReadTile = 0;
 		curURL = $(this).attr("value");
@@ -24,54 +19,96 @@ $(document).ready(function(){
             success: function(data) {
             	curReadTile++;
             	$("#feed-page").empty();
-            	buildFeeds(data)
+            	buildFeeds(data);
             }
 		});
 	});
 
 
-	// $("#feed-page").infinitescroll({
-	// 	navSelector  : '#nav_selector',    // selector for the paged navigation 
-	// 	nextSelector : '#nav_selector a',  // selector for the NEXT link (to page 2)
-	// 	itemSelector : '#feed_content',     // selector for all items you'll retrieve
-	// 	loading: {
- //    		finishedMsg: 'No more pages to load.',
- //    		img: 'http://i.imgur.com/qkKy8.gif'
- //  		}
-	// }, function(data) {
- //  		$.ajax({
- //     		url: "/feeds/showfeed/",
- //            type: 'POST',
- //            dataType: 'json',
- //            data: {
- //            	tile : curReadTile,
- //           		url : curURL,
- //            	csrfmiddlewaretoken : document.getElementsByName('csrfmiddlewaretoken')[0].value
- //            },
- //            success: function(data) {
- //            	curReadTile++;
- //            	buildFeeds(data)
- //            }
-	// 	});
+	// $('div.loadmoreajaxloader').onScrollBeyond( function() {
+	// 	$('div.loadmoreajaxloader').onScrollBeyond('disable');
+ // 		$.ajax({
+ // 			url: "/feeds/showfeed/",
+ //        	type: 'POST',
+ //        	dataType: 'json',
+ //        	data: {
+	//         	tile : curReadTile,
+	//        		url : curURL,
+	//         	csrfmiddlewaretoken : document.getElementsByName('csrfmiddlewaretoken')[0].value
+ //        	},
+	//         success: function(data) {
+	//         	curReadTile++;
+	//         	buildFeeds(data);
+	//         	$('div.loadmoreajaxloader').onScrollBeyond('enable');
+	//         }
+	//     });
 	// });
 	
+	$("#recommendations button").click(function(e){
+		curReadTile = 0;
+		curURL = $(this).attr("value");
+		$.ajax({
+     		url: "/feeds/showfeed/",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+            	tile : curReadTile,
+           		url : curURL,
+            	csrfmiddlewaretoken : document.getElementsByName('csrfmiddlewaretoken')[0].value
+            },
+            success: function(data) {
+            	curReadTile++;
+            	$("#feed-page").empty();
+            	buildFeeds(data);
+            }
+		});
+	});
+	
+	
+	$("#friendrecs button").click(function(e){
+		curReadTile = 0;
+		curURL = $(this).attr("value");
+		$.ajax({
+     		url: "/feeds/showfeed/",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+            	tile : curReadTile,
+           		url : curURL,
+            	csrfmiddlewaretoken : document.getElementsByName('csrfmiddlewaretoken')[0].value
+            },
+            success: function(data) {
+            	curReadTile++;
+            	$("#feed-page").empty();
+            	buildFeeds(data);
+            }
+		});
+	});
 
 
-	//USES FEEDS/SHOWFEED ALSO
- 	//    $("#recommendations button").click(function(e){
-	// 	$("#feed-page").load($(this).attr("value"));
-	// 	$("#feed-container").addClass("well");
-	// });
-
- 	//    $("#feedbut feed").click(function(e){
-	// 	$("#feed-page").load($(this).attr("value"));
-	// 	$("#feed-container").addClass("well");
-	// });
+	$("#userrec button").click(function(e){
+		curReadTile = 0;
+		curURL = $(this).attr("value");
+		$.ajax({
+     		url: "/feeds/showfeed/",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+            	tile : curReadTile,
+           		url : curURL,
+            	csrfmiddlewaretoken : document.getElementsByName('csrfmiddlewaretoken')[0].value
+            },
+            success: function(data) {
+            	curReadTile++;
+            	$("#feed-page").empty();
+            	buildFeeds(data);
+            }
+		});
+	});
 });
 
 function buildFeeds(data){
 	
-
 	var image_tag = "";
 	if(data.title_icon.toUpperCase() !== "IMG".toUpperCase()){
 		image_tag = '<img src='+data.title_icon+'>';
@@ -95,6 +132,10 @@ function buildFeeds(data){
                 "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=\"https://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>"+
                 "</p></div>");
     	});
+		// if ($('div.loadmoreajaxloader').exists() ){
+	 //    	$('div.loadmoreajaxloader').remove();
+		// }
+		// $("#feed_content").append('<div class="loadmoreajaxloader" style="display:none;"><center><img src="http://i.imgur.com/qkKy8.gif" /></center></div>');
 
 	$("#feed-page").append("</div>");
 	$("#feed-container").addClass("well");

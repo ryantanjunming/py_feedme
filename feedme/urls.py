@@ -35,7 +35,7 @@ urlpatterns = patterns('',
     # (r'^accounts/(?i)profileSubmit?/$','accounts.views.profileSubmit'),
 
     
-    (r'^feeds?/$','feeds.views.index'),
+    #(r'^feeds?/$','feeds.views.index'),
     (r'^feeds?/(?i)bugs?/$','feeds.views.bugs'),
     (r'^feeds?/(?i)sentBugs?/$','feeds.views.sentBugs'),
     (r'^feeds/(?i)myFeeds?/$','feeds.views.myFeeds'),

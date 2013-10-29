@@ -1,5 +1,5 @@
 {% extends 'extends/base.html' %}
-{% block title %}Login/Register to FeedMe{% endblock %}
+{% block title %}FeedMe{% endblock %}
 {% block stylesheets %}
     <!-- custom css pages -->
     <link href="/static/css/custom/login.css" rel="stylesheet" media="screen">
@@ -7,7 +7,7 @@
 {% block content %}
 	<div class="row">
 		<div class="container">
-			<div class="col-md-4">
+			<div class="col-md-3 col-md-offset-5">
 				<div class="well">
 					<div id="login" class="login-block">
 				      	<div class="form-signin">
@@ -23,7 +23,7 @@
 				    </div>
 				</div>
 			</div>	
-		   <div class="col-md-4 col-md-offset-4"> 
+		   <div class="col-md-3"> 
 			    <div class="well">
 				    <div id="rego" class="rego-block">
 				      	<form class="form-rego" id="regoForm" method="get" action="">
@@ -56,6 +56,6 @@
    <script src="/static/js/custom/jquery.backstretch.min.js"></script>
 
 <script type="text/javascript">
- $.backstretch("/static/img/earth2.png");
+ $.backstretch("/static/img/earth.jpg");
 </script>
 {% endblock %}

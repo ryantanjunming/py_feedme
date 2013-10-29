@@ -20,7 +20,7 @@
 					<div id="feedbut">
 						{% for cat, feeds in feed_entries.iteritems %}
 						{{ cat }}
-						<ul class="category-list">
+						<ul class="feed-list">
 						{% for entry in feeds %}
 							<li>
 								<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
@@ -62,7 +62,7 @@
 	            <div class="well">
 		            
 		            <h4>My Recommendations</h4>
-					<ul id="recommendations">
+					<ul id="recommendations" class="feed-list">
 					{% for entry in rec_entries %}
 						<li>
 							<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
@@ -83,7 +83,7 @@
 				<div class="well">
 					<h4>What your Friends are Following</h4>
 					{% if friend_recs %}
-						<ul id="friendrecs">
+						<ul id="friendrecs" class="feed-list">
 						{% for entry in friend_recs %}
 							<li>
 								<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
@@ -103,7 +103,7 @@
                 <div class="well">
 				    <h4>Recommended for You</h4>
 				    {% if user_recs %}
-					    <ul id="userrec">
+					    <ul id="userrec" class="feed-list">
 					    {% for entry in user_recs %}
 						    <li>
 							    <button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
@@ -139,7 +139,7 @@
 {% block javascript %}
 	<!-- loaded scripts for animation & validation -->
 	<script src="/static/js/jquery-ui-1.10.3.custom.min.js"></script>
-	
+
 	<script src="/static/js/jquery.validate.min.js"></script>
 	<script src="/static/js/additional-methods.min.js"></script>
 	<script src="/static/js/jquery.infinitescroll.min.js"></script>

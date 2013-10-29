@@ -406,24 +406,35 @@ def make_feed_json(feed, host_site, user, tile):
     updated_time += str(last_updated)
     
     pp = pprint.PrettyPrinter(indent=2)
+    pp.pprint(feed['entries'][0])
 
     request_entries = []
     start = tile*20
     end = start+20
+
     for i in range(start, end):
         entry = feed['entries'][i]
-        fields = {'link' : entry.link,
+        contentText = entry.summary        
+        
+        try:
+            if entry.content:
+                if len(entry.summary) < len(entry.content[0].value):
+                    contentText = entry.content[0].value
+        except:
+            print("entry.content[0].value not found")
+
+        fields = {  'link' : entry.link,
                     'title' : entry.title,
                     'author' : "No Author" if not entry.author else entry.author,
                     'published' : str(datetime.fromtimestamp(time.mktime(entry['published_parsed']))),
                     'markreadlink' : host_site + "/feeds/markRead?url=" + entry.link,
-                    'summary' : entry.summary
+                    'summary' : contentText
                 }
-                
+
         request_entries.append(fields)
 
-    # pp.pprint(request_entries);
-    # print('<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>');
+    pp.pprint(request_entries)
+    print('<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>');
     
     responseObject = { 
             'title_icon' : img,
@@ -432,7 +443,7 @@ def make_feed_json(feed, host_site, user, tile):
             'last_updated' : updated_time,
             'request_entries' : request_entries
             }
-    
+      
     # pp.pprint(responseObject)
     
     json = simplejson.dumps(responseObject)

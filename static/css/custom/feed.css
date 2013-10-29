@@ -1,9 +1,9 @@
-.category-list {
+.feed-list {
   list-style-type: none;
   padding-left: 0px;
 }
 
-.category-list li{
+.feed-list li{
   margin-bottom: -12px;
 }
 

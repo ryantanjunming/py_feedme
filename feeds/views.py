@@ -409,7 +409,7 @@ def make_feed_json(feed, host_site, user, tile):
     # pp.pprint(feed['entries'][0])
 
     request_entries = []
-
+    
     for entry in feed['entries']:
         # entry = feed['entries'][i]
         contentText = entry.summary        

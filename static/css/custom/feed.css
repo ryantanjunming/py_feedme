@@ -1,3 +1,7 @@
+hr {
+	border-top: 1.5px solid #bbb;
+}
+
 .feed-list {
   list-style-type: none;
   padding-left: 0px;
@@ -32,4 +36,14 @@
     background-color: #FCFCFC;
 }
 
+.add-feed-btn {
+	width: 100%;
+}
 
+.friend-rec-btn {
+	width: 100%;
+}
+
+.my-rec-btn {
+	width: 100%;
+}

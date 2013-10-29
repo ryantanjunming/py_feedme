@@ -4,6 +4,39 @@ var curURL;
 
 $(document).ready(function(){
 	
+	$('#add-feed-container').hide();
+	$('#add-feed-btn').click(function(){
+		if(!$('#add-feed-container').is(":visible")){
+			$('#add-feed-container').show('blind');
+			$('#add-feed-btn').text("- Add Feed");
+		}else{
+			$('#add-feed-container').hide('blind');
+			$('#add-feed-btn').text("+ Add Feed");
+		}
+	});
+
+	$('#recommendation-friend-container').hide();
+	$('#friend-rec-btn').click(function(){
+		if(!$('#recommendation-friend-container').is(":visible")){
+			$('#recommendation-friend-container').show('blind');
+			$('#friend-rec-btn').text("- Friend Recomendation");
+		}else{
+			$('#recommendation-friend-container').hide('blind');
+			$('#friend-rec-btn').text("+ Friend Recomendation");
+		}
+	});
+
+	$('#recommendations-lists-container').hide();
+	$('#my-rec-btn').click(function(){
+		if(!$('#recommendations-lists-container').is(":visible")){
+			$('#recommendations-lists-container').show('blind');
+			$('#my-rec-btn').text("- Recs & Friends");
+		}else{
+			$('#recommendations-lists-container').hide('blind');
+			$('#my-rec-btn').text("+ Recs & Friends");
+		}
+	});
+
 	$("#feedbut button").click(function(e){
 		curReadTile = 0;
 		curURL = $(this).attr("value");
@@ -24,7 +57,7 @@ $(document).ready(function(){
 		});
 	});
 
-
+	// INFINITE SCROLL CODE
 	// $('div.loadmoreajaxloader').onScrollBeyond( function() {
 	// 	$('div.loadmoreajaxloader').onScrollBeyond('disable');
  // 		$.ajax({
@@ -43,6 +76,8 @@ $(document).ready(function(){
 	//         }
 	//     });
 	// });
+
+	
 	
 	$("#recommendations button").click(function(e){
 		curReadTile = 0;
@@ -63,7 +98,7 @@ $(document).ready(function(){
             }
 		});
 	});
-	
+
 	
 	$("#friendrecs button").click(function(e){
 		curReadTile = 0;
@@ -132,6 +167,7 @@ function buildFeeds(data){
                 "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=\"https://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>"+
                 "</p></div>");
     	});
+		// INFINITE SCROLL CODE
 		// if ($('div.loadmoreajaxloader').exists() ){
 	 //    	$('div.loadmoreajaxloader').remove();
 		// }

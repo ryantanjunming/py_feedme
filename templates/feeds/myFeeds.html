@@ -37,88 +37,100 @@
 				</div>
 				
 	            <!--Add Feed-->
+	            
 	            <div class="well">
-					<h4>Add a new Feed!</h4>
-					<form method='post' action='/feeds/insertFeed/'>
-					{% csrf_token %}
-						<!-- <input type="text" name="username" placeholder="Username"/><br/> -->
-						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/>
-						<input type="submit" class="btn btn-primary btn-block" name="submit"/>
-					</form>
+	            	<div id="add-feed-container">
+						<h4>Add a new Feed!</h4>
+						<form method='post' action='/feeds/insertFeed/'>
+						{% csrf_token %}
+							<!-- <input type="text" name="username" placeholder="Username"/><br/> -->
+							<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/>
+							<input type="submit" class="btn btn-primary btn-block" name="submit"/>
+						</form>
+					</div>
+					<button id="add-feed-btn" type="button" class="btn btn-default add-feed-btn">&#43; Add Feed</button>
 				</div>
 
-	            <!--Add Recommendations-->
+
+	            <!--Add Recommendations-->	            
 	            <div class="well">
-					<h4>Recommend to a Friend</h4>
-					<form method='post' class="form-friend" action='/feeds/insertRecommendation/'>
-					{% csrf_token %}
-		                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/>
-						<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/>
-						<input type="submit" class="btn btn-primary btn-block" name="submit"/>
-					</form>
+		            <div id="recommendation-friend-container">
+						<h4>Recommend a Feed to a Friend</h4>
+						<form method='post' class="form-friend" action='/feeds/insertRecommendation/'>
+						{% csrf_token %}
+			                <input type="text" class="form-control" name="receiver" placeholder="Receiver"/>
+							<input type="text" class="form-control" name="feedurl" placeholder="Website Url"/>
+							<input type="submit" class="btn btn-primary btn-block" name="submit"/>
+						</form>
+					</div>
+					<button id="friend-rec-btn" type="button" class="btn btn-default friend-rec-btn">&#43; Feed A Friend</button>
 				</div>
 
 	            <!--Recommendations panel-->
-	            <div class="well">
-		            
-		            <h4>My Recommendations</h4>
-					<ul id="recommendations" class="feed-list">
-					{% for entry in rec_entries %}
-						<li>
-							<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
-							<a href="{{ entry.add_url }}">
-								<!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
-                                <span class="glyphicon glyphicon-ok"></span> 
-							</a>
-							<a href="{{ entry.del_url }}">
-								<!--<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">-->
-                                <span class="glyphicon glyphicon-remove"></span> 
-							</a>
-						</li>
-					{% endfor %}
-					</ul>
-				</div>
-				
-				<!--Friend Recommendation panel-->
-				<div class="well">
-					<h4>What your Friends are Following</h4>
-					{% if friend_recs %}
-						<ul id="friendrecs" class="feed-list">
-						{% for entry in friend_recs %}
+		        
+		        <div class="well">
+		        	<div id="recommendations-lists-container">
+			            <h4>My Recommendations</h4>
+						<ul id="recommendations" class="feed-list">
+						{% for entry in rec_entries %}
 							<li>
 								<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
 								<a href="{{ entry.add_url }}">
-									
-                                    <span class="glyphicon glyphicon-ok"></span> 
+									<!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
+	                                <span class="glyphicon glyphicon-ok"></span> 
+								</a>
+								<a href="{{ entry.del_url }}">
+									<!--<img src="/static/img/delete.png" alt="Delete Button" width="16" height="16">-->
+	                                <span class="glyphicon glyphicon-remove"></span> 
 								</a>
 							</li>
 						{% endfor %}
 						</ul>
-					{% else %}
-						<p>Sorry, we have no recommendations for you right now.</p>
-					{% endif %}
-				</div>
+						
+						<hr/>
+						
+						<!--Friend Recommendation panel-->
+						<h4>What your Friends are Following</h4>
+						{% if friend_recs %}
+							<ul id="friendrecs" class="feed-list">
+							{% for entry in friend_recs %}
+								<li>
+									<button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
+									<a href="{{ entry.add_url }}">
+										
+	                                    <span class="glyphicon glyphicon-ok"></span> 
+									</a>
+								</li>
+							{% endfor %}
+							</ul>
+						{% else %}
+							<p>Sorry, we have no recommendations for you right now.</p>
+						{% endif %}
+						
+						<hr/>
 
-				<!--User Recommendation panel-->
-                <div class="well">
-				    <h4>Recommended for You</h4>
-				    {% if user_recs %}
-					    <ul id="userrec" class="feed-list">
-					    {% for entry in user_recs %}
-						    <li>
-							    <button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
-							    <a href="{{ entry.add_url }}">
-								    <!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
-                                    <span class="glyphicon glyphicon-ok"></span> 
-							    </a>
-						    </li>
-					    {% endfor %}
-					    </ul>
-				    {% else %}
-					    <p>Sorry, we have no recommendations for you right now.</p>
-				    {% endif %}
-                </div>
+						<!--User Recommendation panel-->
+					    <h4>Recommended for You</h4>
+					    {% if user_recs %}
+						    <ul id="userrec" class="feed-list">
+						    {% for entry in user_recs %}
+							    <li>
+								    <button type="button" value="{{ entry.url }}" class="btn btn-default btn-xs navbar-btn" target="_blank">{{ entry.name }}</button>
+								    <a href="{{ entry.add_url }}">
+									    <!--<img src="/static/img/tick.ico" alt="Add Button" width="16" height="16">-->
+	                                    <span class="glyphicon glyphicon-ok"></span> 
+								    </a>
+							    </li>
+						    {% endfor %}
+						    </ul>
+					    {% else %}
+						    <p>Sorry, we have no recommendations for you right now.</p>
+					    {% endif %}
+					</div>
+					<button id="my-rec-btn" type="button" class="btn btn-default my-rec-btn">&#43; Recs & Friends</button>
+	            </div>
 				
+
 	            <br>
                 <!--Bugs-->
                 <div class="well">
@@ -160,7 +172,7 @@
 
 	<script src="/static/js/jquery.validate.min.js"></script>
 	<script src="/static/js/additional-methods.min.js"></script>
-	<script src="/static/js/jquery.scrollExtend.min.js"></script>
+	<script src="/static/js/expand.js"></script>
 
 	<!-- custom scripts -->
 	<script src="/static/js/custom/feed_page.js"></script>

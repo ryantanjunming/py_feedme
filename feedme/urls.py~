@@ -25,10 +25,11 @@ urlpatterns = patterns('',
     (r'^accounts/(?i)logout?/$','accounts.views.logout'),
     (r'^accounts/(?i)register?/$','accounts.views.register'),
     
+    (r'^accounts/(?i)usernameValidation?/$','accounts.views.usernameValidation'),
     (r'^accounts/(?i)resetPassword?/$','accounts.views.resetPassword'),
     (r'^accounts/(?i)resetPasswordUser?/$','accounts.views.resetPasswordUser'),
     (r'^accounts/(?i)resetPasswordEmail?/$','accounts.views.resetPasswordEmail'),
-    (r'^accounts/(?i)resetPasswordUserRedirect?/$','accounts.views.resetPasswordUser'),
+    (r'^accounts/(?i)resetPasswordUserRedirect?/$','accounts.views.resetPasswordUserRedirect'),
     (r'^accounts/(?i)resetPasswordNewPassword?/$','accounts.views.resetPasswordNewPassword'),
     # (r'^accounts/(?i)profileView?/$','accounts.views.profileView'),
     # (r'^accounts/(?i)profileSubmit?/$','accounts.views.profileSubmit'),
@@ -48,12 +49,15 @@ urlpatterns = patterns('',
     (r'^feeds/(?i)feederror?/$', TemplateView.as_view(template_name="feeds/feederror.html")),
     (r'^feeds/(?i)categorise?/$','feeds.views.categorise_feed'),
     (r'^feeds/(?i)catdel?/$','feeds.views.category_delete'),
+    (r'^feeds/(?i)markRead?/$','feeds.views.mark_entry_read'),
 
     (r'^friends?/$','friends.views.my_view'),
     (r'^friends/(?i)add?/$','friends.views.add_friend'),
     (r'^friends/(?i)remove?/$','friends.views.remove_friend'),
     (r'^friends/(?i)accept?/$','friends.views.accept_friendship'),
     (r'^friends/(?i)reject?/$','friends.views.reject_friendship'),
-    (r'^friends/(?i)cancel?/$','friends.views.cancel_request')
+    (r'^friends/(?i)cancel?/$','friends.views.cancel_request'),
+    
+    (r'/$','accounts.views.index')
 
 )

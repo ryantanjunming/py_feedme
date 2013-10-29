@@ -14,7 +14,7 @@
 		{% block stylesheets %}{% endblock %}
 
 	</head>
-	<body>
+	<body style="background-color:#CCCCCC">
 		<div id="container top_header">
 	     	<div class="navbar navbar-default">
 	        	<div class="contain-header">
@@ -54,21 +54,7 @@
 		<div class="content_body">
 			{% block content %}{% endblock %}
 		</div>
-		<!--Bitcoin, coinbase-->
-		<a class="coinbase-button" data-code="b97ef89f995ccdd3168978db39edb526" data-button-style="donation_small" href="https://coinbase.com/checkouts/b97ef89f995ccdd3168978db39edb526">Donate Bitcoins</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
-
-		<!--stripe-->
-		<form action="/feeds/billStripeToken" method="POST">
-		{% csrf_token %}
-		<script
-		    src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button"
-		    data-key="pk_test_muKy9OSJ9uqulyQOq8lCpvng"
-		    data-amount="2000"
-		    data-name="Demo Site"
-		    data-description="2 widgets ($20.00)"
-		    data-image="/128x128.png">
-		  </script>
-		</form>
+		
 		
 
 		<!-- standard js includes -->

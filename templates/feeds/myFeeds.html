@@ -179,7 +179,24 @@
       });
     </script>
     <!-- AddThis Smart Layers END -->
-
+    <script type='text/javascript'>
+		$(document).ready(function(){
+	        <!--Used to display feeds on current page-->
+			$("#feedbut button").click(function(e){
+				$("#feedpage").load($(this).attr("value"));
+                
+			});
+            $("#recommendations button").click(function(e){
+				$("#feedpage").load($(this).attr("value"));
+			});
+            $("#feedbut feed").click(function(e){
+				$("#feedpage").load($(this).attr("value"));
+			});
+            $("#feedbackBut").click(function(e){
+				window.open("/feeds/bugs/","_blank");
+			});
+		});
+	</script>
     <script src="/static/js/custom/jquery.backstretch.min.js"></script>
 
     <script type="text/javascript">

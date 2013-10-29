@@ -31,13 +31,6 @@ def my_view(request):
     # List all sent friendship requests
     sent = Friend.objects.sent_requests(user=request.user)
 
-    # List of this user's followers
-    #all_followers = Following.objects.followers(request.user)
-
-    # List of who this user is following
-    #following = Following.objects.following(request.user)
-
-    ### Managing friendship relationships
     #other_user = User.objects.get(pk=1)
     #new_relationship = Friend.objects.add_friend(request.user, other_user)
     #Friend.objects.are_friends(request.user, other_user) == True

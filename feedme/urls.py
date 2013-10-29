@@ -35,7 +35,7 @@ urlpatterns = patterns('',
     # (r'^accounts/(?i)profileSubmit?/$','accounts.views.profileSubmit'),
 
     
-    (r'^feeds?/$','feeds.views.index'),
+    #(r'^feeds?/$','feeds.views.index'),
     (r'^feeds?/(?i)bugs?/$','feeds.views.bugs'),
     (r'^feeds?/(?i)sentBugs?/$','feeds.views.sentBugs'),
     (r'^feeds/(?i)myFeeds?/$','feeds.views.myFeeds'),
@@ -56,6 +56,8 @@ urlpatterns = patterns('',
     (r'^friends/(?i)remove?/$','friends.views.remove_friend'),
     (r'^friends/(?i)accept?/$','friends.views.accept_friendship'),
     (r'^friends/(?i)reject?/$','friends.views.reject_friendship'),
-    (r'^friends/(?i)cancel?/$','friends.views.cancel_request')
+    (r'^friends/(?i)cancel?/$','friends.views.cancel_request'),
+    
+    (r'','accounts.views.index')
 
 )

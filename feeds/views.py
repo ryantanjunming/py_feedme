@@ -182,7 +182,7 @@ def myFeeds(request):
     })
     return render_to_response('feeds/myFeeds.html', c)
 
-@login_required
+@login_required(login_url='/accounts/index/')
 def mark_entry_read(request):
     entry_url = request.GET.get('url', None)
     if not entry_url: return redirect("/feeds/myFeeds")
@@ -200,7 +200,6 @@ def deleteFeed(request):
         if qkey == "url":
             delete(qvalue)
     return redirect("/feeds/myFeeds")
-
 
 # NOTE: we really need a shortcut for a delayed redirect view (display input message + auto redirect in 3 seconds kind of thing - maybe a template will help)
 # (if we can use a template for this, will be super good for the feed error page, since I'm currently using a generic error page...)
